@@ -1,0 +1,5 @@
+[
+  {"name": "عصير برتقال", "price": "1500 د.ع", "image": "juice.jpg"},
+  {"name": "تونة", "price": "2500 د.ع", "image": "tuna.jpg"},
+  {"name": "بسكويت", "price": "1000 د.ع", "image": "biscuits.jpg"}
+]
