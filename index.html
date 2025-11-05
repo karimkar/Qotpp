@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اسواق القطب</title>
+    <title>متجر أسواق القطب</title>
     <!-- تحميل Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- تحميل Lucide Icons -->
@@ -34,6 +34,41 @@
         }
         .cart-flash {
             animation: flash-animation 0.3s ease-in-out;
+        }
+        /* تحسينات للاستجابة */
+        @media (max-width: 480px) {
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .product-grid {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+        @media (max-width: 360px) {
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* مؤشر التحميل */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #10b981;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* تحسينات للسلة */
+        .cart-item {
+            transition: all 0.3s ease;
+        }
+        .cart-item:hover {
+            background-color: #f9fafb;
         }
     </style>
 </head>
@@ -83,8 +118,14 @@
         <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-emerald-500 pb-2">أقسام المتجر</h2>
 
         <!-- شبكة عرض الفئات -->
-        <div id="categories-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div id="categories-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 category-grid">
             <!-- سيتم ملء هذا القسم ديناميكياً بواسطة JavaScript -->
+        </div>
+        
+        <!-- مؤشر التحميل -->
+        <div id="loading-indicator" class="hidden">
+            <div class="loader"></div>
+            <p class="text-center text-gray-600 mt-2">جاري تحميل المنتجات...</p>
         </div>
     </main>
 
@@ -142,7 +183,7 @@
 
             <!-- شبكة عرض المنتجات الفرعية -->
             <div class="p-4 overflow-y-auto flex-1">
-                <div id="sub-products-grid" class="grid grid-cols-2 gap-4">
+                <div id="sub-products-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 product-grid">
                     <!-- سيتم ملء المنتجات الفرعية هنا -->
                 </div>
             </div>
@@ -172,7 +213,7 @@
 
             <!-- قائمة المنتجات في السلة -->
             <div class="p-4 overflow-y-auto flex-1">
-                <div id="cart-items-list" class="space-y-4">
+                <div id="cart-items-list" class="space-y-3">
                     <!-- سيتم ملء محتويات السلة هنا -->
                 </div>
                 <!-- رسالة سلة فارغة -->
@@ -253,6 +294,22 @@
         </div>
     </div>
 
+    <!-- نافذة تأكيد الطلب -->
+    <div id="checkout-confirm-modal" class="fixed inset-0 z-[110] bg-black bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-xl shadow-2xl p-6 transform scale-95 transition-all duration-300">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">تأكيد الطلب</h3>
+            <p id="confirm-message" class="text-gray-600 mb-6">هل أنت متأكد من إتمام الطلب؟</p>
+            <div class="flex space-x-3 space-x-reverse">
+                <button id="confirm-checkout" class="flex-1 bg-emerald-600 text-white font-semibold py-2 rounded-lg hover:bg-emerald-700 transition duration-150">
+                    نعم، تأكيد
+                </button>
+                <button class="flex-1 bg-gray-300 text-gray-700 font-semibold py-2 rounded-lg hover:bg-gray-400 transition duration-150" onclick="closeModal('checkout-confirm-modal')">
+                    إلغاء
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- كود JavaScript -->
     <script>
         // -----------------------------------------------------
@@ -264,28 +321,28 @@
         const defaultPhoneNumber = '07800101049';
         
         // -----------------------------------------------------
-        // البيانات الوهمية
+        // البيانات الوهمية مع أيقونات مصححة
         // -----------------------------------------------------
         const categories = [
-            { id: 1, name: "بقوليات", icon: "carrot", color: "10b981", imageUrl: "https://images.unsplash.com/photo-1627916515865-c3f9152a466a?q=80&w=600&auto=format&fit=crop" },
-            { id: 2, name: "معلبات", icon: "grape", color: "f59e0b", imageUrl: "https://images.unsplash.com/photo-1579613832104-e0b62e49c716?q=80&w=600&auto=format&fit=crop" },
+            { id: 1, name: "بقوليات", icon: "bean", color: "10b981", imageUrl: "https://images.unsplash.com/photo-1627916515865-c3f9152a466a?q=80&w=600&auto=format&fit=crop" },
+            { id: 2, name: "معلبات", icon: "can", color: "f59e0b", imageUrl: "https://images.unsplash.com/photo-1579613832104-e0b62e49c716?q=80&w=600&auto=format&fit=crop" },
             { id: 3, name: "الحليب ومشتقاته", icon: "milk", color: "dc2626", imageUrl: "https://images.unsplash.com/photo-1588836592271-be84c478a05c?q=80&w=600&auto=format&fit=crop" },
-            { id: 4, name: "زيوت + سمن", icon: "fish", color: "06b6d4", imageUrl: "https://images.unsplash.com/photo-1615719984922-38e55e0037a3?q=80&w=600&auto=format&fit=crop" },
-            { id: 5, name: "تتبيلات + صلصات", icon: "milk", color: "3b82f6", imageUrl: "https://images.unsplash.com/photo-1549480654-e67c8702c2db?q=80&w=600&auto=format&fit=crop" },
-            { id: 6, name: "مخللات", icon: "beans", color: "a8a29e", imageUrl: "https://images.unsplash.com/photo-1574015091771-b0400b8686d1?q=80&w=600&auto=format&fit=crop" },
+            { id: 4, name: "زيوت + سمن", icon: "flask-conical", color: "06b6d4", imageUrl: "https://images.unsplash.com/photo-1615719984922-38e55e0037a3?q=80&w=600&auto=format&fit=crop" },
+            { id: 5, name: "تتبيلات + صلصات", icon: "utensils", color: "3b82f6", imageUrl: "https://images.unsplash.com/photo-1549480654-e67c8702c2db?q=80&w=600&auto=format&fit=crop" },
+            { id: 6, name: "مخللات", icon: "carrot", color: "a8a29e", imageUrl: "https://images.unsplash.com/photo-1574015091771-b0400b8686d1?q=80&w=600&auto=format&fit=crop" },
             { id: 7, name: "حلويات + تسالي", icon: "croissant", color: "d97706", imageUrl: "https://images.unsplash.com/photo-1551025537-8894ce51897c?q=80&w=600&auto=format&fit=crop" },
-            { id: 8, name: "مشروبات باردة", icon: "soup", color: "6b7280", imageUrl: "https://images.unsplash.com/photo-1596707323136-12157a97495d?q=80&w=600&auto=format&fit=crop" },
-            { id: 9, name: "مشروبات ساخنة", icon: "snowflake", color: "93c5fd", imageUrl: "https://images.unsplash.com/photo-1550882354-9fa2a8342718?q=80&w=600&auto=format&fit=crop" },
-            { id: 10, name: "منظفات سائلة", icon: "coffee", color: "475569", imageUrl: "https://images.unsplash.com/photo-1549727494-0a86b3626d77?q=80&w=600&auto=format&fit=crop" },
-            { id: 11, name: "منظفات جافة", icon: "bottle", color: "78350f", imageUrl: "https://images.unsplash.com/photo-1626207865207-6f0147983656?q=80&w=600&auto=format&fit=crop" },
-            { id: 12, name: "معكرونة + شوربة", icon: "baby", color: "f472b6", imageUrl: "https://images.unsplash.com/photo-1599818815124-77a7f45b73e3?q=80&w=600&auto=format&fit=crop" },
-            { id: 13, name: "رز + طحين", icon: "spray-can", color: "065f46", imageUrl: "https://images.unsplash.com/photo-1621900115049-f14d8583b27b?q=80&w=600&auto=format&fit=crop" },
-            { id: 14, name: "سكر + ملح", icon: "soap-hand", color: "6d28d9", imageUrl: "https://images.unsplash.com/photo-1607062400301-1372e3919e99?q=80&w=600&auto=format&fit=crop" },
-            { id: 15, name: "مستلزمات الطفل", icon: "home", color: "1e40af", imageUrl: "https://images.unsplash.com/photo-1632766863814-192e22c15981?q=80&w=600&auto=format&fit=crop" },
-            { id: 16, name: "العناية الشخصية", icon: "sandwich", color: "f97316", imageUrl: "https://images.unsplash.com/photo-1541544778546-bc5921821033?q=80&w=600&auto=format&fit=crop" },
-            { id: 17, name: "المستهلكات", icon: "cooking-pot", color: "ca8a04", imageUrl: "https://images.unsplash.com/photo-1547496503-75f858066b1a?q=80&w=600&auto=format&fit=crop" },
+            { id: 8, name: "مشروبات باردة", icon: "glass-water", color: "6b7280", imageUrl: "https://images.unsplash.com/photo-1596707323136-12157a97495d?q=80&w=600&auto=format&fit=crop" },
+            { id: 9, name: "مشروبات ساخنة", icon: "coffee", color: "93c5fd", imageUrl: "https://images.unsplash.com/photo-1550882354-9fa2a8342718?q=80&w=600&auto=format&fit=crop" },
+            { id: 10, name: "منظفات سائلة", icon: "spray-can", color: "475569", imageUrl: "https://images.unsplash.com/photo-1549727494-0a86b3626d77?q=80&w=600&auto=format&fit=crop" },
+            { id: 11, name: "منظفات جافة", icon: "box", color: "78350f", imageUrl: "https://images.unsplash.com/photo-1626207865207-6f0147983656?q=80&w=600&auto=format&fit=crop" },
+            { id: 12, name: "معكرونة + شوربة", icon: "wheat", color: "f472b6", imageUrl: "https://images.unsplash.com/photo-1599818815124-77a7f45b73e3?q=80&w=600&auto=format&fit=crop" },
+            { id: 13, name: "رز + طحين", icon: "wheat", color: "065f46", imageUrl: "https://images.unsplash.com/photo-1621900115049-f14d8583b27b?q=80&w=600&auto=format&fit=crop" },
+            { id: 14, name: "سكر + ملح", icon: "salt", color: "6d28d9", imageUrl: "https://images.unsplash.com/photo-1607062400301-1372e3919e99?q=80&w=600&auto=format&fit=crop" },
+            { id: 15, name: "مستلزمات الطفل", icon: "baby", color: "1e40af", imageUrl: "https://images.unsplash.com/photo-1632766863814-192e22c15981?q=80&w=600&auto=format&fit=crop" },
+            { id: 16, name: "العناية الشخصية", icon: "user", color: "f97316", imageUrl: "https://images.unsplash.com/photo-1541544778546-bc5921821033?q=80&w=600&auto=format&fit=crop" },
+            { id: 17, name: "المستهلكات", icon: "shopping-bag", color: "ca8a04", imageUrl: "https://images.unsplash.com/photo-1547496503-75f858066b1a?q=80&w=600&auto=format&fit=crop" },
             { id: 18, name: "البيض", icon: "egg", color: "fbbf24", imageUrl: "https://images.unsplash.com/photo-1587842795431-705b06d86016?q=80&w=600&auto=format&fit=crop" },
-            { id: 19, name: "الشاي والقهوة", icon: "tea-cup", color: "57534e", imageUrl: "https://images.unsplash.com/photo-1497935321875-1085023a1a51?q=80&w=600&auto=format&fit=crop" },
+            { id: 19, name: "الشاي والقهوة", icon: "coffee", color: "57534e", imageUrl: "https://images.unsplash.com/photo-1497935321875-1085023a1a51?q=80&w=600&auto=format&fit=crop" },
             { id: 20, name: "الآيس كريم والمثلجات", icon: "ice-cream", color: "ec4899", imageUrl: "https://images.unsplash.com/photo-1518349271638-348518900696?q=80&w=600&auto=format&fit=crop" }
         ];
 
@@ -344,14 +401,23 @@
             const category = categories.find(cat => cat.id === categoryId);
             if (!category) return;
 
-            currentCategory = category;
-            currentSubProducts = generateSubProducts(categoryId, category.name);
+            // إظهار مؤشر التحميل
+            document.getElementById('loading-indicator').classList.remove('hidden');
+            
+            // محاكاة تأخير الشبكة
+            setTimeout(() => {
+                currentCategory = category;
+                currentSubProducts = generateSubProducts(categoryId, category.name);
 
-            document.getElementById('modal-category-name').textContent = category.name;
-            document.getElementById('category-details-modal').classList.remove('hidden');
-            document.getElementById('sort-selector').value = 'default';
+                document.getElementById('modal-category-name').textContent = category.name;
+                document.getElementById('category-details-modal').classList.remove('hidden');
+                document.getElementById('sort-selector').value = 'default';
 
-            renderSubProducts(currentSubProducts);
+                renderSubProducts(currentSubProducts);
+                
+                // إخفاء مؤشر التحميل
+                document.getElementById('loading-indicator').classList.add('hidden');
+            }, 800);
         }
 
         function renderSubProducts(products) {
@@ -437,6 +503,7 @@
                 displayModal('تمت الإضافة', `${product.name} (${newQuantity} وحدات) في السلة`);
             }
             renderCart();
+            saveCartToStorage();
         }
 
         function changeCartItemQuantity(productId, delta) {
@@ -450,11 +517,13 @@
                 existingItem.quantity = newQuantity;
             }
             renderCart();
+            saveCartToStorage();
         }
 
         function deleteCartItem(productId) {
             cartItems = cartItems.filter(item => item.productId !== productId);
             renderCart();
+            saveCartToStorage();
             displayModal('تم الحذف', 'تم حذف المنتج بنجاح من سلة التسوق');
         }
 
@@ -484,22 +553,22 @@
                 totalCount += item.quantity;
 
                 const itemHtml = `
-                    <div class="flex items-center space-x-4 space-x-reverse border-b border-gray-100 pb-3">
-                        <img src="${item.imageUrl}" alt="${item.name}" class="w-16 h-16 rounded-lg object-cover shadow-sm">
+                    <div class="cart-item flex items-center space-x-4 space-x-reverse border-b border-gray-100 pb-3 p-2 rounded-lg">
+                        <img src="${item.imageUrl}" alt="${item.name}" class="w-16 h-16 rounded-lg object-cover shadow-sm flex-shrink-0">
                         <div class="flex-1 min-w-0">
-                            <p class="font-semibold text-gray-800 truncate">${item.name}</p>
-                            <p class="text-sm text-gray-500">${item.price.toFixed(2)} ر.س / للوحدة</p>
+                            <p class="font-semibold text-gray-800 truncate text-sm">${item.name}</p>
+                            <p class="text-xs text-gray-500">${item.price.toFixed(2)} ر.س / للوحدة</p>
                         </div>
-                        <div class="flex items-center space-x-2 space-x-reverse bg-gray-100 rounded-full p-1 shadow-inner">
+                        <div class="flex items-center space-x-2 space-x-reverse bg-gray-100 rounded-full p-1 shadow-inner flex-shrink-0">
                             <button onclick="changeCartItemQuantity('${item.productId}', 1)" class="text-emerald-600 hover:text-emerald-800 p-1 rounded-full transition duration-150">
                                 <i data-lucide="plus" class="w-4 h-4"></i>
                             </button>
-                            <span class="font-bold text-sm text-gray-700">${item.quantity}</span>
+                            <span class="font-bold text-sm text-gray-700 mx-1">${item.quantity}</span>
                             <button onclick="changeCartItemQuantity('${item.productId}', -1)" class="text-red-500 hover:text-red-700 p-1 rounded-full transition duration-150">
                                 <i data-lucide="minus" class="w-4 h-4"></i>
                             </button>
                         </div>
-                        <button onclick="deleteCartItem('${item.productId}')" class="text-red-500 hover:text-red-700 transition duration-150 p-1">
+                        <button onclick="deleteCartItem('${item.productId}')" class="text-red-500 hover:text-red-700 transition duration-150 p-1 flex-shrink-0">
                              <i data-lucide="trash-2" class="w-5 h-5"></i>
                         </button>
                     </div>
@@ -528,6 +597,22 @@
         }
 
         // -----------------------------------------------------
+        // حفظ واستعادة السلة
+        // -----------------------------------------------------
+
+        function saveCartToStorage() {
+            localStorage.setItem('qutubMarketsCart', JSON.stringify(cartItems));
+        }
+
+        function loadCartFromStorage() {
+            const savedCart = localStorage.getItem('qutubMarketsCart');
+            if (savedCart) {
+                cartItems = JSON.parse(savedCart);
+                renderCart();
+            }
+        }
+
+        // -----------------------------------------------------
         // دوال النوافذ المنبثقة
         // -----------------------------------------------------
 
@@ -536,6 +621,15 @@
             if (modal) {
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
+                
+                // إضافة مستمع حدث لإغلاق النافذة بالنقر خارجها
+                setTimeout(() => {
+                    modal.addEventListener('click', function(e) {
+                        if (e.target === modal) {
+                            closeModal(modalId);
+                        }
+                    });
+                }, 10);
             }
         }
 
@@ -551,6 +645,38 @@
             document.getElementById('modal-title').textContent = title;
             document.getElementById('modal-message').textContent = message;
             showModal('custom-modal');
+        }
+
+        // -----------------------------------------------------
+        // تأكيد الطلب
+        // -----------------------------------------------------
+
+        function confirmCheckout() {
+            if (cartItems.length === 0) {
+                displayModal('سلة فارغة', 'سلتك فارغة، أضف بعض المنتجات أولاً');
+                return;
+            }
+            
+            const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('confirm-message').textContent = `إجمالي طلبك: ${total.toFixed(2)} ر.س. هل أنت متأكد من إتمام الطلب؟`;
+            showModal('checkout-confirm-modal');
+        }
+
+        function processCheckout() {
+            // محاكاة عملية الدفع
+            const orderNumber = Math.floor(Math.random() * 1000000);
+            
+            // تفريغ السلة
+            cartItems = [];
+            renderCart();
+            saveCartToStorage();
+            
+            // إغلاق النوافذ
+            closeModal('cart-modal');
+            closeModal('checkout-confirm-modal');
+            
+            // عرض تأكيد النجاح
+            displayModal('تم الطلب بنجاح', `تم استلام طلبك رقم #${orderNumber} بنجاح. سيتم التواصل معك قريباً لتأكيد التفاصيل والتوصيل.`);
         }
 
         // -----------------------------------------------------
@@ -651,10 +777,14 @@
             // عرض الفئات
             renderCategories();
 
+            // تحميل السلة من التخزين المحلي
+            loadCartFromStorage();
+
             // تفعيل أحداث الـ DOM
             document.getElementById('category-search').addEventListener('input', filterCategories);
             document.getElementById('cart-button').addEventListener('click', () => showModal('cart-modal'));
-            document.getElementById('checkout-button').addEventListener('click', () => displayModal('إتمام الطلب', 'تم إرسال طلبك بنجاح سيتم التواصل معك قريباً'));
+            document.getElementById('checkout-button').addEventListener('click', confirmCheckout);
+            document.getElementById('confirm-checkout').addEventListener('click', processCheckout);
             document.getElementById('contact-button').addEventListener('click', () => {
                 document.getElementById('display-phone-number').textContent = defaultPhoneNumber;
                 showModal('contact-modal');
