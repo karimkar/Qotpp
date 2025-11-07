@@ -284,6 +284,29 @@
             color: white;
             padding: 20px 24px;
         }
+
+        /* إغلاق النافذة عند الضغط خارجها */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            max-width: 90%;
+            max-height: 90%;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -310,33 +333,11 @@
                     </div>
                 </div>
 
-                <!-- أيقونات -->
+                <!-- أيقونات - فقط زر الاتصال -->
                 <div class="flex items-center space-x-2 space-x-reverse">
-                    <!-- زر تواصل معنا -->
+                    <!-- زر تواصل معنا فقط -->
                     <button id="contact-us-btn" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 touch-feedback" aria-label="تواصل معنا">
                         <i data-lucide="phone" class="w-6 h-6 text-gray-700"></i>
-                    </button>
-                    
-                    <!-- بحث سريع -->
-                    <button id="quick-search-btn" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 touch-feedback" aria-label="البحث السريع">
-                        <i data-lucide="search" class="w-6 h-6 text-gray-700"></i>
-                    </button>
-                    
-                    <!-- المفضلة -->
-                    <button id="favorites-btn" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 relative touch-feedback" aria-label="قائمة المفضلة">
-                        <i data-lucide="heart" class="w-6 h-6 text-gray-700"></i>
-                        <span id="favorites-count" class="absolute -top-1 -left-1 bg-pink-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
-                    </button>
-                    
-                    <!-- السلة -->
-                    <button id="cart-button" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 relative touch-feedback" aria-label="سلة التسوق">
-                        <i data-lucide="shopping-cart" class="w-6 h-6 text-gray-700"></i>
-                        <span id="cart-count" class="absolute -top-1 -left-1 bg-purple-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center cart-badge hidden">0</span>
-                    </button>
-                    
-                    <!-- الملف الشخصي -->
-                    <button id="profile-btn" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 touch-feedback" aria-label="الحساب الشخصي">
-                        <i data-lucide="user" class="w-6 h-6 text-gray-700"></i>
                     </button>
                 </div>
             </div>
@@ -431,8 +432,8 @@
     </nav>
 
     <!-- نافذة تفاصيل الفئة -->
-    <div id="category-details-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4">
-        <div class="bg-white w-full h-full md:max-w-4xl md:h-5/6 modern-modal modal-fullscreen flex flex-col transition-all duration-300">
+    <div id="category-details-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'category-details-modal')">
+        <div class="bg-white w-full h-full md:max-w-4xl md:h-5/6 modern-modal modal-fullscreen flex flex-col transition-all duration-300 modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold flex items-center space-x-2 space-x-reverse">
                     <span id="modal-category-name"></span>
@@ -444,10 +445,7 @@
             </div>
             
             <div class="p-3 md:p-4 bg-gray-50 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
-                <button id="ai-assistant-button" class="flex items-center text-sm font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-2 rounded-lg hover:opacity-90 transition duration-150 shadow-md touch-feedback w-full md:w-auto justify-center" onclick="openAIAssistant()">
-                    <i data-lucide="bot" class="w-4 h-4 ml-1"></i>
-                    مساعد الذكاء الاصطناعي
-                </button>
+                <!-- تم إزالة زر المساعد الذكي -->
 
                 <div class="filter-tabs w-full md:w-auto">
                     <div class="filter-tab active" onclick="changeFilterTab('all')">الكل</div>
@@ -483,8 +481,8 @@
     </div>
 
     <!-- نافذة البحث -->
-    <div id="search-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4">
-        <div class="bg-white w-full h-full md:max-w-2xl modern-modal modal-fullscreen">
+    <div id="search-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'search-modal')">
+        <div class="bg-white w-full h-full md:max-w-2xl modern-modal modal-fullscreen modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">البحث في المتجر</h3>
                 <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('search-modal')" aria-label="إغلاق النافذة">
@@ -505,8 +503,8 @@
     </div>
 
     <!-- نافذة السلة -->
-    <div id="cart-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4">
-        <div class="bg-white w-full h-full md:max-w-2xl modern-modal modal-fullscreen flex flex-col">
+    <div id="cart-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'cart-modal')">
+        <div class="bg-white w-full h-full md:max-w-2xl modern-modal modal-fullscreen flex flex-col modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">سلة التسوق</h3>
                 <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('cart-modal')" aria-label="إغلاق النافذة">
@@ -531,8 +529,8 @@
     </div>
 
     <!-- نافذة الحساب الشخصي -->
-    <div id="profile-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4">
-        <div class="bg-white w-full md:max-w-md modern-modal">
+    <div id="profile-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'profile-modal')">
+        <div class="bg-white w-full md:max-w-md modern-modal modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">حسابي</h3>
                 <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('profile-modal')" aria-label="إغلاق النافذة">
@@ -548,7 +546,7 @@
                     <p class="text-gray-600">سجل الدخول للوصول إلى حسابك</p>
                 </div>
                 <div class="space-y-4">
-                    <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback" onclick="loginUser()">
+                    <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback" onclick="openLoginModal()">
                         تسجيل الدخول
                     </button>
                     <button class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition duration-150 touch-feedback" onclick="registerUser()">
@@ -559,9 +557,39 @@
         </div>
     </div>
 
+    <!-- نافذة تسجيل الدخول -->
+    <div id="login-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'login-modal')">
+        <div class="bg-white w-full md:max-w-md modern-modal modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header flex justify-between items-center">
+                <h3 class="text-xl font-bold">تسجيل الدخول</h3>
+                <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('login-modal')" aria-label="إغلاق النافذة">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">البريد الإلكتروني</label>
+                        <input type="email" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="example@email.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">كلمة المرور</label>
+                        <input type="password" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="********">
+                    </div>
+                    <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback">
+                        تسجيل الدخول
+                    </button>
+                </div>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-600 text-sm">ليس لديك حساب؟ <button class="text-purple-600 font-semibold" onclick="switchToRegister()">إنشاء حساب جديد</button></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- نافذة المفضلة -->
-    <div id="favorites-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4">
-        <div class="bg-white w-full h-full md:max-w-2xl modern-modal modal-fullscreen flex flex-col">
+    <div id="favorites-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'favorites-modal')">
+        <div class="bg-white w-full h-full md:max-w-2xl modern-modal modal-fullscreen flex flex-col modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">قائمة المفضلة</h3>
                 <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('favorites-modal')" aria-label="إغلاق النافذة">
@@ -581,8 +609,8 @@
     </div>
 
     <!-- نافذة تواصل معنا -->
-    <div id="contact-us-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4">
-        <div class="bg-white w-full md:max-w-md modern-modal">
+    <div id="contact-us-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'contact-us-modal')">
+        <div class="bg-white w-full md:max-w-md modern-modal modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">تواصل معنا</h3>
                 <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('contact-us-modal')" aria-label="إغلاق النافذة">
@@ -638,8 +666,8 @@
     </div>
 
     <!-- نافذة القائمة الجانبية -->
-    <div id="sidebar-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-start justify-start p-2 md:p-4">
-        <div class="bg-white w-80 h-full modern-modal">
+    <div id="sidebar-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-start justify-start p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'sidebar-modal')">
+        <div class="bg-white w-80 h-full modern-modal modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">القائمة</h3>
                 <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('sidebar-modal')" aria-label="إغلاق النافذة">
@@ -692,42 +720,7 @@
                         <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 touch-feedback" onclick="openContactUsModal()">
                             تواصل معنا
                         </button>
-                        <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 touch-feedback" onclick="openAIAssistant()">
-                            المساعد الذكي
-                        </button>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- نافذة المساعد الذكي -->
-    <div id="ai-assistant-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4">
-        <div class="bg-white w-full md:max-w-md modern-modal">
-            <div class="modal-header flex justify-between items-center">
-                <h3 class="text-xl font-bold">المساعد الذكي</h3>
-                <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('ai-assistant-modal')" aria-label="إغلاق النافذة">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-            <div class="p-6">
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i data-lucide="bot" class="w-8 h-8 text-white"></i>
-                    </div>
-                    <h4 class="text-lg font-semibold">كيف يمكنني مساعدتك؟</h4>
-                    <p class="text-gray-600 text-sm">أساعدك في العثور على أفضل المنتجات</p>
-                </div>
-                <div class="space-y-3">
-                    <button class="w-full text-right py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition duration-150 touch-feedback" onclick="askAI('أفضل العروض')">
-                        ما هي أفضل العروض المتاحة؟
-                    </button>
-                    <button class="w-full text-right py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition duration-150 touch-feedback" onclick="askAI('منتجات جديدة')">
-                        ما هي المنتجات الجديدة؟
-                    </button>
-                    <button class="w-full text-right py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition duration-150 touch-feedback" onclick="askAI('نصائح تسوق')">
-                        نصائح للتسوق الذكي
-                    </button>
                 </div>
             </div>
         </div>
@@ -1042,6 +1035,11 @@
             document.getElementById('profile-modal').classList.remove('hidden');
         }
 
+        function openLoginModal() {
+            closeModal('profile-modal');
+            document.getElementById('login-modal').classList.remove('hidden');
+        }
+
         function openFavoritesModal() {
             document.getElementById('favorites-modal').classList.remove('hidden');
         }
@@ -1050,13 +1048,11 @@
             document.getElementById('contact-us-modal').classList.remove('hidden');
         }
 
-        function openAIAssistant() {
-            document.getElementById('ai-assistant-modal').classList.remove('hidden');
-        }
-
         function openHome() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
             setActiveNavItem(0);
+            // إغلاق أي نافذة مفتوحة
+            closeAllModals();
         }
 
         function setActiveNavItem(index) {
@@ -1073,12 +1069,21 @@
             document.getElementById(modalId).classList.add('hidden');
         }
 
-        function startShopping() {
-            openCategoryDetails(1);
+        function closeAllModals() {
+            const modals = document.querySelectorAll('[id$="-modal"]');
+            modals.forEach(modal => {
+                modal.classList.add('hidden');
+            });
         }
 
-        function loginUser() {
-            alert('سيتم فتح نافذة تسجيل الدخول قريباً');
+        function closeModalOnOverlay(event, modalId) {
+            if (event.target === event.currentTarget) {
+                closeModal(modalId);
+            }
+        }
+
+        function startShopping() {
+            openCategoryDetails(1);
         }
 
         function registerUser() {
@@ -1091,10 +1096,6 @@
                 return;
             }
             alert('سيتم فتح نافذة إتمام الشراء قريباً');
-        }
-
-        function askAI(question) {
-            alert(`سؤال للمساعد الذكي: ${question}\n\nهذه ميزة تجريبية، سيتم تطويرها قريباً.`);
         }
 
         function updateCartModal() {
@@ -1220,10 +1221,6 @@
             
             // إضافة أحداث للأزرار
             document.getElementById('sidebar-toggle').addEventListener('click', openSidebar);
-            document.getElementById('quick-search-btn').addEventListener('click', openSearchModal);
-            document.getElementById('favorites-btn').addEventListener('click', openFavoritesModal);
-            document.getElementById('cart-button').addEventListener('click', openCartModal);
-            document.getElementById('profile-btn').addEventListener('click', openProfileModal);
             document.getElementById('contact-us-btn').addEventListener('click', openContactUsModal);
             
             document.body.style.opacity = '0';
