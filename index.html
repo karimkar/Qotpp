@@ -358,20 +358,25 @@
                         <i data-lucide="shopping-bag" class="w-8 h-8 text-white"></i>
                     </div>
                     <div>
-                        <h1 class="text-4xl font-bold text-gray-800">أسواق القطب</h1>
+                        <h1 class="text-3xl font-bold text-gray-800">أسواق القطب</h1>
                         <p class="text-xs text-gray-800 -mt-1">  </p>
                     </div>
                 </div>
 
                 <!-- أيقونات -->
                 <div class="flex items-center space-x-3 space-x-reverse">
+                    <!-- زر تواصل معنا -->
+                    <button id="contact-us-btn" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200" aria-label="تواصل معنا">
+                        <i data-lucide="phone" class="w-6 h-6 text-gray-700"></i>
+                    </button>
+                    
                     <!-- بحث سريع -->
                     <button id="quick-search-btn" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200" aria-label="البحث السريع">
                         <i data-lucide="search" class="w-6 h-6 text-gray-700"></i>
                     </button>
                     
                     <!-- المفضلة -->
-                    <button class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 relative" aria-label="قائمة المفضلة">
+                    <button id="favorites-btn" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 relative" aria-label="قائمة المفضلة">
                         <i data-lucide="heart" class="w-6 h-6 text-gray-700"></i>
                         <span class="absolute -top-1 -left-1 bg-pink-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
                     </button>
@@ -511,6 +516,148 @@
         </div>
     </div>
 
+    <!-- نافذة تواصل معنا -->
+    <div id="contact-us-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="bg-white w-full md:max-w-md modern-modal">
+            <div class="modal-header flex justify-between items-center">
+                <h3 class="text-xl font-bold">تواصل معنا</h3>
+                <button class="text-white hover:text-gray-200" onclick="closeModal('contact-us-modal')" aria-label="إغلاق النافذة">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="bg-purple-100 p-3 rounded-full">
+                            <i data-lucide="phone" class="w-5 h-5 text-purple-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold">الهاتف</p>
+                            <p class="text-gray-600">+966 123 456 789</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <i data-lucide="message-circle" class="w-5 h-5 text-green-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold">الواتساب</p>
+                            <p class="text-gray-600">+966 123 456 789</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <i data-lucide="mail" class="w-5 h-5 text-blue-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold">البريد الإلكتروني</p>
+                            <p class="text-gray-600">info@aswaq-alqotob.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <button onclick="closeModal('contact-us-modal')" class="w-full bg-purple-600 text-white font-semibold py-3 rounded-lg hover:bg-purple-700 transition duration-150">
+                        إغلاق
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة البحث -->
+    <div id="search-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="bg-white w-full md:max-w-2xl modern-modal">
+            <div class="modal-header flex justify-between items-center">
+                <h3 class="text-xl font-bold">البحث في المتجر</h3>
+                <button class="text-white hover:text-gray-200" onclick="closeModal('search-modal')" aria-label="إغلاق النافذة">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="relative mb-6">
+                    <input type="text" id="search-input" placeholder="ابحث عن المنتجات..." 
+                           class="w-full p-4 border border-gray-300 rounded-xl text-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    <i data-lucide="search" class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2"></i>
+                </div>
+                <div id="search-results" class="max-h-96 overflow-y-auto">
+                    <p class="text-gray-500 text-center py-8">اكتب كلمة البحث أعلاه للعثور على المنتجات</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة الحساب -->
+    <div id="profile-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="bg-white w-full md:max-w-md modern-modal">
+            <div class="modal-header flex justify-between items-center">
+                <h3 class="text-xl font-bold">حسابي</h3>
+                <button class="text-white hover:text-gray-200" onclick="closeModal('profile-modal')" aria-label="إغلاق النافذة">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="text-center mb-6">
+                    <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="user" class="w-10 h-10 text-purple-600"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold">مرحباً بك!</h4>
+                    <p class="text-gray-600">سجل الدخول للوصول إلى حسابك</p>
+                </div>
+                <div class="space-y-4">
+                    <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150">
+                        تسجيل الدخول
+                    </button>
+                    <button class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition duration-150">
+                        إنشاء حساب جديد
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة المفضلة -->
+    <div id="favorites-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="bg-white w-full md:max-w-2xl h-full md:h-5/6 modern-modal flex flex-col">
+            <div class="modal-header flex justify-between items-center">
+                <h3 class="text-xl font-bold">قائمة المفضلة</h3>
+                <button class="text-white hover:text-gray-200" onclick="closeModal('favorites-modal')" aria-label="إغلاق النافذة">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <div id="favorites-list" class="space-y-4">
+                    <p class="text-gray-500 text-center py-8">لا توجد منتجات في المفضلة بعد</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة السلة -->
+    <div id="cart-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="bg-white w-full md:max-w-2xl h-full md:h-5/6 modern-modal flex flex-col">
+            <div class="modal-header flex justify-between items-center">
+                <h3 class="text-xl font-bold">سلة التسوق</h3>
+                <button class="text-white hover:text-gray-200" onclick="closeModal('cart-modal')" aria-label="إغلاق النافذة">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <div id="cart-items" class="space-y-4">
+                    <p class="text-gray-500 text-center py-8">سلة التسوق فارغة</p>
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-200">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="font-semibold">المجموع:</span>
+                    <span id="cart-total" class="font-bold text-lg text-purple-600">0.00 ر.س</span>
+                </div>
+                <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150">
+                    إتمام الشراء
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- كود JavaScript -->
     <script>
         // بيانات القوائم الرئيسية (20 قائمة)
@@ -542,6 +689,7 @@
         let currentSubProducts = [];
         let currentCategory = null;
         let currentFilter = 'all';
+        let favorites = [];
 
         // إنشاء المنتجات الفرعية (30 منتج لكل فئة)
         function generateSubProducts(categoryId, categoryName) {
@@ -787,6 +935,27 @@
             }
         }
 
+        // فتح النوافذ
+        function openSearchModal() {
+            document.getElementById('search-modal').classList.remove('hidden');
+        }
+
+        function openProfileModal() {
+            document.getElementById('profile-modal').classList.remove('hidden');
+        }
+
+        function openFavoritesModal() {
+            document.getElementById('favorites-modal').classList.remove('hidden');
+        }
+
+        function openCartModal() {
+            document.getElementById('cart-modal').classList.remove('hidden');
+        }
+
+        function openContactUsModal() {
+            document.getElementById('contact-us-modal').classList.remove('hidden');
+        }
+
         // إغلاق النافذة المنبثقة
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
@@ -837,6 +1006,13 @@
             
             // إعداد تأثيرات التمرير
             setupScrollEffects();
+            
+            // إضافة أحداث للأزرار
+            document.getElementById('quick-search-btn').addEventListener('click', openSearchModal);
+            document.getElementById('profile-btn').addEventListener('click', openProfileModal);
+            document.getElementById('favorites-btn').addEventListener('click', openFavoritesModal);
+            document.getElementById('cart-button').addEventListener('click', openCartModal);
+            document.getElementById('contact-us-btn').addEventListener('click', openContactUsModal);
             
             // إضافة تأثيرات دخول للصفحة
             document.body.style.opacity = '0';
