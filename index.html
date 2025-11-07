@@ -234,6 +234,56 @@
             transform: scale(0.98);
             transition: transform 0.1s ease;
         }
+
+        .btn-modern {
+            background: var(--purple-gradient);
+            transition: all 0.3s ease;
+            border: none;
+            color: white;
+            font-weight: 600;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+        }
+        
+        .btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+        }
+        
+        .filter-tabs {
+            display: flex;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 4px;
+        }
+        
+        .filter-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .filter-tab.active {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            color: #3b82f6;
+        }
+        
+        .modern-modal {
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            background: var(--blue-gradient);
+            color: white;
+            padding: 20px 24px;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -262,9 +312,31 @@
 
                 <!-- أيقونات -->
                 <div class="flex items-center space-x-2 space-x-reverse">
+                    <!-- زر تواصل معنا -->
+                    <button id="contact-us-btn" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 touch-feedback" aria-label="تواصل معنا">
+                        <i data-lucide="phone" class="w-6 h-6 text-gray-700"></i>
+                    </button>
+                    
+                    <!-- بحث سريع -->
+                    <button id="quick-search-btn" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 touch-feedback" aria-label="البحث السريع">
+                        <i data-lucide="search" class="w-6 h-6 text-gray-700"></i>
+                    </button>
+                    
+                    <!-- المفضلة -->
+                    <button id="favorites-btn" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 relative touch-feedback" aria-label="قائمة المفضلة">
+                        <i data-lucide="heart" class="w-6 h-6 text-gray-700"></i>
+                        <span id="favorites-count" class="absolute -top-1 -left-1 bg-pink-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                    </button>
+                    
+                    <!-- السلة -->
                     <button id="cart-button" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 relative touch-feedback" aria-label="سلة التسوق">
                         <i data-lucide="shopping-cart" class="w-6 h-6 text-gray-700"></i>
                         <span id="cart-count" class="absolute -top-1 -left-1 bg-purple-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center cart-badge hidden">0</span>
+                    </button>
+                    
+                    <!-- الملف الشخصي -->
+                    <button id="profile-btn" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 touch-feedback" aria-label="الحساب الشخصي">
+                        <i data-lucide="user" class="w-6 h-6 text-gray-700"></i>
                     </button>
                 </div>
             </div>
@@ -454,6 +526,209 @@
                 <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback" onclick="checkout()">
                     إتمام الشراء
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة الحساب الشخصي -->
+    <div id="profile-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4">
+        <div class="bg-white w-full md:max-w-md modern-modal">
+            <div class="modal-header flex justify-between items-center">
+                <h3 class="text-xl font-bold">حسابي</h3>
+                <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('profile-modal')" aria-label="إغلاق النافذة">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="text-center mb-6">
+                    <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="user" class="w-10 h-10 text-purple-600"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold">مرحباً بك!</h4>
+                    <p class="text-gray-600">سجل الدخول للوصول إلى حسابك</p>
+                </div>
+                <div class="space-y-4">
+                    <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback" onclick="loginUser()">
+                        تسجيل الدخول
+                    </button>
+                    <button class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition duration-150 touch-feedback" onclick="registerUser()">
+                        إنشاء حساب جديد
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة المفضلة -->
+    <div id="favorites-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4">
+        <div class="bg-white w-full h-full md:max-w-2xl modern-modal modal-fullscreen flex flex-col">
+            <div class="modal-header flex justify-between items-center">
+                <h3 class="text-xl font-bold">قائمة المفضلة</h3>
+                <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('favorites-modal')" aria-label="إغلاق النافذة">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <div id="favorites-list" class="space-y-4">
+                    <div class="text-center py-8">
+                        <i data-lucide="heart" class="w-16 h-16 text-pink-300 mx-auto mb-4"></i>
+                        <p class="text-gray-500 text-lg">لا توجد منتجات في المفضلة بعد</p>
+                        <p class="text-gray-400 text-sm mt-2">أضف منتجات إلى المفضلة لتظهر هنا</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تواصل معنا -->
+    <div id="contact-us-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4">
+        <div class="bg-white w-full md:max-w-md modern-modal">
+            <div class="modal-header flex justify-between items-center">
+                <h3 class="text-xl font-bold">تواصل معنا</h3>
+                <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('contact-us-modal')" aria-label="إغلاق النافذة">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="bg-purple-100 p-3 rounded-full">
+                            <i data-lucide="phone" class="w-5 h-5 text-purple-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold">الهاتف</p>
+                            <p class="text-gray-600">+966 123 456 789</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <i data-lucide="message-circle" class="w-5 h-5 text-green-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold">الواتساب</p>
+                            <p class="text-gray-600">+966 123 456 789</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <i data-lucide="mail" class="w-5 h-5 text-blue-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold">البريد الإلكتروني</p>
+                            <p class="text-gray-600">info@aswaq-alqotob.com</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="bg-orange-100 p-3 rounded-full">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-orange-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold">العنوان</p>
+                            <p class="text-gray-600">المملكة العربية السعودية</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <button onclick="closeModal('contact-us-modal')" class="w-full bg-purple-600 text-white font-semibold py-3 rounded-lg hover:bg-purple-700 transition duration-150 touch-feedback">
+                        إغلاق
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة القائمة الجانبية -->
+    <div id="sidebar-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-start justify-start p-2 md:p-4">
+        <div class="bg-white w-80 h-full modern-modal">
+            <div class="modal-header flex justify-between items-center">
+                <h3 class="text-xl font-bold">القائمة</h3>
+                <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('sidebar-modal')" aria-label="إغلاق النافذة">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i data-lucide="user" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <p class="font-semibold">مرحباً بك!</p>
+                        <p class="text-gray-600 text-sm">زائر</p>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 pt-4">
+                        <h4 class="font-semibold text-gray-800 mb-3">التصنيفات</h4>
+                        <div class="space-y-2">
+                            <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 flex items-center justify-between touch-feedback" onclick="openCategoryDetails(1)">
+                                <span>البقوليات</span>
+                                <i data-lucide="chevron-left" class="w-4 h-4 text-gray-400"></i>
+                            </button>
+                            <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 flex items-center justify-between touch-feedback" onclick="openCategoryDetails(2)">
+                                <span>المعلبات</span>
+                                <i data-lucide="chevron-left" class="w-4 h-4 text-gray-400"></i>
+                            </button>
+                            <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 flex items-center justify-between touch-feedback" onclick="openCategoryDetails(3)">
+                                <span>الحليب ومشتقاته</span>
+                                <i data-lucide="chevron-left" class="w-4 h-4 text-gray-400"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-4">
+                        <h4 class="font-semibold text-gray-800 mb-3">الحساب</h4>
+                        <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 touch-feedback" onclick="openProfileModal()">
+                            حسابي
+                        </button>
+                        <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 touch-feedback" onclick="openFavoritesModal()">
+                            المفضلة
+                        </button>
+                        <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 touch-feedback" onclick="openCartModal()">
+                            سلة التسوق
+                        </button>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-4">
+                        <h4 class="font-semibold text-gray-800 mb-3">المساعدة</h4>
+                        <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 touch-feedback" onclick="openContactUsModal()">
+                            تواصل معنا
+                        </button>
+                        <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 touch-feedback" onclick="openAIAssistant()">
+                            المساعد الذكي
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة المساعد الذكي -->
+    <div id="ai-assistant-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4">
+        <div class="bg-white w-full md:max-w-md modern-modal">
+            <div class="modal-header flex justify-between items-center">
+                <h3 class="text-xl font-bold">المساعد الذكي</h3>
+                <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('ai-assistant-modal')" aria-label="إغلاق النافذة">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="bot" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold">كيف يمكنني مساعدتك؟</h4>
+                    <p class="text-gray-600 text-sm">أساعدك في العثور على أفضل المنتجات</p>
+                </div>
+                <div class="space-y-3">
+                    <button class="w-full text-right py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition duration-150 touch-feedback" onclick="askAI('أفضل العروض')">
+                        ما هي أفضل العروض المتاحة؟
+                    </button>
+                    <button class="w-full text-right py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition duration-150 touch-feedback" onclick="askAI('منتجات جديدة')">
+                        ما هي المنتجات الجديدة؟
+                    </button>
+                    <button class="w-full text-right py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition duration-150 touch-feedback" onclick="askAI('نصائح تسوق')">
+                        نصائح للتسوق الذكي
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -741,6 +1016,10 @@
         }
 
         // وظائف النوافذ
+        function openSidebar() {
+            document.getElementById('sidebar-modal').classList.remove('hidden');
+        }
+
         function openSearchModal() {
             document.getElementById('search-modal').classList.remove('hidden');
             const searchInput = document.getElementById('search-input');
@@ -760,19 +1039,19 @@
         }
 
         function openProfileModal() {
-            alert('نافذة الحساب الشخصي - تحت التطوير');
+            document.getElementById('profile-modal').classList.remove('hidden');
         }
 
         function openFavoritesModal() {
-            alert('نافذة المفضلة - تحت التطوير');
+            document.getElementById('favorites-modal').classList.remove('hidden');
         }
 
         function openContactUsModal() {
-            alert('نافذة تواصل معنا - تحت التطوير');
+            document.getElementById('contact-us-modal').classList.remove('hidden');
         }
 
         function openAIAssistant() {
-            alert('المساعد الذكي - تحت التطوير');
+            document.getElementById('ai-assistant-modal').classList.remove('hidden');
         }
 
         function openHome() {
@@ -798,12 +1077,24 @@
             openCategoryDetails(1);
         }
 
+        function loginUser() {
+            alert('سيتم فتح نافذة تسجيل الدخول قريباً');
+        }
+
+        function registerUser() {
+            alert('سيتم فتح نافذة إنشاء حساب جديد قريباً');
+        }
+
         function checkout() {
             if (cartItems.length === 0) {
                 alert('سلة التسوق فارغة');
                 return;
             }
             alert('سيتم فتح نافذة إتمام الشراء قريباً');
+        }
+
+        function askAI(question) {
+            alert(`سؤال للمساعد الذكي: ${question}\n\nهذه ميزة تجريبية، سيتم تطويرها قريباً.`);
         }
 
         function updateCartModal() {
@@ -919,24 +1210,21 @@
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
                 console.log('تم تحميل الأيقونات');
-            } else {
-                console.error('لم يتم تحميل مكتبة الأيقونات');
             }
             
             // إنشاء جميع المنتجات
             generateAllProducts();
-            console.log('تم إنشاء المنتجات');
             
             // عرض القوائم
             renderCategories();
-            console.log('تم عرض الفئات');
             
             // إضافة أحداث للأزرار
-            document.getElementById('sidebar-toggle').addEventListener('click', function() {
-                alert('القائمة الجانبية - تحت التطوير');
-            });
-            
+            document.getElementById('sidebar-toggle').addEventListener('click', openSidebar);
+            document.getElementById('quick-search-btn').addEventListener('click', openSearchModal);
+            document.getElementById('favorites-btn').addEventListener('click', openFavoritesModal);
             document.getElementById('cart-button').addEventListener('click', openCartModal);
+            document.getElementById('profile-btn').addEventListener('click', openProfileModal);
+            document.getElementById('contact-us-btn').addEventListener('click', openContactUsModal);
             
             document.body.style.opacity = '0';
             setTimeout(() => {
