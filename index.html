@@ -409,6 +409,48 @@
         .offline-indicator.show {
             transform: translateY(0);
         }
+
+        /* تنسيقات خاصة بنموذج إنشاء الحساب */
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        
+        .password-container {
+            position: relative;
+        }
     </style>
 </head>
 
@@ -460,11 +502,6 @@
     <header class="sticky top-0 z-50 glass-effect shadow-sm">
         <div class="container mx-auto px-4 padding-mobile">
             <div class="flex items-center justify-between py-3">
-                <!-- القائمة الجانبية -->
-                <button id="sidebar-toggle" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 touch-feedback" aria-label="فتح القائمة الجانبية">
-                    <i data-lucide="menu" class="w-6 h-6 text-gray-700"></i>
-                </button>
-
                 <!-- الشعار -->
                 <div class="flex items-center space-x-2 space-x-reverse">
                     <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-2 rounded-xl shadow-lg">
@@ -696,7 +733,7 @@
                     <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback" onclick="openLoginModal()">
                         تسجيل الدخول
                     </button>
-                    <button class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition duration-150 touch-feedback" onclick="registerUser()">
+                    <button class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition duration-150 touch-feedback" onclick="openRegisterModal()">
                         إنشاء حساب جديد
                     </button>
                 </div>
@@ -714,21 +751,89 @@
                 </button>
             </div>
             <div class="p-6">
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">البريد الإلكتروني</label>
-                        <input type="email" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="example@email.com">
+                <form id="login-form">
+                    <div class="space-y-4">
+                        <div class="form-group">
+                            <label class="form-label">البريد الإلكتروني</label>
+                            <input type="email" id="login-email" class="form-input" placeholder="example@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">كلمة المرور</label>
+                            <div class="password-container">
+                                <input type="password" id="login-password" class="form-input pr-12" placeholder="********" required>
+                                <button type="button" class="password-toggle" onclick="togglePassword('login-password', this)">
+                                    <i data-lucide="eye" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback">
+                            تسجيل الدخول
+                        </button>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">كلمة المرور</label>
-                        <input type="password" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="********">
-                    </div>
-                    <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback">
-                        تسجيل الدخول
-                    </button>
-                </div>
+                </form>
                 <div class="mt-4 text-center">
                     <p class="text-gray-600 text-sm">ليس لديك حساب؟ <button class="text-purple-600 font-semibold" onclick="switchToRegister()">إنشاء حساب جديد</button></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة إنشاء حساب جديد -->
+    <div id="register-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'register-modal')">
+        <div class="bg-white w-full md:max-w-md modern-modal modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header flex justify-between items-center">
+                <h3 class="text-xl font-bold">إنشاء حساب جديد</h3>
+                <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('register-modal')" aria-label="إغلاق النافذة">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <form id="register-form">
+                    <div class="space-y-4">
+                        <div class="form-group">
+                            <label class="form-label">الاسم الكامل</label>
+                            <input type="text" id="register-name" class="form-input" placeholder="أدخل اسمك الكامل" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">البريد الإلكتروني</label>
+                            <input type="email" id="register-email" class="form-input" placeholder="example@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">رقم الهاتف</label>
+                            <input type="tel" id="register-phone" class="form-input" placeholder="05XXXXXXXX" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">كلمة المرور</label>
+                            <div class="password-container">
+                                <input type="password" id="register-password" class="form-input pr-12" placeholder="********" required minlength="6">
+                                <button type="button" class="password-toggle" onclick="togglePassword('register-password', this)">
+                                    <i data-lucide="eye" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">يجب أن تحتوي كلمة المرور على 6 أحرف على الأقل</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">تأكيد كلمة المرور</label>
+                            <div class="password-container">
+                                <input type="password" id="register-confirm-password" class="form-input pr-12" placeholder="********" required>
+                                <button type="button" class="password-toggle" onclick="togglePassword('register-confirm-password', this)">
+                                    <i data-lucide="eye" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="register-terms" class="rounded border-gray-300 text-purple-600 focus:ring-purple-500" required>
+                                <span class="mr-2 text-sm text-gray-600">أوافق على <a href="#" class="text-purple-600 hover:underline">شروط الاستخدام</a> و <a href="#" class="text-purple-600 hover:underline">سياسة الخصوصية</a></span>
+                            </label>
+                        </div>
+                        <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback">
+                            إنشاء حساب
+                        </button>
+                    </div>
+                </form>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-600 text-sm">لديك حساب بالفعل؟ <button class="text-purple-600 font-semibold" onclick="switchToLogin()">تسجيل الدخول</button></p>
                 </div>
             </div>
         </div>
@@ -1491,6 +1596,11 @@
             document.getElementById('login-modal').classList.remove('hidden');
         }
 
+        function openRegisterModal() {
+            closeModal('profile-modal');
+            document.getElementById('register-modal').classList.remove('hidden');
+        }
+
         function openFavoritesModal() {
             document.getElementById('favorites-modal').classList.remove('hidden');
         }
@@ -1544,13 +1654,14 @@
             openCategoryDetails(1);
         }
 
-        function registerUser() {
-            showToast('سيتم فتح نافذة إنشاء حساب جديد قريباً');
-        }
-
         function switchToRegister() {
             closeModal('login-modal');
-            showToast('سيتم فتح نافذة إنشاء حساب جديد قريباً');
+            openRegisterModal();
+        }
+
+        function switchToLogin() {
+            closeModal('register-modal');
+            openLoginModal();
         }
 
         function checkout() {
@@ -1619,6 +1730,175 @@
                 addToCart(productId);
                 closeModal('search-modal');
             }
+        }
+
+        // وظيفة إظهار/إخفاء كلمة المرور
+        function togglePassword(inputId, button) {
+            const passwordInput = document.getElementById(inputId);
+            const icon = button.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                passwordInput.type = 'password';
+                icon.setAttribute('data-lucide', 'eye');
+            }
+            
+            lucide.createIcons();
+        }
+
+        // وظيفة التحقق من نموذج التسجيل
+        function validateRegisterForm() {
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const phone = document.getElementById('register-phone').value.trim();
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            const terms = document.getElementById('register-terms').checked;
+            
+            // التحقق من الاسم
+            if (name.length < 2) {
+                showToast('الاسم يجب أن يكون على الأقل حرفين');
+                return false;
+            }
+            
+            // التحقق من البريد الإلكتروني
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showToast('يرجى إدخال بريد إلكتروني صحيح');
+                return false;
+            }
+            
+            // التحقق من رقم الهاتف
+            const phoneRegex = /^05\d{8}$/;
+            if (!phoneRegex.test(phone)) {
+                showToast('يرجى إدخال رقم هاتف صحيح (يبدأ بـ 05 ويحتوي على 10 أرقام)');
+                return false;
+            }
+            
+            // التحقق من كلمة المرور
+            if (password.length < 6) {
+                showToast('كلمة المرور يجب أن تكون على الأقل 6 أحرف');
+                return false;
+            }
+            
+            // التحقق من تطابق كلمة المرور
+            if (password !== confirmPassword) {
+                showToast('كلمات المرور غير متطابقة');
+                return false;
+            }
+            
+            // التحقق من الموافقة على الشروط
+            if (!terms) {
+                showToast('يجب الموافقة على شروط الاستخدام وسياسة الخصوصية');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // وظيفة معالجة نموذج التسجيل
+        function handleRegisterForm(event) {
+            event.preventDefault();
+            
+            if (!validateRegisterForm()) {
+                return;
+            }
+            
+            // هنا يمكنك إضافة كود لإرسال البيانات إلى الخادم
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            
+            // محاكاة عملية التسجيل
+            showToast('🎉 تم إنشاء الحساب بنجاح!');
+            
+            // إغلاق النافذة بعد التسجيل
+            setTimeout(() => {
+                closeModal('register-modal');
+                
+                // تحديث واجهة المستخدم لإظهار أن المستخدم مسجل الدخول
+                document.querySelector('.mobile-nav-item:last-child span').textContent = 'حسابي';
+                document.querySelector('#profile-modal .text-center h4').textContent = `مرحباً ${name}`;
+                document.querySelector('#profile-modal .text-center p').textContent = email;
+                
+                // إخفاء زر إنشاء حساب وإظهار زر تسجيل الخروج
+                const profileModalContent = document.querySelector('#profile-modal .space-y-4');
+                profileModalContent.innerHTML = `
+                    <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback" onclick="openLoginModal()">
+                        تحديث البيانات
+                    </button>
+                    <button class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition duration-150 touch-feedback" onclick="logoutUser()">
+                        تسجيل الخروج
+                    </button>
+                `;
+            }, 1500);
+        }
+
+        // وظيفة تسجيل الخروج
+        function logoutUser() {
+            showToast('تم تسجيل الخروج بنجاح');
+            closeModal('profile-modal');
+            
+            // إعادة تعيين واجهة المستخدم إلى الحالة الافتراضية
+            document.querySelector('.mobile-nav-item:last-child span').textContent = 'حسابي';
+            document.querySelector('#profile-modal .text-center h4').textContent = 'مرحباً بك!';
+            document.querySelector('#profile-modal .text-center p').textContent = 'سجل الدخول للوصول إلى حسابك';
+            
+            const profileModalContent = document.querySelector('#profile-modal .space-y-4');
+            profileModalContent.innerHTML = `
+                <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback" onclick="openLoginModal()">
+                    تسجيل الدخول
+                </button>
+                <button class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition duration-150 touch-feedback" onclick="openRegisterModal()">
+                    إنشاء حساب جديد
+                </button>
+            `;
+        }
+
+        // وظيفة معالجة نموذج تسجيل الدخول
+        function handleLoginForm(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            
+            // التحقق من البريد الإلكتروني
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showToast('يرجى إدخال بريد إلكتروني صحيح');
+                return;
+            }
+            
+            // التحقق من كلمة المرور
+            if (password.length < 6) {
+                showToast('كلمة المرور يجب أن تكون على الأقل 6 أحرف');
+                return;
+            }
+            
+            // محاكاة عملية تسجيل الدخول
+            showToast('🎉 تم تسجيل الدخول بنجاح!');
+            
+            // إغلاق النافذة بعد تسجيل الدخول
+            setTimeout(() => {
+                closeModal('login-modal');
+                
+                // تحديث واجهة المستخدم لإظهار أن المستخدم مسجل الدخول
+                document.querySelector('.mobile-nav-item:last-child span').textContent = 'حسابي';
+                document.querySelector('#profile-modal .text-center h4').textContent = `مرحباً ${email.split('@')[0]}`;
+                document.querySelector('#profile-modal .text-center p').textContent = email;
+                
+                // إخفاء زر إنشاء حساب وإظهار زر تسجيل الخروج
+                const profileModalContent = document.querySelector('#profile-modal .space-y-4');
+                profileModalContent.innerHTML = `
+                    <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback" onclick="openLoginModal()">
+                        تحديث البيانات
+                    </button>
+                    <button class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition duration-150 touch-feedback" onclick="logoutUser()">
+                        تسجيل الخروج
+                    </button>
+                `;
+            }, 1500);
         }
 
         // وظيفة الرسائل المؤقتة
@@ -1690,11 +1970,12 @@
             renderCategories();
             
             // إضافة أحداث للأزرار
-            document.getElementById('sidebar-toggle').addEventListener('click', openSidebar);
             document.getElementById('cart-header-btn').addEventListener('click', openCartModal);
             document.getElementById('contact-us-btn').addEventListener('click', openContactUsModal);
             
-            // إضافة حدث للنموذج
+            // إضافة أحداث للنماذج
+            document.getElementById('register-form').addEventListener('submit', handleRegisterForm);
+            document.getElementById('login-form').addEventListener('submit', handleLoginForm);
             document.getElementById('payment-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 showToast('🎉 تم تأكيد الطلب بنجاح! سيتم التواصل معك قريباً.');
@@ -1723,6 +2004,7 @@
         window.openCartModal = openCartModal;
         window.openProfileModal = openProfileModal;
         window.openLoginModal = openLoginModal;
+        window.openRegisterModal = openRegisterModal;
         window.openFavoritesModal = openFavoritesModal;
         window.openContactUsModal = openContactUsModal;
         window.openPaymentModal = openPaymentModal;
@@ -1731,8 +2013,8 @@
         window.closeAllModals = closeAllModals;
         window.closeModalOnOverlay = closeModalOnOverlay;
         window.startShopping = startShopping;
-        window.registerUser = registerUser;
         window.switchToRegister = switchToRegister;
+        window.switchToLogin = switchToLogin;
         window.checkout = checkout;
         window.openCategoryDetails = openCategoryDetails;
         window.changeFilterTab = changeFilterTab;
@@ -1742,6 +2024,8 @@
         window.updateCartItemQuantity = updateCartItemQuantity;
         window.removeFromCart = removeFromCart;
         window.performSearch = performSearch;
+        window.togglePassword = togglePassword;
+        window.logoutUser = logoutUser;
         window.showToast = showToast;
     </script>
 </body>
