@@ -181,7 +181,7 @@
             line-height: 1.8;
         }
         
-        /* PWA Install Prompt */
+        /* PWA Install Prompt - تم إخفاؤه بدلاً من حذفه */
         .install-prompt {
             position: fixed;
             bottom: 100px;
@@ -194,6 +194,7 @@
             z-index: 1002;
             transform: translateY(150%);
             transition: transform 0.3s ease;
+            display: none; /* إخفاء العنصر */
         }
         
         .install-prompt.show {
@@ -474,8 +475,8 @@
         </div>
     </div>
 
-    <!-- PWA Install Prompt -->
-    <div id="install-prompt" class="install-prompt">
+    <!-- PWA Install Prompt - مخفي ولكن موجود للحفاظ على الوظائف -->
+    <div id="install-prompt" class="install-prompt" style="display: none;">
         <div class="flex items-center space-x-3 space-x-reverse mb-3">
             <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
                 <i data-lucide="shopping-bag" class="w-6 h-6 text-purple-600"></i>
@@ -1152,19 +1153,13 @@
             }
         }
 
-        // إدارة تثبيت PWA
+        // إدارة تثبيت PWA - معدلة لمنع العرض التلقائي
         let deferredPrompt;
         function setupPWAInstall() {
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
-                
-                setTimeout(() => {
-                    const installPrompt = document.getElementById('install-prompt');
-                    if (installPrompt) {
-                        installPrompt.classList.add('show');
-                    }
-                }, 5000);
+                // تم إزالة الكود الذي يعرض النافذة تلقائياً
             });
 
             const installAccept = document.getElementById('install-accept');
@@ -1178,7 +1173,7 @@
                         console.log('User response to install prompt:', outcome);
                         deferredPrompt = null;
                         const installPrompt = document.getElementById('install-prompt');
-                        if (installPrompt) installPrompt.classList.remove('show');
+                        if (installPrompt) installPrompt.style.display = 'none';
                     }
                 });
             }
@@ -1186,7 +1181,7 @@
             if (installCancel) {
                 installCancel.addEventListener('click', () => {
                     const installPrompt = document.getElementById('install-prompt');
-                    if (installPrompt) installPrompt.classList.remove('show');
+                    if (installPrompt) installPrompt.style.display = 'none';
                     localStorage.setItem('installPromptDismissed', Date.now());
                 });
             }
