@@ -280,6 +280,18 @@
             .padding-mobile {
                 padding: 16px !important;
             }
+            
+            /* تحسينات خاصة لنافذة إنشاء الحساب */
+            .register-modal-mobile {
+                width: 95% !important;
+                max-height: 90% !important;
+                margin: 5% auto !important;
+            }
+            
+            .register-form-mobile {
+                max-height: calc(100vh - 200px) !important;
+                overflow-y: auto !important;
+            }
         }
         
         .touch-feedback:active {
@@ -451,6 +463,26 @@
         
         .password-container {
             position: relative;
+        }
+        
+        /* زر التسجيل - إصلاح المشكلة */
+        .register-button {
+            width: 100%;
+            background: var(--purple-gradient);
+            color: white;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+        
+        .register-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
         }
     </style>
 </head>
@@ -779,16 +811,16 @@
         </div>
     </div>
 
-    <!-- نافذة إنشاء حساب جديد -->
+    <!-- نافذة إنشاء حساب جديد - تم التصحيح -->
     <div id="register-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'register-modal')">
-        <div class="bg-white w-full md:max-w-md modern-modal modal-content" onclick="event.stopPropagation()">
+        <div class="bg-white w-full md:max-w-md modern-modal register-modal-mobile modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">إنشاء حساب جديد</h3>
                 <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('register-modal')" aria-label="إغلاق النافذة">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <div class="p-6">
+            <div class="p-6 register-form-mobile">
                 <form id="register-form">
                     <div class="space-y-4">
                         <div class="form-group">
@@ -828,7 +860,8 @@
                                 <span class="mr-2 text-sm text-gray-600">أوافق على <a href="#" class="text-purple-600 hover:underline">شروط الاستخدام</a> و <a href="#" class="text-purple-600 hover:underline">سياسة الخصوصية</a></span>
                             </label>
                         </div>
-                        <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback">
+                        <!-- زر التسجيل - تم إصلاح المشكلة -->
+                        <button type="submit" class="register-button">
                             إنشاء حساب
                         </button>
                     </div>
