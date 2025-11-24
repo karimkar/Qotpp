@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -736,7 +737,7 @@
             <div class="p-6 border-t border-gray-200">
                 <div class="flex justify-between items-center mb-4">
                     <span class="font-semibold">المجموع:</span>
-                    <span id="cart-total" class="font-bold text-lg text-purple-600">0.00 ر.س</span>
+                    <span id="cart-total" class="font-bold text-lg text-purple-600">0.00 د.ع</span>
                 </div>
                 <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback" onclick="checkout()">
                     إتمام الشراء
@@ -830,10 +831,6 @@
                         <div class="form-group">
                             <label class="form-label">البريد الإلكتروني</label>
                             <input type="email" id="register-email" class="form-input" placeholder="example@email.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">رقم الهاتف</label>
-                            <input type="tel" id="register-phone" class="form-input" placeholder="07XXXXXXXXX" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">كلمة المرور</label>
@@ -1048,7 +1045,7 @@
                     <div class="mt-6">
                         <div class="flex justify-between items-center mb-4">
                             <span class="font-semibold">المجموع:</span>
-                            <span id="payment-total" class="font-bold text-lg text-purple-600">0.00 ر.س</span>
+                            <span id="payment-total" class="font-bold text-lg text-purple-600">0.00 د.ع</span>
                         </div>
                         <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback">
                             تأكيد الطلب
@@ -1416,8 +1413,8 @@
                         
                         <div class="flex justify-between items-center mt-auto">
                             <div>
-                                <span class="font-extrabold text-lg text-purple-700">${product.price.toFixed(2)} ر.س</span>
-                                ${product.hasDiscount ? `<span class="text-xs text-red-500 line-through block">${product.originalPrice.toFixed(2)} ر.س</span>` : ''}
+                                <span class="font-extrabold text-lg text-purple-700">${product.price.toFixed(2)} د.ع</span>
+                                ${product.hasDiscount ? `<span class="text-xs text-red-500 line-through block">${product.originalPrice.toFixed(2)} د.ع</span>` : ''}
                             </div>
                         </div>
                     </div>
@@ -1494,8 +1491,8 @@
             
             if (cartItems.length === 0) {
                 cartItemsContainer.innerHTML = '<p class="text-gray-500 text-center py-8">سلة التسوق فارغة</p>';
-                cartTotal.textContent = '0.00 ر.س';
-                if (paymentTotal) paymentTotal.textContent = '0.00 ر.س';
+                cartTotal.textContent = '0.00 د.ع';
+                if (paymentTotal) paymentTotal.textContent = '0.00 د.ع';
                 return;
             }
             
@@ -1511,7 +1508,7 @@
                         <div class="flex-1">
                             <h4 class="font-semibold text-gray-800">${item.name}</h4>
                             <div class="flex items-center justify-between mt-2">
-                                <span class="font-bold text-purple-600">${item.price.toFixed(2)} ر.س</span>
+                                <span class="font-bold text-purple-600">${item.price.toFixed(2)} د.ع</span>
                                 <div class="flex items-center space-x-2 space-x-reverse">
                                     <button class="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center touch-feedback" onclick="updateCartItemQuantity('${item.productId}', -1)">
                                         <i data-lucide="minus" class="w-4 h-4"></i>
@@ -1523,7 +1520,7 @@
                                 </div>
                             </div>
                             <div class="flex justify-between items-center mt-2">
-                                <span class="text-sm text-gray-600">المجموع: ${itemTotal.toFixed(2)} ر.س</span>
+                                <span class="text-sm text-gray-600">المجموع: ${itemTotal.toFixed(2)} د.ع</span>
                                 <button class="text-red-500 hover:text-red-700 text-sm touch-feedback" onclick="removeFromCart('${item.productId}')">
                                     حذف
                                 </button>
@@ -1534,8 +1531,8 @@
             });
             
             cartItemsContainer.innerHTML = itemsHTML;
-            cartTotal.textContent = total.toFixed(2) + ' ر.س';
-            if (paymentTotal) paymentTotal.textContent = total.toFixed(2) + ' ر.س';
+            cartTotal.textContent = total.toFixed(2) + ' د.ع';
+            if (paymentTotal) paymentTotal.textContent = total.toFixed(2) + ' د.ع';
             
             // تحديث الأيقونات
             if (typeof lucide !== 'undefined') {
@@ -1737,8 +1734,8 @@
                             <h4 class="font-semibold text-gray-800">${product.name}</h4>
                             <p class="text-sm text-gray-600">${product.categoryName}</p>
                             <div class="flex items-center mt-1">
-                                <span class="font-bold text-purple-600">${product.price.toFixed(2)} ر.س</span>
-                                ${product.hasDiscount ? `<span class="text-xs text-red-500 line-through mr-2">${product.originalPrice.toFixed(2)} ر.س</span>` : ''}
+                                <span class="font-bold text-purple-600">${product.price.toFixed(2)} د.ع</span>
+                                ${product.hasDiscount ? `<span class="text-xs text-red-500 line-through mr-2">${product.originalPrice.toFixed(2)} د.ع</span>` : ''}
                             </div>
                         </div>
                         <button class="bg-purple-600 text-white p-2 rounded-lg hover:bg-purple-700 transition duration-150 touch-feedback">
@@ -1776,11 +1773,10 @@
             lucide.createIcons();
         }
 
-        // وظيفة التحقق من نموذج التسجيل
+        // وظيفة التحقق من نموذج التسجيل - تم التصحيح
         function validateRegisterForm() {
             const name = document.getElementById('register-name').value.trim();
             const email = document.getElementById('register-email').value.trim();
-            const phone = document.getElementById('register-phone').value.trim();
             const password = document.getElementById('register-password').value;
             const confirmPassword = document.getElementById('register-confirm-password').value;
             const terms = document.getElementById('register-terms').checked;
@@ -1795,13 +1791,6 @@
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 showToast('يرجى إدخال بريد إلكتروني صحيح');
-                return false;
-            }
-            
-            // التحقق من رقم الهاتف
-            const phoneRegex = /^07\d{11}$/;
-            if (!phoneRegex.test(phone)) {
-                showToast('يرجى إدخال رقم هاتف صحيح (يبدأ بـ 07 ويحتوي على 11 أرقام)');
                 return false;
             }
             
@@ -1826,7 +1815,7 @@
             return true;
         }
 
-        // وظيفة معالجة نموذج التسجيل
+        // وظيفة معالجة نموذج التسجيل - تم التصحيح
         function handleRegisterForm(event) {
             event.preventDefault();
             
