@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -485,6 +484,51 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
         }
+
+        /* تنسيقات التحقق بالبريد الإلكتروني */
+        .verification-code-input {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 8px;
+        }
+        
+        .verification-container {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        .verification-digit {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .verification-digit:focus {
+            border-color: #8b5cf6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        .resend-button {
+            background: none;
+            border: none;
+            color: #8b5cf6;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+        
+        .resend-button:disabled {
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -737,7 +781,7 @@
             <div class="p-6 border-t border-gray-200">
                 <div class="flex justify-between items-center mb-4">
                     <span class="font-semibold">المجموع:</span>
-                    <span id="cart-total" class="font-bold text-lg text-purple-600">0.00 د.ع</span>
+                    <span id="cart-total" class="font-bold text-lg text-purple-600">0.00</span>
                 </div>
                 <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback" onclick="checkout()">
                     إتمام الشراء
@@ -858,14 +902,64 @@
                             </label>
                         </div>
                         <!-- زر التسجيل - تم إصلاح المشكلة -->
-                        <button type="submit" class="register-button">
-                            إنشاء حساب
+                        <button type="button" class="register-button" onclick="sendVerificationCode()">
+                            إرسال رمز التحقق
                         </button>
                     </div>
                 </form>
                 <div class="mt-4 text-center">
                     <p class="text-gray-600 text-sm">لديك حساب بالفعل؟ <button class="text-purple-600 font-semibold" onclick="switchToLogin()">تسجيل الدخول</button></p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة التحقق بالبريد الإلكتروني -->
+    <div id="verification-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'verification-modal')">
+        <div class="bg-white w-full md:max-w-md modern-modal modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header flex justify-between items-center">
+                <h3 class="text-xl font-bold">التحقق من البريد الإلكتروني</h3>
+                <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('verification-modal')" aria-label="إغلاق النافذة">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="mail" class="w-8 h-8 text-green-600"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold mb-2">تم إرسال رمز التحقق</h4>
+                    <p class="text-gray-600 text-sm">لقد أرسلنا رمز تحقق مكون من 6 أرقام إلى بريدك الإلكتروني</p>
+                    <p id="verification-email" class="text-purple-600 font-medium mt-1"></p>
+                </div>
+                
+                <form id="verification-form">
+                    <div class="space-y-4">
+                        <div class="form-group">
+                            <label class="form-label">أدخل رمز التحقق</label>
+                            <div class="verification-container">
+                                <input type="text" maxlength="1" class="verification-digit" oninput="moveToNext(this, 1)" onkeydown="handleVerificationInput(event, 0)">
+                                <input type="text" maxlength="1" class="verification-digit" oninput="moveToNext(this, 2)" onkeydown="handleVerificationInput(event, 1)">
+                                <input type="text" maxlength="1" class="verification-digit" oninput="moveToNext(this, 3)" onkeydown="handleVerificationInput(event, 2)">
+                                <input type="text" maxlength="1" class="verification-digit" oninput="moveToNext(this, 4)" onkeydown="handleVerificationInput(event, 3)">
+                                <input type="text" maxlength="1" class="verification-digit" oninput="moveToNext(this, 5)" onkeydown="handleVerificationInput(event, 4)">
+                                <input type="text" maxlength="1" class="verification-digit" oninput="moveToNext(this, 6)" onkeydown="handleVerificationInput(event, 5)">
+                            </div>
+                            <input type="hidden" id="verification-code" required>
+                        </div>
+                        
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600 mb-2">لم تستلم الرمز؟</p>
+                            <button type="button" id="resend-button" class="resend-button" onclick="resendVerificationCode()">
+                                إعادة إرسال الرمز (<span id="countdown">60</span>)
+                            </button>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback">
+                            التحقق وإنشاء الحساب
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -1045,7 +1139,7 @@
                     <div class="mt-6">
                         <div class="flex justify-between items-center mb-4">
                             <span class="font-semibold">المجموع:</span>
-                            <span id="payment-total" class="font-bold text-lg text-purple-600">0.00 د.ع</span>
+                            <span id="payment-total" class="font-bold text-lg text-purple-600">0.00</span>
                         </div>
                         <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback">
                             تأكيد الطلب
@@ -1088,6 +1182,8 @@
         let currentCategory = null;
         let currentFilter = 'all';
         let allProducts = [];
+        let verificationCode = '';
+        let countdownInterval = null;
 
         // === PWA FUNCTIONALITY ===
         
@@ -1413,8 +1509,8 @@
                         
                         <div class="flex justify-between items-center mt-auto">
                             <div>
-                                <span class="font-extrabold text-lg text-purple-700">${product.price.toFixed(2)} د.ع</span>
-                                ${product.hasDiscount ? `<span class="text-xs text-red-500 line-through block">${product.originalPrice.toFixed(2)} د.ع</span>` : ''}
+                                <span class="font-extrabold text-lg text-purple-700">${product.price.toFixed(2)}</span>
+                                ${product.hasDiscount ? `<span class="text-xs text-red-500 line-through block">${product.originalPrice.toFixed(2)}</span>` : ''}
                             </div>
                         </div>
                     </div>
@@ -1491,8 +1587,8 @@
             
             if (cartItems.length === 0) {
                 cartItemsContainer.innerHTML = '<p class="text-gray-500 text-center py-8">سلة التسوق فارغة</p>';
-                cartTotal.textContent = '0.00 د.ع';
-                if (paymentTotal) paymentTotal.textContent = '0.00 د.ع';
+                cartTotal.textContent = '0.00';
+                if (paymentTotal) paymentTotal.textContent = '0.00';
                 return;
             }
             
@@ -1508,7 +1604,7 @@
                         <div class="flex-1">
                             <h4 class="font-semibold text-gray-800">${item.name}</h4>
                             <div class="flex items-center justify-between mt-2">
-                                <span class="font-bold text-purple-600">${item.price.toFixed(2)} د.ع</span>
+                                <span class="font-bold text-purple-600">${item.price.toFixed(2)}</span>
                                 <div class="flex items-center space-x-2 space-x-reverse">
                                     <button class="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center touch-feedback" onclick="updateCartItemQuantity('${item.productId}', -1)">
                                         <i data-lucide="minus" class="w-4 h-4"></i>
@@ -1520,7 +1616,7 @@
                                 </div>
                             </div>
                             <div class="flex justify-between items-center mt-2">
-                                <span class="text-sm text-gray-600">المجموع: ${itemTotal.toFixed(2)} د.ع</span>
+                                <span class="text-sm text-gray-600">المجموع: ${itemTotal.toFixed(2)}</span>
                                 <button class="text-red-500 hover:text-red-700 text-sm touch-feedback" onclick="removeFromCart('${item.productId}')">
                                     حذف
                                 </button>
@@ -1531,8 +1627,8 @@
             });
             
             cartItemsContainer.innerHTML = itemsHTML;
-            cartTotal.textContent = total.toFixed(2) + ' د.ع';
-            if (paymentTotal) paymentTotal.textContent = total.toFixed(2) + ' د.ع';
+            cartTotal.textContent = total.toFixed(2);
+            if (paymentTotal) paymentTotal.textContent = total.toFixed(2);
             
             // تحديث الأيقونات
             if (typeof lucide !== 'undefined') {
@@ -1624,6 +1720,10 @@
         function openRegisterModal() {
             closeModal('profile-modal');
             document.getElementById('register-modal').classList.remove('hidden');
+        }
+
+        function openVerificationModal() {
+            document.getElementById('verification-modal').classList.remove('hidden');
         }
 
         function openFavoritesModal() {
@@ -1734,8 +1834,8 @@
                             <h4 class="font-semibold text-gray-800">${product.name}</h4>
                             <p class="text-sm text-gray-600">${product.categoryName}</p>
                             <div class="flex items-center mt-1">
-                                <span class="font-bold text-purple-600">${product.price.toFixed(2)} د.ع</span>
-                                ${product.hasDiscount ? `<span class="text-xs text-red-500 line-through mr-2">${product.originalPrice.toFixed(2)} د.ع</span>` : ''}
+                                <span class="font-bold text-purple-600">${product.price.toFixed(2)}</span>
+                                ${product.hasDiscount ? `<span class="text-xs text-red-500 line-through mr-2">${product.originalPrice.toFixed(2)}</span>` : ''}
                             </div>
                         </div>
                         <button class="bg-purple-600 text-white p-2 rounded-lg hover:bg-purple-700 transition duration-150 touch-feedback">
@@ -1815,24 +1915,135 @@
             return true;
         }
 
-        // وظيفة معالجة نموذج التسجيل - تم التصحيح
-        function handleRegisterForm(event) {
-            event.preventDefault();
-            
+        // إرسال رمز التحقق
+        function sendVerificationCode() {
             if (!validateRegisterForm()) {
                 return;
             }
             
-            // هنا يمكنك إضافة كود لإرسال البيانات إلى الخادم
+            const email = document.getElementById('register-email').value.trim();
+            
+            // توليد رمز تحقق عشوائي مكون من 6 أرقام
+            verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            // في بيئة حقيقية، هنا سيتم إرسال الرمز إلى البريد الإلكتروني
+            // ولكن في هذا المثال، سنعرضه في console للمستخدم
+            console.log(`رمز التحقق المرسل إلى ${email}: ${verificationCode}`);
+            
+            // عرض البريد الإلكتروني في نافذة التحقق
+            document.getElementById('verification-email').textContent = email;
+            
+            // إغلاق نافذة التسجيل وفتح نافذة التحقق
+            closeModal('register-modal');
+            openVerificationModal();
+            
+            // بدء العد التنازلي لإعادة الإرسال
+            startCountdown();
+            
+            showToast('تم إرسال رمز التحقق إلى بريدك الإلكتروني');
+        }
+
+        // إعادة إرسال رمز التحقق
+        function resendVerificationCode() {
+            const resendButton = document.getElementById('resend-button');
+            if (resendButton.disabled) return;
+            
+            // توليد رمز تحقق جديد
+            verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            // في بيئة حقيقية، هنا سيتم إرسال الرمز إلى البريد الإلكتروني
+            const email = document.getElementById('register-email').value.trim();
+            console.log(`رمز التحقق الجديد المرسل إلى ${email}: ${verificationCode}`);
+            
+            // إعادة بدء العد التنازلي
+            startCountdown();
+            
+            showToast('تم إعادة إرسال رمز التحقق');
+        }
+
+        // بدء العد التنازلي لإعادة الإرسال
+        function startCountdown() {
+            let countdown = 60;
+            const countdownElement = document.getElementById('countdown');
+            const resendButton = document.getElementById('resend-button');
+            
+            resendButton.disabled = true;
+            
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            countdownInterval = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    resendButton.disabled = false;
+                    countdownElement.textContent = '60';
+                }
+            }, 1000);
+        }
+
+        // التعامل مع إدخال رمز التحقق
+        function moveToNext(input, nextIndex) {
+            if (input.value.length === 1) {
+                if (nextIndex <= 6) {
+                    const nextInput = document.querySelector(`.verification-digit:nth-child(${nextIndex})`);
+                    if (nextInput) {
+                        nextInput.focus();
+                    }
+                }
+            }
+            updateVerificationCode();
+        }
+
+        function handleVerificationInput(event, currentIndex) {
+            if (event.key === 'Backspace' && event.target.value === '') {
+                if (currentIndex > 0) {
+                    const prevInput = document.querySelector(`.verification-digit:nth-child(${currentIndex})`);
+                    if (prevInput) {
+                        prevInput.focus();
+                    }
+                }
+            }
+        }
+
+        function updateVerificationCode() {
+            const digits = document.querySelectorAll('.verification-digit');
+            let code = '';
+            digits.forEach(digit => {
+                code += digit.value;
+            });
+            document.getElementById('verification-code').value = code;
+        }
+
+        // التحقق من رمز التحقق وإنشاء الحساب
+        function handleVerificationForm(event) {
+            event.preventDefault();
+            
+            const enteredCode = document.getElementById('verification-code').value;
+            
+            if (enteredCode.length !== 6) {
+                showToast('يرجى إدخال رمز التحقق المكون من 6 أرقام');
+                return;
+            }
+            
+            if (enteredCode !== verificationCode) {
+                showToast('رمز التحقق غير صحيح');
+                return;
+            }
+            
+            // إذا كان الرمز صحيحاً، إنشاء الحساب
             const name = document.getElementById('register-name').value.trim();
             const email = document.getElementById('register-email').value.trim();
             
-            // محاكاة عملية التسجيل
+            // محاكاة عملية إنشاء الحساب
             showToast('🎉 تم إنشاء الحساب بنجاح!');
             
-            // إغلاق النافذة بعد التسجيل
+            // إغلاق النافذة بعد إنشاء الحساب
             setTimeout(() => {
-                closeModal('register-modal');
+                closeModal('verification-modal');
                 
                 // تحديث واجهة المستخدم لإظهار أن المستخدم مسجل الدخول
                 document.querySelector('.mobile-nav-item:last-child span').textContent = 'حسابي';
@@ -1991,8 +2202,8 @@
             document.getElementById('contact-us-btn').addEventListener('click', openContactUsModal);
             
             // إضافة أحداث للنماذج
-            document.getElementById('register-form').addEventListener('submit', handleRegisterForm);
             document.getElementById('login-form').addEventListener('submit', handleLoginForm);
+            document.getElementById('verification-form').addEventListener('submit', handleVerificationForm);
             document.getElementById('payment-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 showToast('🎉 تم تأكيد الطلب بنجاح! سيتم التواصل معك قريباً.');
@@ -2022,6 +2233,7 @@
         window.openProfileModal = openProfileModal;
         window.openLoginModal = openLoginModal;
         window.openRegisterModal = openRegisterModal;
+        window.openVerificationModal = openVerificationModal;
         window.openFavoritesModal = openFavoritesModal;
         window.openContactUsModal = openContactUsModal;
         window.openPaymentModal = openPaymentModal;
@@ -2044,6 +2256,12 @@
         window.togglePassword = togglePassword;
         window.logoutUser = logoutUser;
         window.showToast = showToast;
+        window.sendVerificationCode = sendVerificationCode;
+        window.resendVerificationCode = resendVerificationCode;
+        window.moveToNext = moveToNext;
+        window.handleVerificationInput = handleVerificationInput;
+        window.updateVerificationCode = updateVerificationCode;
+        window.handleVerificationForm = handleVerificationForm;
     </script>
 </body>
 </html>
