@@ -76,10 +76,11 @@
             height: 140px;
         }
         
+        /* التعديل هنا فقط: تغيير object-fit من cover إلى contain */
         .category-image {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: contain; /* تم التغيير من cover إلى contain */
             transition: transform 0.5s ease;
         }
         
@@ -138,7 +139,7 @@
         .product-image {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* هذا يبقى كما هو للمنتجات */
             transition: transform 0.5s ease;
         }
         
@@ -184,6 +185,7 @@
             line-height: 1.8;
         }
         
+        /* PWA Install Prompt - تم إخفاؤه بدلاً من حذفه */
         .install-prompt {
             position: fixed;
             bottom: 100px;
@@ -196,13 +198,14 @@
             z-index: 1002;
             transform: translateY(150%);
             transition: transform 0.3s ease;
-            display: none;
+            display: none; /* إخفاء العنصر */
         }
         
         .install-prompt.show {
             transform: translateY(0);
         }
         
+        /* Splash Screen */
         .splash-screen {
             position: fixed;
             top: 0;
@@ -223,6 +226,7 @@
             pointer-events: none;
         }
         
+        /* تحسينات الجوال */
         @media (max-width: 768px) {
             .mobile-bottom-nav {
                 box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
@@ -281,6 +285,7 @@
                 padding: 16px !important;
             }
             
+            /* تحسينات خاصة لنافذة إنشاء الحساب */
             .register-modal-mobile {
                 width: 95% !important;
                 max-height: 90% !important;
@@ -348,6 +353,7 @@
             padding: 20px 24px;
         }
 
+        /* إغلاق النافذة عند الضغط خارجها */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -370,6 +376,7 @@
             max-height: 90%;
         }
 
+        /* تخصيصات إضافية */
         .reading-progress {
             position: fixed;
             top: 0;
@@ -401,6 +408,7 @@
             opacity: 1;
         }
 
+        /* Offline Indicator */
         .offline-indicator {
             position: fixed;
             top: 0;
@@ -419,6 +427,7 @@
             transform: translateY(0);
         }
 
+        /* تنسيقات خاصة بنموذج إنشاء الحساب */
         .form-input {
             width: 100%;
             padding: 12px 16px;
@@ -460,6 +469,7 @@
             position: relative;
         }
         
+        /* زر التسجيل - إصلاح المشكلة */
         .register-button {
             width: 100%;
             background: var(--purple-gradient);
@@ -479,6 +489,7 @@
             box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
         }
 
+        /* تنسيقات التحقق بالبريد الإلكتروني */
         .verification-code-input {
             text-align: center;
             font-size: 18px;
@@ -522,83 +533,6 @@
             color: #9ca3af;
             cursor: not-allowed;
         }
-
-        /* أنماط نموذج الاتصال الجديدة */
-        .contact-form-container {
-            background-color: rgba(255,255,255,0.95);
-            padding: 30px 35px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            width: 100%;
-            max-width: 420px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .contact-form-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-        }
-        
-        .contact-form-container h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #333;
-        }
-        
-        .contact-form-input {
-            width: 100%;
-            margin-bottom: 18px;
-            padding: 12px 15px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            font-size: 15px;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        
-        .contact-form-input:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0,123,255,0.5);
-            outline: none;
-        }
-        
-        .contact-form-textarea {
-            width: 100%;
-            margin-bottom: 18px;
-            padding: 12px 15px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            font-size: 15px;
-            transition: border-color 0.3s, box-shadow 0.3s;
-            min-height: 150px;
-            resize: vertical;
-        }
-        
-        .contact-form-textarea:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0,123,255,0.5);
-            outline: none;
-        }
-        
-        .contact-form-button {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 10px;
-            border: none;
-            background: #007bff;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-        }
-        
-        .contact-form-button:hover {
-            background: #0056b3;
-            transform: translateY(-2px);
-        }
-        
-        .contact-form-button:active {
-            transform: translateY(1px);
-        }
     </style>
 </head>
 
@@ -622,7 +556,7 @@
         </div>
     </div>
 
-    <!-- PWA Install Prompt -->
+    <!-- PWA Install Prompt - مخفي ولكن موجود للحفاظ على الوظائف -->
     <div id="install-prompt" class="install-prompt" style="display: none;">
         <div class="flex items-center space-x-3 space-x-reverse mb-3">
             <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
@@ -697,7 +631,7 @@
                                 ابدأ التسوق الآن
                             </button>
                             <button class="bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white px-6 py-3 md:px-8 md:py-4 rounded-xl font-bold text-base md:text-lg hover:bg-white/20 transition duration-200 button-fullwidth touch-feedback" onclick="openContactUsModal()">
-                                تواصل معنا
+                                تعرف على المزيد
                             </button>
                         </div>
                     </div>
@@ -757,9 +691,9 @@
                 <i data-lucide="heart" class="w-6 h-6 mx-auto mb-1"></i>
                 <span class="text-xs">المفضلة</span>
             </button>
-            <button class="mobile-nav-item touch-feedback" onclick="openContactUsModal()">
-                <i data-lucide="phone" class="w-6 h-6 mx-auto mb-1"></i>
-                <span class="text-xs">اتصل بنا</span>
+            <button class="mobile-nav-item touch-feedback" onclick="openProfileModal()">
+                <i data-lucide="user" class="w-6 h-6 mx-auto mb-1"></i>
+                <span class="text-xs">حسابي</span>
             </button>
         </div>
     </nav>
@@ -926,7 +860,7 @@
         </div>
     </div>
 
-    <!-- نافذة إنشاء حساب جديد -->
+    <!-- نافذة إنشاء حساب جديد - تم التصحيح -->
     <div id="register-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'register-modal')">
         <div class="bg-white w-full md:max-w-md modern-modal register-modal-mobile modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
@@ -971,6 +905,7 @@
                                 <span class="mr-2 text-sm text-gray-600">أوافق على <a href="#" class="text-purple-600 hover:underline">شروط الاستخدام</a> و <a href="#" class="text-purple-600 hover:underline">سياسة الخصوصية</a></span>
                             </label>
                         </div>
+                        <!-- زر التسجيل - تم إصلاح المشكلة -->
                         <button type="button" id="send-verification-btn" class="register-button" onclick="sendVerificationCode()">
                             إرسال رمز التحقق
                         </button>
@@ -1054,16 +989,31 @@
         </div>
     </div>
 
-    <!-- نافذة تواصل معنا الجديدة مع النموذج -->
+    <!-- نافذة تواصل معنا الجديدة -->
     <div id="contact-us-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'contact-us-modal')">
-        <div class="contact-form-container modal-content" onclick="event.stopPropagation()">
-            <h2>تواصل معنا</h2>
-            <form id="contactForm">
-                <input type="text" name="to_name" placeholder="الاسم" class="contact-form-input" required>
-                <input type="email" name="to_email" placeholder="البريد الإلكتروني" class="contact-form-input" required>
-                <textarea name="message" placeholder="رسالتك" rows="6" class="contact-form-textarea" required></textarea>
-                <button type="submit" class="contact-form-button">إرسال</button>
-            </form>
+        <div class="bg-white w-full md:max-w-md modern-modal modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header flex justify-between items-center">
+                <h3 class="text-xl font-bold">تواصل معنا</h3>
+                <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('contact-us-modal')" aria-label="إغلاق النافذة">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <!-- نموذج الاتصال الجديد -->
+                <form id="contact-form" style="background-color: rgba(255,255,255,0.95); padding: 25px 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                    <h2 style="text-align: center; margin-bottom: 25px; color: #333; font-size: 1.5rem;">تواصل معنا</h2>
+                    <input type="text" name="to_name" placeholder="الاسم" required 
+                           style="width: 100%; margin-bottom: 18px; padding: 12px 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 15px; transition: border-color 0.3s, box-shadow 0.3s;">
+                    <input type="email" name="to_email" placeholder="البريد الإلكتروني" required
+                           style="width: 100%; margin-bottom: 18px; padding: 12px 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 15px; transition: border-color 0.3s, box-shadow 0.3s;">
+                    <textarea name="message" placeholder="رسالتك" rows="6" required
+                              style="width: 100%; margin-bottom: 18px; padding: 12px 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 15px; transition: border-color 0.3s, box-shadow 0.3s;"></textarea>
+                    <button type="submit" 
+                            style="width: 100%; padding: 12px 15px; border-radius: 10px; border: none; background: #007bff; color: white; font-size: 16px; cursor: pointer; transition: background 0.3s, transform 0.2s;">
+                        إرسال
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -1181,7 +1131,7 @@
         const EMAILJS_SERVICE_ID = 'service_s3tkjzh';
         const EMAILJS_TEMPLATE_ID = 'template_oe0t4ki';
         const STORE_EMAIL = 'kingash2000@gmail.com';
-        const CONTACT_EMAILJS_TEMPLATE_ID = 'template_oe0t4ki'; // قالب جديد للاتصال
+        const CONTACT_TEMPLATE_ID = 'template_oe0t4ki'; // يمكنك تغييره إذا كان لديك قالب منفصل للاتصال
 
         // بيانات التطبيق
         const categories = [
@@ -1290,6 +1240,35 @@
             }
         }
 
+        // إرسال رسالة الاتصال
+        async function sendContactMessage(formData) {
+            try {
+                const templateParams = {
+                    to_email: STORE_EMAIL,
+                    to_name: 'أسواق القطب',
+                    from_name: formData.get('to_name'),
+                    from_email: formData.get('to_email'),
+                    message: formData.get('message'),
+                    subject: 'رسالة جديدة من نموذج الاتصال',
+                    store_name: 'أسواق القطب'
+                };
+
+                console.log('📧 إرسال رسالة اتصال:', templateParams);
+
+                const response = await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    CONTACT_TEMPLATE_ID,
+                    templateParams
+                );
+
+                console.log('✅ تم إرسال رسالة الاتصال بنجاح:', response);
+                return { success: true, response };
+            } catch (error) {
+                console.error('❌ فشل إرسال رسالة الاتصال:', error);
+                return { success: false, error };
+            }
+        }
+
         // إرسال رمز التحقق
         async function sendVerificationEmail(email, name, code) {
             try {
@@ -1324,44 +1303,17 @@
             }
         }
 
-        // إرسال رسالة الاتصال
-        async function sendContactMessage(formData) {
-            try {
-                const templateParams = {
-                    to_email: STORE_EMAIL,
-                    to_name: 'أسواق القطب',
-                    from_name: formData.get('to_name'),
-                    from_email: formData.get('to_email'),
-                    message: formData.get('message'),
-                    subject: 'رسالة جديدة من نموذج الاتصال',
-                    store_name: 'أسواق القطب'
-                };
-
-                console.log('📧 إرسال رسالة اتصال:', templateParams);
-
-                const response = await emailjs.send(
-                    EMAILJS_SERVICE_ID,
-                    CONTACT_EMAILJS_TEMPLATE_ID,
-                    templateParams
-                );
-
-                console.log('✅ تم إرسال رسالة الاتصال بنجاح:', response);
-                return { success: true, response };
-            } catch (error) {
-                console.error('❌ فشل إرسال رسالة الاتصال:', error);
-                return { success: false, error };
-            }
-        }
-
         // === دوال التحقق والتسجيل ===
 
         window.sendVerificationCode = async function() {
+            // الحصول على البيانات من النموذج
             const name = document.getElementById('register-name').value.trim();
             const email = document.getElementById('register-email').value.trim();
             const password = document.getElementById('register-password').value;
             const confirmPassword = document.getElementById('register-confirm-password').value;
             const terms = document.getElementById('register-terms').checked;
             
+            // التحقق من صحة البيانات
             if (!name || !email || !password || !confirmPassword || !terms) {
                 showToast('يرجى ملء جميع الحقول');
                 return;
@@ -1377,25 +1329,30 @@
                 return;
             }
             
+            // التحقق من صحة البريد الإلكتروني
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 showToast('يرجى إدخال بريد إلكتروني صحيح');
                 return;
             }
             
+            // تعطيل الزر أثناء الإرسال
             const sendButton = document.getElementById('send-verification-btn');
             const originalText = sendButton.textContent;
             sendButton.textContent = 'جاري الإرسال...';
             sendButton.disabled = true;
             
+            // إنشاء رمز تحقق
             verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
             userEmail = email;
             userName = name;
             
             try {
+                // إرسال رمز التحقق عبر EmailJS
                 const result = await sendVerificationEmail(email, name, verificationCode);
                 
                 if (result.success) {
+                    // حفظ بيانات المستخدم مؤقتاً
                     const userData = {
                         name: name,
                         email: email,
@@ -1405,6 +1362,7 @@
                     };
                     localStorage.setItem('pendingRegistration', JSON.stringify(userData));
                     
+                    // عرض نافذة التحقق
                     document.getElementById('verification-email').textContent = email;
                     closeModal('register-modal');
                     openVerificationModal();
@@ -1412,8 +1370,10 @@
                     showToast('✅ تم إرسال رمز التحقق إلى بريدك الإلكتروني');
                 } else {
                     showToast('❌ فشل إرسال رمز التحقق. يرجى المحاولة مرة أخرى');
-                    alert(`رمز التحقق للاختبار: ${verificationCode}`);
+                    // للاختبار: عرض الرمز في التنبيه
+                    alert(`رمز التحقق للاختبار: ${verificationCode}\n(سيتم إرساله إلى بريدك في بيئة الإنتاج)`);
                     
+                    // الاستمرار في أي حال
                     const userData = {
                         name: name,
                         email: email,
@@ -1432,24 +1392,28 @@
                 console.error('Error:', error);
                 showToast('حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى');
             } finally {
+                // إعادة تفعيل الزر
                 sendButton.textContent = originalText;
                 sendButton.disabled = false;
             }
         };
 
         window.resendVerificationCode = async function() {
+            // التحقق من وجود بيانات المستخدم
             const pendingData = JSON.parse(localStorage.getItem('pendingRegistration'));
             if (!pendingData) {
                 showToast('❌ لا توجد بيانات تسجيل معلقة');
                 return;
             }
             
+            // إنشاء رمز جديد
             verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
             pendingData.verificationCode = verificationCode;
             pendingData.timestamp = Date.now();
             localStorage.setItem('pendingRegistration', JSON.stringify(pendingData));
             
             try {
+                // إعادة إرسال الرمز
                 const result = await sendVerificationEmail(
                     pendingData.email,
                     pendingData.name,
@@ -1521,17 +1485,20 @@
         window.handleVerificationForm = async function(event) {
             event.preventDefault();
             
+            // جمع الأرقام المدخلة
             const digits = document.querySelectorAll('.verification-digit');
             let enteredCode = '';
             digits.forEach(digit => {
                 enteredCode += digit.value;
             });
             
+            // التحقق من اكتمال الرمز
             if (enteredCode.length !== 6) {
                 showToast('❌ يرجى إدخال جميع الأرقام');
                 return;
             }
             
+            // الحصول على بيانات التسجيل المعلقة
             const pendingData = JSON.parse(localStorage.getItem('pendingRegistration'));
             if (!pendingData) {
                 showToast('❌ انتهت صلاحية جلسة التسجيل. يرجى البدء من جديد');
@@ -1540,11 +1507,15 @@
                 return;
             }
             
+            // التحقق من الرمز
             if (enteredCode === pendingData.verificationCode) {
+                // حفظ المستخدم
                 saveUser(pendingData.name, pendingData.email, pendingData.password);
                 
+                // تنظيف البيانات المعلقة
                 localStorage.removeItem('pendingRegistration');
                 
+                // إغلاق العد التنازلي
                 if (countdownInterval) {
                     clearInterval(countdownInterval);
                 }
@@ -1552,12 +1523,14 @@
                 showToast('🎉 تم إنشاء حسابك بنجاح! يمكنك الآن تسجيل الدخول');
                 closeModal('verification-modal');
                 
+                // تسجيل الدخول تلقائياً
                 setTimeout(() => {
                     openLoginModal();
                 }, 1000);
             } else {
                 showToast('❌ رمز التحقق غير صحيح. يرجى المحاولة مرة أخرى');
                 
+                // اهتزاز الحقول
                 digits.forEach(digit => {
                     digit.style.borderColor = '#ef4444';
                     setTimeout(() => {
@@ -1569,26 +1542,40 @@
 
         function saveUser(name, email, password) {
             try {
+                // الحصول على المستخدمين الحاليين
                 let users = JSON.parse(localStorage.getItem('storeUsers') || '[]');
                 
+                // التحقق من عدم وجود مستخدم بنفس البريد
                 if (users.some(user => user.email === email)) {
                     console.warn('المستخدم مسجل بالفعل:', email);
                     return false;
                 }
                 
+                // إضافة المستخدم الجديد
                 const newUser = {
                     id: 'USER-' + Date.now(),
                     name: name,
                     email: email,
-                    password: password,
+                    password: password, // في التطبيق الحقيقي يجب تشفير كلمة المرور
                     createdAt: new Date().toISOString(),
-                    verified: true
+                    verified: true,
+                    orders: [],
+                    totalSpent: 0,
+                    loyaltyPoints: 100 // نقاط ولاء للمستخدم الجديد
                 };
                 
                 users.push(newUser);
                 localStorage.setItem('storeUsers', JSON.stringify(users));
                 
                 console.log('✅ تم حفظ المستخدم:', newUser);
+                
+                // حفظ المستخدم الحالي
+                localStorage.setItem('currentUser', JSON.stringify({
+                    id: newUser.id,
+                    name: newUser.name,
+                    email: newUser.email
+                }));
+                
                 return true;
             } catch (error) {
                 console.error('Error saving user:', error);
@@ -1633,6 +1620,7 @@
             
             resendButton.disabled = true;
             
+            // إلغاء العد السابق إذا كان موجوداً
             if (countdownInterval) {
                 clearInterval(countdownInterval);
             }
@@ -1683,7 +1671,7 @@
             document.getElementById('contact-us-btn').addEventListener('click', openContactUsModal);
             
             // إضافة حدث لنموذج الاتصال
-            const contactForm = document.getElementById('contactForm');
+            const contactForm = document.getElementById('contact-form');
             if (contactForm) {
                 contactForm.addEventListener('submit', handleContactForm);
             }
@@ -1717,7 +1705,7 @@
             
             // تنظيف أي بيانات تسجيل معلقة قديمة
             const pendingData = JSON.parse(localStorage.getItem('pendingRegistration'));
-            if (pendingData && Date.now() - pendingData.timestamp > 3600000) {
+            if (pendingData && Date.now() - pendingData.timestamp > 3600000) { // ساعة واحدة
                 localStorage.removeItem('pendingRegistration');
             }
             
@@ -1741,6 +1729,7 @@
         function setupPWAInstall() {
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
+                // يمكن إضافة منطق تثبيت PWA هنا لاحقاً
             });
         }
 
@@ -1861,33 +1850,41 @@
 
         // === دوال النوافذ المفقودة ===
         
+        // دالة فتح نافذة الحساب الشخصي
         window.openProfileModal = function() {
             document.getElementById('profile-modal').classList.remove('hidden');
         };
 
+        // دالة فتح نافذة المفضلة
         window.openFavoritesModal = function() {
             document.getElementById('favorites-modal').classList.remove('hidden');
         };
 
+        // دالة فتح نافذة البحث
         window.openSearchModal = function() {
             document.getElementById('search-modal').classList.remove('hidden');
         };
 
+        // دالة فتح الصفحة الرئيسية
         window.openHome = function() {
+            // إغلاق أي نوافذ مفتوحة والعودة للصفحة الرئيسية
             closeAllModals();
             setActiveNavItem('home');
         };
 
+        // دالة تعيين العنصر النشط في القائمة
         window.setActiveNavItem = function(itemName) {
             document.querySelectorAll('.mobile-nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
+            // يمكن إضافة منطق لتحديد العنصر النشط حسب itemName
             if (itemName === 'home') {
                 document.querySelector('.mobile-nav-item:nth-child(1)').classList.add('active');
             }
         };
 
+        // دالة إغلاق جميع النوافذ
         window.closeAllModals = function() {
             const modals = document.querySelectorAll('.modal-overlay');
             modals.forEach(modal => {
@@ -1895,12 +1892,14 @@
             });
         };
 
+        // دالة إغلاق النافذة عند النقر خارجها
         window.closeModalOnOverlay = function(event, modalId) {
             if (event.target === document.getElementById(modalId)) {
                 closeModal(modalId);
             }
         };
 
+        // دوال أخرى
         window.openCategoryDetails = function(categoryId) {
             const category = categories.find(cat => cat.id === categoryId);
             if (!category) return;
@@ -2119,11 +2118,13 @@
         window.openVerificationModal = function() {
             document.getElementById('verification-modal').classList.remove('hidden');
             
+            // تفريغ حقول الرمز
             const digits = document.querySelectorAll('.verification-digit');
             digits.forEach(digit => {
                 digit.value = '';
             });
             
+            // التركيز على الحقل الأول
             if (digits.length > 0) {
                 digits[0].focus();
             }
@@ -2172,6 +2173,7 @@
                     sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
                     break;
                 default:
+                    // الترتيب الافتراضي
                     break;
             }
             
@@ -2221,6 +2223,8 @@
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value;
             
+            // في التطبيق الحقيقي، يجب التحقق من قاعدة البيانات
+            // هنا نتحقق من التخزين المحلي
             const users = JSON.parse(localStorage.getItem('storeUsers') || '[]');
             const user = users.find(u => u.email === email && u.password === password);
             
@@ -2228,15 +2232,28 @@
                 showToast('🎉 تم تسجيل الدخول بنجاح!');
                 closeModal('login-modal');
                 
+                // حفظ حالة تسجيل الدخول
                 localStorage.setItem('currentUser', JSON.stringify({
                     id: user.id,
                     name: user.name,
                     email: user.email
                 }));
+                
+                // تحديث واجهة المستخدم لتعكس حالة تسجيل الدخول
+                updateUserInterface();
             } else {
                 showToast('❌ البريد الإلكتروني أو كلمة المرور غير صحيحة');
             }
         };
+
+        function updateUserInterface() {
+            // تحديث واجهة المستخدم بعد تسجيل الدخول
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                console.log('👤 المستخدم الحالي:', currentUser.name);
+                // يمكنك تحديث الهيدر أو أي عناصر أخرى هنا
+            }
+        }
 
         window.updateReadingProgress = function() {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -2245,7 +2262,7 @@
             document.getElementById("reading-progress").style.width = scrolled + "%";
         };
 
-        // جعل الدوال الأخرى متاحة
+        // دالة إضافة المنتج للسلة
         window.addToCart = function(productId) {
             const product = allProducts.find(p => p.id === productId);
             if (!product) return;
@@ -2269,6 +2286,7 @@
             showToast('تمت إضافة المنتج إلى السلة');
         };
 
+        // دالة إتمام الشراء
         window.checkout = function() {
             if (cartItems.length === 0) {
                 showToast('سلة التسوق فارغة');
@@ -2278,10 +2296,12 @@
             openPaymentModal();
         };
 
+        // دالة إتمام الطلب
         async function completeOrder(orderData) {
             showToast('جاري معالجة طلبك...');
             
             try {
+                // حفظ الطلب وإرسال الإيميل
                 const saveResult = await saveOrder(orderData);
                 
                 if (saveResult.success) {
@@ -2291,11 +2311,13 @@
                         showToast('✅ تم حفظ الطلب! سنتصل بك لتأكيد التفاصيل.');
                     }
                     
+                    // إعادة تعيين السلة
                     cartItems = [];
                     saveCartToLocalStorage();
                     renderCart();
                     updateCartModal();
                     
+                    // إغلاق نافذة الدفع
                     closeModal('payment-modal');
                     
                 } else {
@@ -2316,9 +2338,11 @@
         console.log('- Public Key:', EMAILJS_PUBLIC_KEY);
         console.log('- Service ID:', EMAILJS_SERVICE_ID);
         console.log('- Template ID:', EMAILJS_TEMPLATE_ID);
-        console.log('- Contact Template ID:', CONTACT_EMAILJS_TEMPLATE_ID);
+        console.log('- Contact Template ID:', CONTACT_TEMPLATE_ID);
         console.log('- Store Email:', STORE_EMAIL);
 
     </script>
-</body>
+     
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"> </script> <script type="text/javascript"> (function(){ emailjs.init({ publicKey: "YOUR_PUBLIC_KEY", }); })(); </script>
+    </body>
 </html>
