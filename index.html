@@ -906,7 +906,7 @@
                             </label>
                         </div>
                         <!-- زر التسجيل - تم إصلاح المشكلة -->
-                        <button type="button" class="register-button" onclick="sendVerificationCode()">
+                        <button type="button" id="send-verification-btn" class="register-button" onclick="sendVerificationCode()">
                             إرسال رمز التحقق
                         </button>
                     </div>
@@ -1193,8 +1193,14 @@
         let allProducts = [];
         let verificationCode = '';
         let countdownInterval = null;
+        let userEmail = '';
+        let userName = '';
 
-        // === دوال التخزين والاتصال الجديدة ===
+        // === تهيئة EmailJS ===
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+        console.log('✅ EmailJS initialized successfully');
+
+        // === دوال التخزين والاتصال ===
         
         // حفظ السلة محلياً
         function saveCartToLocalStorage() {
@@ -1261,6 +1267,314 @@
                 return {success: false, error};
             }
         }
+
+        // إرسال رمز التحقق
+        async function sendVerificationEmail(email, name, code) {
+            try {
+                const templateParams = {
+                    to_email: email,
+                    to_name: name,
+                    verification_code: code,
+                    store_name: 'أسواق القطب',
+                    subject: 'رمز التحقق - أسواق القطب',
+                    from_name: 'فريق أسواق القطب'
+                };
+
+                console.log('📧 إرسال رمز التحقق:', {
+                    email: email,
+                    name: name,
+                    code: code,
+                    service: EMAILJS_SERVICE_ID,
+                    template: EMAILJS_TEMPLATE_ID
+                });
+
+                const response = await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_ID,
+                    templateParams
+                );
+
+                console.log('✅ تم إرسال رمز التحقق بنجاح:', response);
+                return { success: true, response };
+            } catch (error) {
+                console.error('❌ فشل إرسال رمز التحقق:', error);
+                return { success: false, error };
+            }
+        }
+
+        // === دوال التحقق والتسجيل ===
+
+        window.sendVerificationCode = async function() {
+            // الحصول على البيانات من النموذج
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            const terms = document.getElementById('register-terms').checked;
+            
+            // التحقق من صحة البيانات
+            if (!name || !email || !password || !confirmPassword || !terms) {
+                showToast('يرجى ملء جميع الحقول');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showToast('كلمات المرور غير متطابقة');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showToast('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+                return;
+            }
+            
+            // التحقق من صحة البريد الإلكتروني
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showToast('يرجى إدخال بريد إلكتروني صحيح');
+                return;
+            }
+            
+            // تعطيل الزر أثناء الإرسال
+            const sendButton = document.getElementById('send-verification-btn');
+            const originalText = sendButton.textContent;
+            sendButton.textContent = 'جاري الإرسال...';
+            sendButton.disabled = true;
+            
+            // إنشاء رمز تحقق
+            verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+            userEmail = email;
+            userName = name;
+            
+            try {
+                // إرسال رمز التحقق عبر EmailJS
+                const result = await sendVerificationEmail(email, name, verificationCode);
+                
+                if (result.success) {
+                    // حفظ بيانات المستخدم مؤقتاً
+                    const userData = {
+                        name: name,
+                        email: email,
+                        password: password,
+                        verificationCode: verificationCode,
+                        timestamp: Date.now()
+                    };
+                    localStorage.setItem('pendingRegistration', JSON.stringify(userData));
+                    
+                    // عرض نافذة التحقق
+                    document.getElementById('verification-email').textContent = email;
+                    closeModal('register-modal');
+                    openVerificationModal();
+                    startCountdown();
+                    showToast('✅ تم إرسال رمز التحقق إلى بريدك الإلكتروني');
+                } else {
+                    showToast('❌ فشل إرسال رمز التحقق. يرجى المحاولة مرة أخرى');
+                    // للاختبار: عرض الرمز في التنبيه
+                    alert(`رمز التحقق للاختبار: ${verificationCode}\n(سيتم إرساله إلى بريدك في بيئة الإنتاج)`);
+                    
+                    // الاستمرار في أي حال
+                    const userData = {
+                        name: name,
+                        email: email,
+                        password: password,
+                        verificationCode: verificationCode,
+                        timestamp: Date.now()
+                    };
+                    localStorage.setItem('pendingRegistration', JSON.stringify(userData));
+                    
+                    document.getElementById('verification-email').textContent = email;
+                    closeModal('register-modal');
+                    openVerificationModal();
+                    startCountdown();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى');
+            } finally {
+                // إعادة تفعيل الزر
+                sendButton.textContent = originalText;
+                sendButton.disabled = false;
+            }
+        };
+
+        window.resendVerificationCode = async function() {
+            // التحقق من وجود بيانات المستخدم
+            const pendingData = JSON.parse(localStorage.getItem('pendingRegistration'));
+            if (!pendingData) {
+                showToast('❌ لا توجد بيانات تسجيل معلقة');
+                return;
+            }
+            
+            // إنشاء رمز جديد
+            verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+            pendingData.verificationCode = verificationCode;
+            pendingData.timestamp = Date.now();
+            localStorage.setItem('pendingRegistration', JSON.stringify(pendingData));
+            
+            try {
+                // إعادة إرسال الرمز
+                const result = await sendVerificationEmail(
+                    pendingData.email,
+                    pendingData.name,
+                    verificationCode
+                );
+                
+                if (result.success) {
+                    startCountdown();
+                    showToast('✅ تم إعادة إرسال رمز التحقق');
+                } else {
+                    showToast('❌ فشل إعادة الإرسال. جاري استخدام الرمز السابق');
+                    startCountdown();
+                }
+            } catch (error) {
+                console.error('Resend error:', error);
+                showToast('⚠️ فشل إعادة الإرسال. حاول مرة أخرى');
+            }
+        };
+
+        window.startCountdown = function() {
+            let countdown = 60;
+            const countdownElement = document.getElementById('countdown');
+            const resendButton = document.getElementById('resend-button');
+            
+            resendButton.disabled = true;
+            
+            // إلغاء العد السابق إذا كان موجوداً
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            countdownInterval = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    resendButton.disabled = false;
+                    countdownElement.textContent = '60';
+                }
+            }, 1000);
+        };
+
+        window.handleVerificationForm = async function(event) {
+            event.preventDefault();
+            
+            // جمع الأرقام المدخلة
+            const digits = document.querySelectorAll('.verification-digit');
+            let enteredCode = '';
+            digits.forEach(digit => {
+                enteredCode += digit.value;
+            });
+            
+            // التحقق من اكتمال الرمز
+            if (enteredCode.length !== 6) {
+                showToast('❌ يرجى إدخال جميع الأرقام');
+                return;
+            }
+            
+            // الحصول على بيانات التسجيل المعلقة
+            const pendingData = JSON.parse(localStorage.getItem('pendingRegistration'));
+            if (!pendingData) {
+                showToast('❌ انتهت صلاحية جلسة التسجيل. يرجى البدء من جديد');
+                closeModal('verification-modal');
+                openRegisterModal();
+                return;
+            }
+            
+            // التحقق من الرمز
+            if (enteredCode === pendingData.verificationCode) {
+                // حفظ المستخدم
+                saveUser(pendingData.name, pendingData.email, pendingData.password);
+                
+                // تنظيف البيانات المعلقة
+                localStorage.removeItem('pendingRegistration');
+                
+                // إغلاق العد التنازلي
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
+                
+                showToast('🎉 تم إنشاء حسابك بنجاح! يمكنك الآن تسجيل الدخول');
+                closeModal('verification-modal');
+                
+                // تسجيل الدخول تلقائياً
+                setTimeout(() => {
+                    openLoginModal();
+                }, 1000);
+            } else {
+                showToast('❌ رمز التحقق غير صحيح. يرجى المحاولة مرة أخرى');
+                
+                // اهتزاز الحقول
+                digits.forEach(digit => {
+                    digit.style.borderColor = '#ef4444';
+                    setTimeout(() => {
+                        digit.style.borderColor = '#d1d5db';
+                    }, 500);
+                });
+            }
+        };
+
+        function saveUser(name, email, password) {
+            try {
+                // الحصول على المستخدمين الحاليين
+                let users = JSON.parse(localStorage.getItem('storeUsers') || '[]');
+                
+                // التحقق من عدم وجود مستخدم بنفس البريد
+                if (users.some(user => user.email === email)) {
+                    console.warn('المستخدم مسجل بالفعل:', email);
+                    return false;
+                }
+                
+                // إضافة المستخدم الجديد
+                const newUser = {
+                    id: 'USER-' + Date.now(),
+                    name: name,
+                    email: email,
+                    password: password, // في التطبيق الحقيقي يجب تشفير كلمة المرور
+                    createdAt: new Date().toISOString(),
+                    verified: true
+                };
+                
+                users.push(newUser);
+                localStorage.setItem('storeUsers', JSON.stringify(users));
+                
+                console.log('✅ تم حفظ المستخدم:', newUser);
+                return true;
+            } catch (error) {
+                console.error('Error saving user:', error);
+                return false;
+            }
+        }
+
+        // === دوال التطبيق الأساسية ===
+
+        window.moveToNext = function(currentInput, nextIndex) {
+            if (currentInput.value.length === 1) {
+                const nextInput = document.querySelector(`.verification-digit:nth-child(${nextIndex})`);
+                if (nextInput) {
+                    nextInput.focus();
+                }
+            }
+            updateVerificationCode();
+        };
+
+        window.handleVerificationInput = function(event, index) {
+            if (event.key === 'Backspace' && event.target.value === '') {
+                const prevInput = document.querySelector(`.verification-digit:nth-child(${index})`);
+                if (prevInput) {
+                    prevInput.focus();
+                }
+            }
+        };
+
+        window.updateVerificationCode = function() {
+            const digits = document.querySelectorAll('.verification-digit');
+            let code = '';
+            digits.forEach(digit => {
+                code += digit.value;
+            });
+            document.getElementById('verification-code').value = code;
+        };
 
         // === تحديث الدوال الحالية ===
         
@@ -1342,10 +1656,6 @@
             setupPWAInstall();
             setupNetworkStatus();
             
-            // إعداد EmailJS
-            emailjs.init(EMAILJS_PUBLIC_KEY);
-            console.log('✅ تم تهيئة EmailJS');
-            
             // إخفاء شاشة التحميل
             hideSplashScreen();
             
@@ -1394,6 +1704,12 @@
             
             // تحديث شريط التقدم
             window.addEventListener('scroll', updateReadingProgress);
+            
+            // تنظيف أي بيانات تسجيل معلقة قديمة
+            const pendingData = JSON.parse(localStorage.getItem('pendingRegistration'));
+            if (pendingData && Date.now() - pendingData.timestamp > 3600000) { // ساعة واحدة
+                localStorage.removeItem('pendingRegistration');
+            }
             
             console.log('✅ تم تهيئة التطبيق بنجاح');
         });
@@ -1801,6 +2117,21 @@
             document.getElementById(modalId).classList.add('hidden');
         };
 
+        window.openVerificationModal = function() {
+            document.getElementById('verification-modal').classList.remove('hidden');
+            
+            // تفريغ حقول الرمز
+            const digits = document.querySelectorAll('.verification-digit');
+            digits.forEach(digit => {
+                digit.value = '';
+            });
+            
+            // التركيز على الحقل الأول
+            if (digits.length > 0) {
+                digits[0].focus();
+            }
+        };
+
         window.hideSplashScreen = function() {
             const splashScreen = document.getElementById('splash-screen');
             setTimeout(() => {
@@ -1888,114 +2219,30 @@
             lucide.createIcons();
         };
 
-        window.sendVerificationCode = function() {
-            const name = document.getElementById('register-name').value;
-            const email = document.getElementById('register-email').value;
-            const password = document.getElementById('register-password').value;
-            const confirmPassword = document.getElementById('register-confirm-password').value;
-            const terms = document.getElementById('register-terms').checked;
-            
-            if (!name || !email || !password || !confirmPassword || !terms) {
-                showToast('يرجى ملء جميع الحقول');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                showToast('كلمات المرور غير متطابقة');
-                return;
-            }
-            
-            if (password.length < 6) {
-                showToast('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
-                return;
-            }
-            
-            // إنشاء رمز تحقق عشوائي
-            verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-            
-            document.getElementById('verification-email').textContent = email;
-            closeModal('register-modal');
-            openVerificationModal();
-            startCountdown();
-            
-            showToast('تم إرسال رمز التحقق إلى بريدك الإلكتروني');
-        };
-
-        window.openVerificationModal = function() {
-            document.getElementById('verification-modal').classList.remove('hidden');
-        };
-
-        window.resendVerificationCode = function() {
-            // إعادة إنشاء رمز تحقق
-            verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-            startCountdown();
-            showToast('تم إعادة إرسال رمز التحقق');
-        };
-
-        window.startCountdown = function() {
-            let countdown = 60;
-            const countdownElement = document.getElementById('countdown');
-            const resendButton = document.getElementById('resend-button');
-            
-            resendButton.disabled = true;
-            
-            countdownInterval = setInterval(() => {
-                countdown--;
-                countdownElement.textContent = countdown;
-                
-                if (countdown <= 0) {
-                    clearInterval(countdownInterval);
-                    resendButton.disabled = false;
-                    countdownElement.textContent = '60';
-                }
-            }, 1000);
-        };
-
-        window.moveToNext = function(currentInput, nextIndex) {
-            if (currentInput.value.length === 1) {
-                const nextInput = document.querySelector(`.verification-digit:nth-child(${nextIndex})`);
-                if (nextInput) {
-                    nextInput.focus();
-                }
-            }
-            updateVerificationCode();
-        };
-
-        window.handleVerificationInput = function(event, index) {
-            if (event.key === 'Backspace' && event.target.value === '') {
-                const prevInput = document.querySelector(`.verification-digit:nth-child(${index})`);
-                if (prevInput) {
-                    prevInput.focus();
-                }
-            }
-        };
-
-        window.updateVerificationCode = function() {
-            const digits = document.querySelectorAll('.verification-digit');
-            let code = '';
-            digits.forEach(digit => {
-                code += digit.value;
-            });
-            document.getElementById('verification-code').value = code;
-        };
-
-        window.handleVerificationForm = function(event) {
-            event.preventDefault();
-            const enteredCode = document.getElementById('verification-code').value;
-            
-            if (enteredCode === verificationCode) {
-                showToast('🎉 تم إنشاء حسابك بنجاح!');
-                closeModal('verification-modal');
-                clearInterval(countdownInterval);
-            } else {
-                showToast('❌ رمز التحقق غير صحيح');
-            }
-        };
-
         window.handleLoginForm = function(event) {
             event.preventDefault();
-            showToast('تم تسجيل الدخول بنجاح!');
-            closeModal('login-modal');
+            
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            
+            // في التطبيق الحقيقي، يجب التحقق من قاعدة البيانات
+            // هنا نتحقق من التخزين المحلي
+            const users = JSON.parse(localStorage.getItem('storeUsers') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                showToast('🎉 تم تسجيل الدخول بنجاح!');
+                closeModal('login-modal');
+                
+                // حفظ حالة تسجيل الدخول
+                localStorage.setItem('currentUser', JSON.stringify({
+                    id: user.id,
+                    name: user.name,
+                    email: user.email
+                }));
+            } else {
+                showToast('❌ البريد الإلكتروني أو كلمة المرور غير صحيحة');
+            }
         };
 
         window.updateReadingProgress = function() {
@@ -2013,6 +2260,13 @@
         // إضافة مستمعي الأحداث للنماذج
         document.getElementById('verification-form').addEventListener('submit', handleVerificationForm);
         document.getElementById('login-form').addEventListener('submit', handleLoginForm);
+
+        // اختبار EmailJS عند التحميل
+        console.log('📧 EmailJS Configuration:');
+        console.log('- Public Key:', EMAILJS_PUBLIC_KEY);
+        console.log('- Service ID:', EMAILJS_SERVICE_ID);
+        console.log('- Template ID:', EMAILJS_TEMPLATE_ID);
+        console.log('- Store Email:', STORE_EMAIL);
 
     </script>
 </body>
