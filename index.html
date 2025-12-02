@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>أسواق القطب - متجر إلكتروني متكامل</title>
     
+    <!-- الخطوط -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#8b5cf6">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -24,9 +27,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <style>
-        /* جميع الأنماط السابقة تبقى كما هي */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-        
         :root {
             --primary-color: #10b981;
             --primary-dark: #059669;
@@ -38,7 +38,7 @@
             --orange-gradient: linear-gradient(135deg, #f59e0b, #f97316);
             --teal-gradient: linear-gradient(135deg, #14b8a6, #0d9488);
         }
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"> </script> <script type="text/javascript"> (function(){ emailjs.init({ publicKey: "YOUR_PUBLIC_KEY", }); })(); </script>
+        
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #f7f9fc 0%, #f0f4f8 100%);
@@ -76,11 +76,10 @@
             height: 140px;
         }
         
-        /* التعديل هنا فقط: تغيير object-fit من cover إلى contain */
         .category-image {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* تم التغيير من cover إلى contain */
+            object-fit: contain;
             transition: transform 0.5s ease;
         }
         
@@ -139,7 +138,7 @@
         .product-image {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* هذا يبقى كما هو للمنتجات */
+            object-fit: cover;
             transition: transform 0.5s ease;
         }
         
@@ -185,7 +184,6 @@
             line-height: 1.8;
         }
         
-        /* PWA Install Prompt - تم إخفاؤه بدلاً من حذفه */
         .install-prompt {
             position: fixed;
             bottom: 100px;
@@ -198,14 +196,13 @@
             z-index: 1002;
             transform: translateY(150%);
             transition: transform 0.3s ease;
-            display: none; /* إخفاء العنصر */
+            display: none;
         }
         
         .install-prompt.show {
             transform: translateY(0);
         }
         
-        /* Splash Screen */
         .splash-screen {
             position: fixed;
             top: 0;
@@ -226,7 +223,6 @@
             pointer-events: none;
         }
         
-        /* تحسينات الجوال */
         @media (max-width: 768px) {
             .mobile-bottom-nav {
                 box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
@@ -285,7 +281,6 @@
                 padding: 16px !important;
             }
             
-            /* تحسينات خاصة لنافذة إنشاء الحساب */
             .register-modal-mobile {
                 width: 95% !important;
                 max-height: 90% !important;
@@ -353,7 +348,6 @@
             padding: 20px 24px;
         }
 
-        /* إغلاق النافذة عند الضغط خارجها */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -361,10 +355,14 @@
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.5);
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
         }
 
         .modal-content {
@@ -376,7 +374,6 @@
             max-height: 90%;
         }
 
-        /* تخصيصات إضافية */
         .reading-progress {
             position: fixed;
             top: 0;
@@ -408,7 +405,6 @@
             opacity: 1;
         }
 
-        /* Offline Indicator */
         .offline-indicator {
             position: fixed;
             top: 0;
@@ -427,7 +423,6 @@
             transform: translateY(0);
         }
 
-        /* تنسيقات خاصة بنموذج إنشاء الحساب */
         .form-input {
             width: 100%;
             padding: 12px 16px;
@@ -469,7 +464,6 @@
             position: relative;
         }
         
-        /* زر التسجيل - إصلاح المشكلة */
         .register-button {
             width: 100%;
             background: var(--purple-gradient);
@@ -489,7 +483,6 @@
             box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
         }
 
-        /* تنسيقات التحقق بالبريد الإلكتروني */
         .verification-code-input {
             text-align: center;
             font-size: 18px;
@@ -556,27 +549,6 @@
         </div>
     </div>
 
-    <!-- PWA Install Prompt - مخفي ولكن موجود للحفاظ على الوظائف -->
-    <div id="install-prompt" class="install-prompt" style="display: none;">
-        <div class="flex items-center space-x-3 space-x-reverse mb-3">
-            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                <i data-lucide="shopping-bag" class="w-6 h-6 text-purple-600"></i>
-            </div>
-            <div class="flex-1">
-                <h3 class="font-bold text-gray-800">تثبيت التطبيق</h3>
-                <p class="text-sm text-gray-600">ثبّت أسواق القطب على جهازك لتجربة أفضل</p>
-            </div>
-        </div>
-        <div class="flex space-x-2 space-x-reverse">
-            <button id="install-cancel" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-semibold transition duration-150 touch-feedback">
-                لاحقاً
-            </button>
-            <button id="install-accept" class="flex-1 bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback">
-                تثبيت
-            </button>
-        </div>
-    </div>
-
     <!-- شريط التقدم -->
     <div class="reading-progress" id="reading-progress"></div>
 
@@ -584,7 +556,6 @@
     <header class="sticky top-0 z-50 glass-effect shadow-sm">
         <div class="container mx-auto px-4 padding-mobile">
             <div class="flex items-center justify-between py-3">
-                <!-- الشعار -->
                 <div class="flex items-center space-x-2 space-x-reverse">
                     <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-2 rounded-xl shadow-lg">
                         <i data-lucide="shopping-bag" class="w-6 h-6 md:w-8 md:h-8 text-white"></i>
@@ -594,15 +565,12 @@
                     </div>
                 </div>
 
-                <!-- أيقونات - زر السلة وزر الاتصال -->
                 <div class="flex items-center space-x-2 space-x-reverse">
-                    <!-- زر سلة التسوق -->
                     <button id="cart-header-btn" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 touch-feedback relative" aria-label="عرض سلة التسوق">
                         <i data-lucide="shopping-cart" class="w-6 h-6 text-gray-700"></i>
                         <span id="cart-header-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center cart-badge hidden">0</span>
                     </button>
 
-                    <!-- زر تواصل معنا -->
                     <button id="contact-us-btn" class="p-2 rounded-lg hover:bg-gray-100 transition duration-200 touch-feedback" aria-label="تواصل معنا">
                         <i data-lucide="phone" class="w-6 h-6 text-gray-700"></i>
                     </button>
@@ -637,7 +605,7 @@
                     </div>
                     <div class="mt-8 w-full max-w-sm">
                         <div class="relative">
-                            <img src="https://media.gemini.media/img/large/2020/3/28/2020_3_28_14_9_48_731.jpg" 
+                            <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=600&auto=format&fit=crop" 
                                  alt="سوبر ماركت حديث" 
                                  class="rounded-2xl shadow-2xl w-full" loading="lazy">
                             <div class="absolute -bottom-4 -right-4 bg-white rounded-2xl p-3 shadow-2xl">
@@ -698,9 +666,8 @@
         </div>
     </nav>
 
-    <!-- جميع النوافذ المنبثقة -->
     <!-- نافذة تفاصيل الفئة -->
-    <div id="category-details-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'category-details-modal')">
+    <div id="category-details-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'category-details-modal')">
         <div class="bg-white w-full h-full md:max-w-4xl md:h-5/6 modern-modal modal-fullscreen flex flex-col transition-all duration-300 modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold flex items-center space-x-2 space-x-reverse">
@@ -747,7 +714,7 @@
     </div>
 
     <!-- نافذة البحث -->
-    <div id="search-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'search-modal')">
+    <div id="search-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'search-modal')">
         <div class="bg-white w-full h-full md:max-w-2xl modern-modal modal-fullscreen modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">البحث في المتجر</h3>
@@ -769,7 +736,7 @@
     </div>
 
     <!-- نافذة السلة -->
-    <div id="cart-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'cart-modal')">
+    <div id="cart-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'cart-modal')">
         <div class="bg-white w-full h-full md:max-w-2xl modern-modal modal-fullscreen flex flex-col modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">سلة التسوق</h3>
@@ -795,7 +762,7 @@
     </div>
 
     <!-- نافذة الحساب الشخصي -->
-    <div id="profile-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'profile-modal')">
+    <div id="profile-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'profile-modal')">
         <div class="bg-white w-full md:max-w-md modern-modal modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">حسابي</h3>
@@ -824,7 +791,7 @@
     </div>
 
     <!-- نافذة تسجيل الدخول -->
-    <div id="login-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'login-modal')">
+    <div id="login-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'login-modal')">
         <div class="bg-white w-full md:max-w-md modern-modal modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">تسجيل الدخول</h3>
@@ -860,8 +827,8 @@
         </div>
     </div>
 
-    <!-- نافذة إنشاء حساب جديد - تم التصحيح -->
-    <div id="register-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'register-modal')">
+    <!-- نافذة إنشاء حساب جديد -->
+    <div id="register-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'register-modal')">
         <div class="bg-white w-full md:max-w-md modern-modal register-modal-mobile modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">إنشاء حساب جديد</h3>
@@ -905,8 +872,7 @@
                                 <span class="mr-2 text-sm text-gray-600">أوافق على <a href="#" class="text-purple-600 hover:underline">شروط الاستخدام</a> و <a href="#" class="text-purple-600 hover:underline">سياسة الخصوصية</a></span>
                             </label>
                         </div>
-                        <!-- زر التسجيل - تم إصلاح المشكلة -->
-                        <button type="button" id="send-verification-btn" class="register-button" onclick="sendVerificationCode()">
+                        <button type="submit" id="send-verification-btn" class="register-button">
                             إرسال رمز التحقق
                         </button>
                     </div>
@@ -919,7 +885,7 @@
     </div>
 
     <!-- نافذة التحقق بالبريد الإلكتروني -->
-    <div id="verification-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'verification-modal')">
+    <div id="verification-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'verification-modal')">
         <div class="bg-white w-full md:max-w-md modern-modal modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">التحقق من البريد الإلكتروني</h3>
@@ -969,7 +935,7 @@
     </div>
 
     <!-- نافذة المفضلة -->
-    <div id="favorites-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'favorites-modal')">
+    <div id="favorites-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'favorites-modal')">
         <div class="bg-white w-full h-full md:max-w-2xl modern-modal modal-fullscreen flex flex-col modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">قائمة المفضلة</h3>
@@ -989,8 +955,8 @@
         </div>
     </div>
 
-    <!-- نافذة تواصل معنا الجديدة -->
-    <div id="contact-us-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'contact-us-modal')">
+    <!-- نافذة تواصل معنا -->
+    <div id="contact-us-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'contact-us-modal')">
         <div class="bg-white w-full md:max-w-md modern-modal modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">تواصل معنا</h3>
@@ -999,17 +965,15 @@
                 </button>
             </div>
             <div class="p-6">
-                <!-- نموذج الاتصال الجديد -->
-                <form id="contact-form" style="background-color: rgba(255,255,255,0.95); padding: 25px 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                <form id="contact-form">
                     <h2 style="text-align: center; margin-bottom: 25px; color: #333; font-size: 1.5rem;">تواصل معنا</h2>
                     <input type="text" name="to_name" placeholder="الاسم" required 
-                           style="width: 100%; margin-bottom: 18px; padding: 12px 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 15px; transition: border-color 0.3s, box-shadow 0.3s;">
+                           class="form-input" style="margin-bottom: 18px;">
                     <input type="email" name="to_email" placeholder="البريد الإلكتروني" required
-                           style="width: 100%; margin-bottom: 18px; padding: 12px 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 15px; transition: border-color 0.3s, box-shadow 0.3s;">
+                           class="form-input" style="margin-bottom: 18px;">
                     <textarea name="message" placeholder="رسالتك" rows="6" required
-                              style="width: 100%; margin-bottom: 18px; padding: 12px 15px; border-radius: 10px; border: 1px solid #ccc; font-size: 15px; transition: border-color 0.3s, box-shadow 0.3s;"></textarea>
-                    <button type="submit" 
-                            style="width: 100%; padding: 12px 15px; border-radius: 10px; border: none; background: #007bff; color: white; font-size: 16px; cursor: pointer; transition: background 0.3s, transform 0.2s;">
+                              class="form-input" style="margin-bottom: 18px;"></textarea>
+                    <button type="submit" class="register-button" style="background: #007bff;">
                         إرسال
                     </button>
                 </form>
@@ -1017,69 +981,8 @@
         </div>
     </div>
 
-    <!-- نافذة القائمة الجانبية -->
-    <div id="sidebar-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-start justify-start p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'sidebar-modal')">
-        <div class="bg-white w-80 h-full modern-modal modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header flex justify-between items-center">
-                <h3 class="text-xl font-bold">القائمة</h3>
-                <button class="text-white hover:text-gray-200 touch-feedback" onclick="closeModal('sidebar-modal')" aria-label="إغلاق النافذة">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-            <div class="p-6">
-                <div class="space-y-4">
-                    <div class="text-center mb-6">
-                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i data-lucide="user" class="w-8 h-8 text-white"></i>
-                        </div>
-                        <p class="font-semibold">مرحباً بك!</p>
-                        <p class="text-gray-600 text-sm">زائر</p>
-                    </div>
-                    
-                    <div class="border-t border-gray-200 pt-4">
-                        <h4 class="font-semibold text-gray-800 mb-3">التصنيفات</h4>
-                        <div class="space-y-2">
-                            <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 flex items-center justify-between touch-feedback" onclick="openCategoryDetails(1)">
-                                <span>البقوليات</span>
-                                <i data-lucide="chevron-left" class="w-4 h-4 text-gray-400"></i>
-                            </button>
-                            <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 flex items-center justify-between touch-feedback" onclick="openCategoryDetails(2)">
-                                <span>المعلبات</span>
-                                <i data-lucide="chevron-left" class="w-4 h-4 text-gray-400"></i>
-                            </button>
-                            <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 flex items-center justify-between touch-feedback" onclick="openCategoryDetails(3)">
-                                <span>الحليب ومشتقاته</span>
-                                <i data-lucide="chevron-left" class="w-4 h-4 text-gray-400"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="border-t border-gray-200 pt-4">
-                        <h4 class="font-semibold text-gray-800 mb-3">الحساب</h4>
-                        <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 touch-feedback" onclick="openProfileModal()">
-                            حسابي
-                        </button>
-                        <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 touch-feedback" onclick="openFavoritesModal()">
-                            المفضلة
-                        </button>
-                        <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 touch-feedback" onclick="openCartModal()">
-                            سلة التسوق
-                        </button>
-                    </div>
-
-                    <div class="border-t border-gray-200 pt-4">
-                        <h4 class="font-semibold text-gray-800 mb-3">المساعدة</h4>
-                        <button class="w-full text-right py-2 px-4 hover:bg-gray-100 rounded-lg transition duration-150 touch-feedback" onclick="openContactUsModal()">
-                            تواصل معنا
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- نافذة الدفع -->
-    <div id="payment-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-2 md:p-4 modal-overlay" onclick="closeModalOnOverlay(event, 'payment-modal')">
+    <div id="payment-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'payment-modal')">
         <div class="bg-white w-full md:max-w-md modern-modal modal-content" onclick="event.stopPropagation()">
             <div class="modal-header flex justify-between items-center">
                 <h3 class="text-xl font-bold">إتمام الدفع</h3>
@@ -1127,13 +1030,18 @@
 
     <script>
         // === إعدادات EmailJS ===
-        const EMAILJS_PUBLIC_KEY = 'O3UZPWUhamzxhmC1J';
+        const EMAILJS_USER_ID = 'O3UZPWUhamzxhmC1J';
         const EMAILJS_SERVICE_ID = 'service_s3tkjzh';
         const EMAILJS_TEMPLATE_ID = 'template_oe0t4ki';
         const STORE_EMAIL = 'kingash2000@gmail.com';
-        const CONTACT_TEMPLATE_ID = 'template_oe0t4ki'; // يمكنك تغييره إذا كان لديك قالب منفصل للاتصال
 
-        // بيانات التطبيق
+        // === تهيئة EmailJS ===
+        (function() {
+            emailjs.init(EMAILJS_USER_ID);
+            console.log('✅ EmailJS initialized with user ID:', EMAILJS_USER_ID);
+        })();
+
+        // === بيانات التطبيق ===
         const categories = [
             { id: 1, name: "بقوليات", icon: "carrot", color: "10b981", gradient: "teal-gradient", imageUrl: "https://images.unsplash.com/photo-1627916515865-c3f9152a466a?q=80&w=600&auto=format&fit=crop" },
             { id: 2, name: "معلبات", icon: "package", color: "f59e0b", gradient: "orange-gradient", imageUrl: "https://images.unsplash.com/photo-1579613832104-e0b62e49c716?q=80&w=600&auto=format&fit=crop" },
@@ -1157,7 +1065,7 @@
             { id: 20, name: "الآيس كريم والمثلجات", icon: "ice-cream", color: "ec4899", gradient: "teal-gradient", imageUrl: "https://images.unsplash.com/photo-1518349271638-348518900696?q=80&w=600&auto=format&fit=crop" }
         ];
 
-        // متغيرات عامة
+        // === متغيرات عامة ===
         let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
         let currentSubProducts = [];
         let currentCategory = null;
@@ -1168,488 +1076,25 @@
         let userEmail = '';
         let userName = '';
 
-        // === تهيئة EmailJS ===
-        emailjs.init(EMAILJS_PUBLIC_KEY);
-        console.log('✅ EmailJS initialized successfully');
-
-        // === دوال التخزين والاتصال ===
-        
-        // حفظ السلة محلياً
-        function saveCartToLocalStorage() {
-            localStorage.setItem('cartItems', JSON.stringify(cartItems));
-        }
-        
-        // حفظ الطلب محلياً وإرسال إيميل
-        async function saveOrder(orderData) {
-            try {
-                // 1. حفظ الطلب محلياً
-                let orders = JSON.parse(localStorage.getItem('storeOrders') || '[]');
-                orders.push({
-                    ...orderData,
-                    id: 'ORD-' + Date.now(),
-                    timestamp: new Date().toISOString(),
-                    status: 'pending'
-                });
-                localStorage.setItem('storeOrders', JSON.stringify(orders));
-                
-                // 2. إرسال إيميل إلى صاحب المتجر
-                const emailResult = await sendOrderToOwner(orderData);
-                
-                return {
-                    success: true,
-                    orderId: orderData.id,
-                    emailSent: emailResult.success,
-                    message: 'تم حفظ الطلب بنجاح' + (emailResult.success ? ' وإرسال الإيميل' : ' ولكن فشل إرسال الإيميل')
-                };
-            } catch (error) {
-                console.error('Error saving order:', error);
-                return {
-                    success: false,
-                    error: error.message
-                };
-            }
-        }
-
-        // إرسال إيميل إلى صاحب المتجر
-        async function sendOrderToOwner(orderData) {
-            try {
-                const templateParams = {
-                    to_email: STORE_EMAIL,
-                    customer_name: orderData.customerName,
-                    order_id: orderData.id,
-                    order_total: orderData.total.toFixed(2),
-                    order_items: orderData.items.map(item => 
-                        `${item.name} - ${item.quantity} x ${item.price} دينار`
-                    ).join('\n'),
-                    customer_phone: orderData.phone,
-                    customer_address: orderData.address,
-                    from_store: 'أسواق القطب',
-                    subject: 'طلب جديد - أسواق القطب'
-                };
-
-                const response = await emailjs.send(
-                    EMAILJS_SERVICE_ID,
-                    EMAILJS_TEMPLATE_ID,
-                    templateParams
-                );
-                
-                return {success: true, response};
-            } catch (error) {
-                console.error('Failed to send email to owner:', error);
-                return {success: false, error};
-            }
-        }
-
-        // إرسال رسالة الاتصال
-        async function sendContactMessage(formData) {
-            try {
-                const templateParams = {
-                    to_email: STORE_EMAIL,
-                    to_name: 'أسواق القطب',
-                    from_name: formData.get('to_name'),
-                    from_email: formData.get('to_email'),
-                    message: formData.get('message'),
-                    subject: 'رسالة جديدة من نموذج الاتصال',
-                    store_name: 'أسواق القطب'
-                };
-
-                console.log('📧 إرسال رسالة اتصال:', templateParams);
-
-                const response = await emailjs.send(
-                    EMAILJS_SERVICE_ID,
-                    CONTACT_TEMPLATE_ID,
-                    templateParams
-                );
-
-                console.log('✅ تم إرسال رسالة الاتصال بنجاح:', response);
-                return { success: true, response };
-            } catch (error) {
-                console.error('❌ فشل إرسال رسالة الاتصال:', error);
-                return { success: false, error };
-            }
-        }
-
-        // إرسال رمز التحقق
-        async function sendVerificationEmail(email, name, code) {
-            try {
-                const templateParams = {
-                    to_email: email,
-                    to_name: name,
-                    verification_code: code,
-                    store_name: 'أسواق القطب',
-                    subject: 'رمز التحقق - أسواق القطب',
-                    from_name: 'فريق أسواق القطب'
-                };
-
-                console.log('📧 إرسال رمز التحقق:', {
-                    email: email,
-                    name: name,
-                    code: code,
-                    service: EMAILJS_SERVICE_ID,
-                    template: EMAILJS_TEMPLATE_ID
-                });
-
-                const response = await emailjs.send(
-                    EMAILJS_SERVICE_ID,
-                    EMAILJS_TEMPLATE_ID,
-                    templateParams
-                );
-
-                console.log('✅ تم إرسال رمز التحقق بنجاح:', response);
-                return { success: true, response };
-            } catch (error) {
-                console.error('❌ فشل إرسال رمز التحقق:', error);
-                return { success: false, error };
-            }
-        }
-
-        // === دوال التحقق والتسجيل ===
-
-        window.sendVerificationCode = async function() {
-            // الحصول على البيانات من النموذج
-            const name = document.getElementById('register-name').value.trim();
-            const email = document.getElementById('register-email').value.trim();
-            const password = document.getElementById('register-password').value;
-            const confirmPassword = document.getElementById('register-confirm-password').value;
-            const terms = document.getElementById('register-terms').checked;
-            
-            // التحقق من صحة البيانات
-            if (!name || !email || !password || !confirmPassword || !terms) {
-                showToast('يرجى ملء جميع الحقول');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                showToast('كلمات المرور غير متطابقة');
-                return;
-            }
-            
-            if (password.length < 6) {
-                showToast('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
-                return;
-            }
-            
-            // التحقق من صحة البريد الإلكتروني
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showToast('يرجى إدخال بريد إلكتروني صحيح');
-                return;
-            }
-            
-            // تعطيل الزر أثناء الإرسال
-            const sendButton = document.getElementById('send-verification-btn');
-            const originalText = sendButton.textContent;
-            sendButton.textContent = 'جاري الإرسال...';
-            sendButton.disabled = true;
-            
-            // إنشاء رمز تحقق
-            verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-            userEmail = email;
-            userName = name;
-            
-            try {
-                // إرسال رمز التحقق عبر EmailJS
-                const result = await sendVerificationEmail(email, name, verificationCode);
-                
-                if (result.success) {
-                    // حفظ بيانات المستخدم مؤقتاً
-                    const userData = {
-                        name: name,
-                        email: email,
-                        password: password,
-                        verificationCode: verificationCode,
-                        timestamp: Date.now()
-                    };
-                    localStorage.setItem('pendingRegistration', JSON.stringify(userData));
-                    
-                    // عرض نافذة التحقق
-                    document.getElementById('verification-email').textContent = email;
-                    closeModal('register-modal');
-                    openVerificationModal();
-                    startCountdown();
-                    showToast('✅ تم إرسال رمز التحقق إلى بريدك الإلكتروني');
-                } else {
-                    showToast('❌ فشل إرسال رمز التحقق. يرجى المحاولة مرة أخرى');
-                    // للاختبار: عرض الرمز في التنبيه
-                    alert(`رمز التحقق للاختبار: ${verificationCode}\n(سيتم إرساله إلى بريدك في بيئة الإنتاج)`);
-                    
-                    // الاستمرار في أي حال
-                    const userData = {
-                        name: name,
-                        email: email,
-                        password: password,
-                        verificationCode: verificationCode,
-                        timestamp: Date.now()
-                    };
-                    localStorage.setItem('pendingRegistration', JSON.stringify(userData));
-                    
-                    document.getElementById('verification-email').textContent = email;
-                    closeModal('register-modal');
-                    openVerificationModal();
-                    startCountdown();
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showToast('حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى');
-            } finally {
-                // إعادة تفعيل الزر
-                sendButton.textContent = originalText;
-                sendButton.disabled = false;
-            }
-        };
-
-        window.resendVerificationCode = async function() {
-            // التحقق من وجود بيانات المستخدم
-            const pendingData = JSON.parse(localStorage.getItem('pendingRegistration'));
-            if (!pendingData) {
-                showToast('❌ لا توجد بيانات تسجيل معلقة');
-                return;
-            }
-            
-            // إنشاء رمز جديد
-            verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-            pendingData.verificationCode = verificationCode;
-            pendingData.timestamp = Date.now();
-            localStorage.setItem('pendingRegistration', JSON.stringify(pendingData));
-            
-            try {
-                // إعادة إرسال الرمز
-                const result = await sendVerificationEmail(
-                    pendingData.email,
-                    pendingData.name,
-                    verificationCode
-                );
-                
-                if (result.success) {
-                    startCountdown();
-                    showToast('✅ تم إعادة إرسال رمز التحقق');
-                } else {
-                    showToast('❌ فشل إعادة الإرسال. جاري استخدام الرمز السابق');
-                    startCountdown();
-                }
-            } catch (error) {
-                console.error('Resend error:', error);
-                showToast('⚠️ فشل إعادة الإرسال. حاول مرة أخرى');
-            }
-        };
-
-        window.handleContactForm = async function(event) {
-            event.preventDefault();
-            
-            const form = event.target;
-            const formData = new FormData(form);
-            
-            // التحقق من البيانات
-            const name = formData.get('to_name').trim();
-            const email = formData.get('to_email').trim();
-            const message = formData.get('message').trim();
-            
-            if (!name || !email || !message) {
-                showToast('يرجى ملء جميع الحقول المطلوبة');
-                return;
-            }
-            
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showToast('يرجى إدخال بريد إلكتروني صحيح');
-                return;
-            }
-            
-            // تعطيل الزر أثناء الإرسال
-            const submitButton = form.querySelector('button[type="submit"]');
-            const originalText = submitButton.textContent;
-            submitButton.textContent = 'جاري الإرسال...';
-            submitButton.disabled = true;
-            
-            try {
-                // إرسال رسالة الاتصال
-                const result = await sendContactMessage(formData);
-                
-                if (result.success) {
-                    showToast('✅ تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.');
-                    form.reset();
-                    closeModal('contact-us-modal');
-                } else {
-                    showToast('❌ فشل إرسال الرسالة. يرجى المحاولة مرة أخرى');
-                }
-            } catch (error) {
-                console.error('Contact form error:', error);
-                showToast('حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى');
-            } finally {
-                // إعادة تفعيل الزر
-                submitButton.textContent = originalText;
-                submitButton.disabled = false;
-            }
-        };
-
-        window.handleVerificationForm = async function(event) {
-            event.preventDefault();
-            
-            // جمع الأرقام المدخلة
-            const digits = document.querySelectorAll('.verification-digit');
-            let enteredCode = '';
-            digits.forEach(digit => {
-                enteredCode += digit.value;
-            });
-            
-            // التحقق من اكتمال الرمز
-            if (enteredCode.length !== 6) {
-                showToast('❌ يرجى إدخال جميع الأرقام');
-                return;
-            }
-            
-            // الحصول على بيانات التسجيل المعلقة
-            const pendingData = JSON.parse(localStorage.getItem('pendingRegistration'));
-            if (!pendingData) {
-                showToast('❌ انتهت صلاحية جلسة التسجيل. يرجى البدء من جديد');
-                closeModal('verification-modal');
-                openRegisterModal();
-                return;
-            }
-            
-            // التحقق من الرمز
-            if (enteredCode === pendingData.verificationCode) {
-                // حفظ المستخدم
-                saveUser(pendingData.name, pendingData.email, pendingData.password);
-                
-                // تنظيف البيانات المعلقة
-                localStorage.removeItem('pendingRegistration');
-                
-                // إغلاق العد التنازلي
-                if (countdownInterval) {
-                    clearInterval(countdownInterval);
-                }
-                
-                showToast('🎉 تم إنشاء حسابك بنجاح! يمكنك الآن تسجيل الدخول');
-                closeModal('verification-modal');
-                
-                // تسجيل الدخول تلقائياً
-                setTimeout(() => {
-                    openLoginModal();
-                }, 1000);
-            } else {
-                showToast('❌ رمز التحقق غير صحيح. يرجى المحاولة مرة أخرى');
-                
-                // اهتزاز الحقول
-                digits.forEach(digit => {
-                    digit.style.borderColor = '#ef4444';
-                    setTimeout(() => {
-                        digit.style.borderColor = '#d1d5db';
-                    }, 500);
-                });
-            }
-        };
-
-        function saveUser(name, email, password) {
-            try {
-                // الحصول على المستخدمين الحاليين
-                let users = JSON.parse(localStorage.getItem('storeUsers') || '[]');
-                
-                // التحقق من عدم وجود مستخدم بنفس البريد
-                if (users.some(user => user.email === email)) {
-                    console.warn('المستخدم مسجل بالفعل:', email);
-                    return false;
-                }
-                
-                // إضافة المستخدم الجديد
-                const newUser = {
-                    id: 'USER-' + Date.now(),
-                    name: name,
-                    email: email,
-                    password: password, // في التطبيق الحقيقي يجب تشفير كلمة المرور
-                    createdAt: new Date().toISOString(),
-                    verified: true,
-                    orders: [],
-                    totalSpent: 0,
-                    loyaltyPoints: 100 // نقاط ولاء للمستخدم الجديد
-                };
-                
-                users.push(newUser);
-                localStorage.setItem('storeUsers', JSON.stringify(users));
-                
-                console.log('✅ تم حفظ المستخدم:', newUser);
-                
-                // حفظ المستخدم الحالي
-                localStorage.setItem('currentUser', JSON.stringify({
-                    id: newUser.id,
-                    name: newUser.name,
-                    email: newUser.email
-                }));
-                
-                return true;
-            } catch (error) {
-                console.error('Error saving user:', error);
-                return false;
-            }
-        }
-
-        // === دوال التطبيق الأساسية ===
-
-        window.moveToNext = function(currentInput, nextIndex) {
-            if (currentInput.value.length === 1) {
-                const nextInput = document.querySelector(`.verification-digit:nth-child(${nextIndex})`);
-                if (nextInput) {
-                    nextInput.focus();
-                }
-            }
-            updateVerificationCode();
-        };
-
-        window.handleVerificationInput = function(event, index) {
-            if (event.key === 'Backspace' && event.target.value === '') {
-                const prevInput = document.querySelector(`.verification-digit:nth-child(${index})`);
-                if (prevInput) {
-                    prevInput.focus();
-                }
-            }
-        };
-
-        window.updateVerificationCode = function() {
-            const digits = document.querySelectorAll('.verification-digit');
-            let code = '';
-            digits.forEach(digit => {
-                code += digit.value;
-            });
-            document.getElementById('verification-code').value = code;
-        };
-
-        window.startCountdown = function() {
-            let countdown = 60;
-            const countdownElement = document.getElementById('countdown');
-            const resendButton = document.getElementById('resend-button');
-            
-            resendButton.disabled = true;
-            
-            // إلغاء العد السابق إذا كان موجوداً
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-            }
-            
-            countdownInterval = setInterval(() => {
-                countdown--;
-                countdownElement.textContent = countdown;
-                
-                if (countdown <= 0) {
-                    clearInterval(countdownInterval);
-                    resendButton.disabled = false;
-                    countdownElement.textContent = '60';
-                }
-            }, 1000);
-        };
-
-        // === التهيئة ===
-        
+        // === تهيئة التطبيق ===
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 تهيئة التطبيق...');
             
             // إعداد PWA
             setupManifest();
-            registerServiceWorker();
-            setupPWAInstall();
-            setupNetworkStatus();
             
             // إخفاء شاشة التحميل
-            hideSplashScreen();
+            setTimeout(() => {
+                const splashScreen = document.getElementById('splash-screen');
+                if (splashScreen) {
+                    splashScreen.classList.add('hidden');
+                    setTimeout(() => {
+                        if (splashScreen.parentNode) {
+                            splashScreen.parentNode.removeChild(splashScreen);
+                        }
+                    }, 500);
+                }
+            }, 2000);
             
             // تهيئة الأيقونات
             if (typeof lucide !== 'undefined') {
@@ -1663,88 +1108,30 @@
             // عرض القوائم
             renderCategories();
             
-            // تحميل السلة من التخزين المحلي
+            // تحميل السلة
             renderCart();
             
-            // إضافة أحداث للأزرار
+            // إضافة أحداث النماذج
+            document.getElementById('register-form').addEventListener('submit', handleRegisterForm);
+            document.getElementById('verification-form').addEventListener('submit', handleVerificationForm);
+            document.getElementById('login-form').addEventListener('submit', handleLoginForm);
+            document.getElementById('contact-form').addEventListener('submit', handleContactForm);
+            document.getElementById('payment-form').addEventListener('submit', handlePaymentForm);
+            
+            // أحداث الأزرار
             document.getElementById('cart-header-btn').addEventListener('click', openCartModal);
             document.getElementById('contact-us-btn').addEventListener('click', openContactUsModal);
             
-            // إضافة حدث لنموذج الاتصال
-            const contactForm = document.getElementById('contact-form');
-            if (contactForm) {
-                contactForm.addEventListener('submit', handleContactForm);
-            }
+            console.log('✅ تم تهيئة التطبيق بنجاح');
             
-            // تحديث نموذج الدفع
-            document.getElementById('payment-form').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const formData = new FormData(this);
-                const orderData = {
-                    id: 'ORD-' + Date.now(),
-                    customerName: formData.get('customerName'),
-                    phone: formData.get('phone'),
-                    address: formData.get('address'),
-                    paymentMethod: formData.get('paymentMethod'),
-                    items: cartItems,
-                    total: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-                    timestamp: new Date().toISOString(),
-                    status: 'pending'
-                };
-                
-                await completeOrder(orderData);
-            });
-            
-            // إضافة أحداث للنماذج الأخرى
-            document.getElementById('login-form').addEventListener('submit', handleLoginForm);
-            document.getElementById('verification-form').addEventListener('submit', handleVerificationForm);
-            
-            // تحديث شريط التقدم
-            window.addEventListener('scroll', updateReadingProgress);
-            
-            // تنظيف أي بيانات تسجيل معلقة قديمة
+            // تنظيف البيانات القديمة
             const pendingData = JSON.parse(localStorage.getItem('pendingRegistration'));
-            if (pendingData && Date.now() - pendingData.timestamp > 3600000) { // ساعة واحدة
+            if (pendingData && Date.now() - pendingData.timestamp > 3600000) {
                 localStorage.removeItem('pendingRegistration');
             }
-            
-            console.log('✅ تم تهيئة التطبيق بنجاح');
         });
 
-        // === دوال PWA الأساسية ===
-        
-        function registerServiceWorker() {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(function(registration) {
-                        console.log('✅ Service Worker registered successfully');
-                    })
-                    .catch(function(error) {
-                        console.log('❌ Service Worker registration failed:', error);
-                    });
-            }
-        }
-
-        function setupPWAInstall() {
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                // يمكن إضافة منطق تثبيت PWA هنا لاحقاً
-            });
-        }
-
-        function setupNetworkStatus() {
-            window.addEventListener('online', () => {
-                document.getElementById('offline-indicator').classList.remove('show');
-                showToast('✅ تم استعادة الاتصال بالإنترنت');
-            });
-
-            window.addEventListener('offline', () => {
-                document.getElementById('offline-indicator').classList.add('show');
-                showToast('⚠️ أنت غير متصل بالإنترنت - التطبيق يعمل في وضع عدم الاتصال');
-            });
-        }
-
+        // === دوال PWA ===
         function setupManifest() {
             const manifest = {
                 "name": "أسواق القطب",
@@ -1773,7 +1160,6 @@
         }
 
         // === دوال التطبيق الأساسية ===
-        
         function generateAllProducts() {
             allProducts = [];
             categories.forEach(category => {
@@ -1848,59 +1234,8 @@
             }
         }
 
-        // === دوال النوافذ المفقودة ===
-        
-        // دالة فتح نافذة الحساب الشخصي
-        window.openProfileModal = function() {
-            document.getElementById('profile-modal').classList.remove('hidden');
-        };
-
-        // دالة فتح نافذة المفضلة
-        window.openFavoritesModal = function() {
-            document.getElementById('favorites-modal').classList.remove('hidden');
-        };
-
-        // دالة فتح نافذة البحث
-        window.openSearchModal = function() {
-            document.getElementById('search-modal').classList.remove('hidden');
-        };
-
-        // دالة فتح الصفحة الرئيسية
-        window.openHome = function() {
-            // إغلاق أي نوافذ مفتوحة والعودة للصفحة الرئيسية
-            closeAllModals();
-            setActiveNavItem('home');
-        };
-
-        // دالة تعيين العنصر النشط في القائمة
-        window.setActiveNavItem = function(itemName) {
-            document.querySelectorAll('.mobile-nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // يمكن إضافة منطق لتحديد العنصر النشط حسب itemName
-            if (itemName === 'home') {
-                document.querySelector('.mobile-nav-item:nth-child(1)').classList.add('active');
-            }
-        };
-
-        // دالة إغلاق جميع النوافذ
-        window.closeAllModals = function() {
-            const modals = document.querySelectorAll('.modal-overlay');
-            modals.forEach(modal => {
-                modal.classList.add('hidden');
-            });
-        };
-
-        // دالة إغلاق النافذة عند النقر خارجها
-        window.closeModalOnOverlay = function(event, modalId) {
-            if (event.target === document.getElementById(modalId)) {
-                closeModal(modalId);
-            }
-        };
-
-        // دوال أخرى
-        window.openCategoryDetails = function(categoryId) {
+        // === دوال النوافذ ===
+        function openCategoryDetails(categoryId) {
             const category = categories.find(cat => cat.id === categoryId);
             if (!category) return;
 
@@ -1908,7 +1243,7 @@
             currentSubProducts = generateSubProducts(categoryId, category.name);
 
             document.getElementById('modal-category-name').textContent = category.name;
-            document.getElementById('category-details-modal').classList.remove('hidden');
+            document.getElementById('category-details-modal').classList.add('active');
             document.getElementById('sort-selector').value = 'default';
 
             currentFilter = 'all';
@@ -1918,9 +1253,9 @@
             document.querySelector('.filter-tab').classList.add('active');
 
             renderSubProducts(currentSubProducts);
-        };
+        }
 
-        window.renderSubProducts = function(products) {
+        function renderSubProducts(products) {
             const grid = document.getElementById('sub-products-grid');
             if (!grid) return;
 
@@ -1970,9 +1305,10 @@
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
-        };
+        }
 
-        window.renderCart = function() {
+        // === دوال السلة ===
+        function renderCart() {
             const headerBadge = document.getElementById('cart-header-badge');
             const bottomBadge = document.getElementById('cart-bottom-badge');
             let totalCount = 0;
@@ -1995,9 +1331,9 @@
                 if (headerBadge) headerBadge.classList.add('hidden');
                 if (bottomBadge) bottomBadge.classList.add('hidden');
             }
-        };
+        }
 
-        window.updateCartModal = function() {
+        function updateCartModal() {
             const cartItemsContainer = document.getElementById('cart-items');
             const cartTotal = document.getElementById('cart-total');
             const paymentTotal = document.getElementById('payment-total');
@@ -2050,220 +1386,9 @@
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
-        };
-
-        window.updateCartItemQuantity = function(productId, change) {
-            const item = cartItems.find(item => item.productId === productId);
-            if (!item) return;
-
-            item.quantity += change;
-            
-            if (item.quantity <= 0) {
-                cartItems = cartItems.filter(item => item.productId !== productId);
-            }
-            
-            saveCartToLocalStorage();
-            renderCart();
-            updateCartModal();
-        };
-
-        window.removeFromCart = function(productId) {
-            cartItems = cartItems.filter(item => item.productId !== productId);
-            saveCartToLocalStorage();
-            renderCart();
-            updateCartModal();
-            showToast('تم حذف المنتج من السلة');
-        };
-
-        window.showToast = function(message) {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 100);
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    document.body.removeChild(toast);
-                }, 300);
-            }, 3000);
-        };
-
-        // دوال النوافذ الأساسية
-        window.openCartModal = function() {
-            document.getElementById('cart-modal').classList.remove('hidden');
-            updateCartModal();
-        };
-
-        window.openContactUsModal = function() {
-            document.getElementById('contact-us-modal').classList.remove('hidden');
-        };
-
-        window.openPaymentModal = function() {
-            if (cartItems.length === 0) {
-                showToast('سلة التسوق فارغة');
-                return;
-            }
-            document.getElementById('payment-modal').classList.remove('hidden');
-        };
-
-        window.closeModal = function(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        };
-
-        window.openVerificationModal = function() {
-            document.getElementById('verification-modal').classList.remove('hidden');
-            
-            // تفريغ حقول الرمز
-            const digits = document.querySelectorAll('.verification-digit');
-            digits.forEach(digit => {
-                digit.value = '';
-            });
-            
-            // التركيز على الحقل الأول
-            if (digits.length > 0) {
-                digits[0].focus();
-            }
-        };
-
-        window.hideSplashScreen = function() {
-            const splashScreen = document.getElementById('splash-screen');
-            setTimeout(() => {
-                splashScreen.classList.add('hidden');
-                setTimeout(() => {
-                    splashScreen.remove();
-                }, 500);
-            }, 2000);
-        };
-
-        // دوال إضافية
-        window.changeFilterTab = function(filter, element) {
-            currentFilter = filter;
-            document.querySelectorAll('.filter-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            element.classList.add('active');
-            
-            let filteredProducts = currentSubProducts;
-            
-            if (filter === 'discount') {
-                filteredProducts = currentSubProducts.filter(p => p.hasDiscount);
-            } else if (filter === 'bestseller') {
-                filteredProducts = currentSubProducts.filter(p => p.isBestseller);
-            }
-            
-            renderSubProducts(filteredProducts);
-        };
-
-        window.sortProducts = function(sortType) {
-            let sortedProducts = [...currentSubProducts];
-            
-            switch(sortType) {
-                case 'price-asc':
-                    sortedProducts.sort((a, b) => a.price - b.price);
-                    break;
-                case 'price-desc':
-                    sortedProducts.sort((a, b) => b.price - a.price);
-                    break;
-                case 'name-asc':
-                    sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
-                    break;
-                default:
-                    // الترتيب الافتراضي
-                    break;
-            }
-            
-            renderSubProducts(sortedProducts);
-        };
-
-        window.startShopping = function() {
-            document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
-        };
-
-        window.switchToRegister = function() {
-            closeModal('login-modal');
-            openRegisterModal();
-        };
-
-        window.switchToLogin = function() {
-            closeModal('register-modal');
-            openLoginModal();
-        };
-
-        window.openRegisterModal = function() {
-            document.getElementById('register-modal').classList.remove('hidden');
-        };
-
-        window.openLoginModal = function() {
-            document.getElementById('login-modal').classList.remove('hidden');
-        };
-
-        window.togglePassword = function(inputId, button) {
-            const input = document.getElementById(inputId);
-            const icon = button.querySelector('i');
-            
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.setAttribute('data-lucide', 'eye-off');
-            } else {
-                input.type = 'password';
-                icon.setAttribute('data-lucide', 'eye');
-            }
-            
-            lucide.createIcons();
-        };
-
-        window.handleLoginForm = function(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value;
-            
-            // في التطبيق الحقيقي، يجب التحقق من قاعدة البيانات
-            // هنا نتحقق من التخزين المحلي
-            const users = JSON.parse(localStorage.getItem('storeUsers') || '[]');
-            const user = users.find(u => u.email === email && u.password === password);
-            
-            if (user) {
-                showToast('🎉 تم تسجيل الدخول بنجاح!');
-                closeModal('login-modal');
-                
-                // حفظ حالة تسجيل الدخول
-                localStorage.setItem('currentUser', JSON.stringify({
-                    id: user.id,
-                    name: user.name,
-                    email: user.email
-                }));
-                
-                // تحديث واجهة المستخدم لتعكس حالة تسجيل الدخول
-                updateUserInterface();
-            } else {
-                showToast('❌ البريد الإلكتروني أو كلمة المرور غير صحيحة');
-            }
-        };
-
-        function updateUserInterface() {
-            // تحديث واجهة المستخدم بعد تسجيل الدخول
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            if (currentUser) {
-                console.log('👤 المستخدم الحالي:', currentUser.name);
-                // يمكنك تحديث الهيدر أو أي عناصر أخرى هنا
-            }
         }
 
-        window.updateReadingProgress = function() {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.getElementById("reading-progress").style.width = scrolled + "%";
-        };
-
-        // دالة إضافة المنتج للسلة
-        window.addToCart = function(productId) {
+        function addToCart(productId) {
             const product = allProducts.find(p => p.id === productId);
             if (!product) return;
 
@@ -2284,24 +1409,503 @@
             saveCartToLocalStorage();
             renderCart();
             showToast('تمت إضافة المنتج إلى السلة');
-        };
+        }
 
-        // دالة إتمام الشراء
-        window.checkout = function() {
+        function updateCartItemQuantity(productId, change) {
+            const item = cartItems.find(item => item.productId === productId);
+            if (!item) return;
+
+            item.quantity += change;
+            
+            if (item.quantity <= 0) {
+                cartItems = cartItems.filter(item => item.productId !== productId);
+            }
+            
+            saveCartToLocalStorage();
+            renderCart();
+            updateCartModal();
+        }
+
+        function removeFromCart(productId) {
+            cartItems = cartItems.filter(item => item.productId !== productId);
+            saveCartToLocalStorage();
+            renderCart();
+            updateCartModal();
+            showToast('تم حذف المنتج من السلة');
+        }
+
+        function saveCartToLocalStorage() {
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        }
+
+        // === دوال النوافذ الأساسية ===
+        function openCartModal() {
+            closeAllModals();
+            document.getElementById('cart-modal').classList.add('active');
+            updateCartModal();
+        }
+
+        function openContactUsModal() {
+            closeAllModals();
+            document.getElementById('contact-us-modal').classList.add('active');
+        }
+
+        function openPaymentModal() {
+            if (cartItems.length === 0) {
+                showToast('سلة التسوق فارغة');
+                return;
+            }
+            closeAllModals();
+            document.getElementById('payment-modal').classList.add('active');
+        }
+
+        function openProfileModal() {
+            closeAllModals();
+            document.getElementById('profile-modal').classList.add('active');
+        }
+
+        function openFavoritesModal() {
+            closeAllModals();
+            document.getElementById('favorites-modal').classList.add('active');
+        }
+
+        function openSearchModal() {
+            closeAllModals();
+            document.getElementById('search-modal').classList.add('active');
+        }
+
+        function openHome() {
+            closeAllModals();
+            setActiveNavItem('home');
+        }
+
+        function openLoginModal() {
+            closeAllModals();
+            document.getElementById('login-modal').classList.add('active');
+        }
+
+        function openRegisterModal() {
+            closeAllModals();
+            document.getElementById('register-modal').classList.add('active');
+        }
+
+        function openVerificationModal() {
+            closeAllModals();
+            document.getElementById('verification-modal').classList.add('active');
+            
+            const digits = document.querySelectorAll('.verification-digit');
+            digits.forEach(digit => {
+                digit.value = '';
+            });
+            
+            if (digits.length > 0) {
+                digits[0].focus();
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function closeAllModals() {
+            const modals = document.querySelectorAll('.modal-overlay');
+            modals.forEach(modal => {
+                modal.classList.remove('active');
+            });
+        }
+
+        function closeModalOnOverlay(event, modalId) {
+            if (event.target === document.getElementById(modalId)) {
+                closeModal(modalId);
+            }
+        }
+
+        function setActiveNavItem(itemName) {
+            document.querySelectorAll('.mobile-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            if (itemName === 'home') {
+                document.querySelector('.mobile-nav-item:nth-child(1)').classList.add('active');
+            }
+        }
+
+        // === دوال المساعدة ===
+        function startShopping() {
+            document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function checkout() {
             if (cartItems.length === 0) {
                 showToast('سلة التسوق فارغة');
                 return;
             }
             closeModal('cart-modal');
             openPaymentModal();
-        };
+        }
 
-        // دالة إتمام الطلب
-        async function completeOrder(orderData) {
-            showToast('جاري معالجة طلبك...');
+        function switchToRegister() {
+            closeModal('login-modal');
+            openRegisterModal();
+        }
+
+        function switchToLogin() {
+            closeModal('register-modal');
+            openLoginModal();
+        }
+
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+            const icon = button.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                input.type = 'password';
+                icon.setAttribute('data-lucide', 'eye');
+            }
+            
+            lucide.createIcons();
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // === دوال التحقق والتسجيل ===
+        async function sendVerificationEmail(email, name, code) {
+            try {
+                console.log('📧 محاولة إرسال رمز التحقق إلى:', email);
+                
+                if (typeof emailjs === 'undefined') {
+                    console.error('❌ EmailJS غير محمّل');
+                    throw new Error('EmailJS غير محمّل');
+                }
+
+                const templateParams = {
+                    to_email: email,
+                    to_name: name,
+                    verification_code: code,
+                    store_name: 'أسواق القطب',
+                    subject: 'رمز التحقق - أسواق القطب'
+                };
+
+                console.log('🔧 معاملات القالب:', templateParams);
+                console.log('🔧 Service ID:', EMAILJS_SERVICE_ID);
+                console.log('🔧 Template ID:', EMAILJS_TEMPLATE_ID);
+
+                const response = await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_ID,
+                    templateParams
+                );
+
+                console.log('✅ تم إرسال رمز التحقق بنجاح:', response);
+                return { 
+                    success: true, 
+                    response: response
+                };
+            } catch (error) {
+                console.error('❌ فشل إرسال رمز التحقق:', error);
+                
+                return { 
+                    success: false, 
+                    error: error,
+                    message: 'فشل إرسال رمز التحقق'
+                };
+            }
+        }
+
+        async function handleRegisterForm(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            const terms = document.getElementById('register-terms').checked;
+            
+            if (!name || !email || !password || !confirmPassword || !terms) {
+                showToast('يرجى ملء جميع الحقول');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showToast('كلمات المرور غير متطابقة');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showToast('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+                return;
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showToast('يرجى إدخال بريد إلكتروني صحيح');
+                return;
+            }
+            
+            const sendButton = document.getElementById('send-verification-btn');
+            const originalText = sendButton.textContent;
+            sendButton.textContent = 'جاري الإرسال...';
+            sendButton.disabled = true;
+            
+            verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+            userEmail = email;
+            userName = name;
+            
+            const userData = {
+                name: name,
+                email: email,
+                password: password,
+                verificationCode: verificationCode,
+                timestamp: Date.now()
+            };
+            localStorage.setItem('pendingRegistration', JSON.stringify(userData));
+            
+            showToast('جاري إرسال رمز التحقق...');
             
             try {
-                // حفظ الطلب وإرسال الإيميل
+                const result = await sendVerificationEmail(email, name, verificationCode);
+                
+                if (result.success) {
+                    showToast('✅ تم إرسال رمز التحقق إلى بريدك الإلكتروني');
+                    
+                    document.getElementById('verification-email').textContent = email;
+                    closeModal('register-modal');
+                    openVerificationModal();
+                    startCountdown();
+                } else {
+                    showToast('❌ فشل إرسال رمز التحقق. يرجى المحاولة مرة أخرى');
+                    sendButton.textContent = originalText;
+                    sendButton.disabled = false;
+                }
+            } catch (error) {
+                console.error('خطأ في عملية التسجيل:', error);
+                showToast('❌ حدث خطأ. يرجى المحاولة مرة أخرى');
+                sendButton.textContent = originalText;
+                sendButton.disabled = false;
+            }
+        }
+
+        function handleVerificationForm(e) {
+            e.preventDefault();
+            
+            const digits = document.querySelectorAll('.verification-digit');
+            let enteredCode = '';
+            digits.forEach(digit => {
+                enteredCode += digit.value;
+            });
+            
+            if (enteredCode.length !== 6) {
+                showToast('❌ يرجى إدخال جميع الأرقام');
+                return;
+            }
+            
+            const pendingData = JSON.parse(localStorage.getItem('pendingRegistration'));
+            if (!pendingData) {
+                showToast('❌ انتهت صلاحية جلسة التسجيل. يرجى البدء من جديد');
+                closeModal('verification-modal');
+                openRegisterModal();
+                return;
+            }
+            
+            if (enteredCode === pendingData.verificationCode) {
+                saveUser(pendingData.name, pendingData.email, pendingData.password);
+                
+                localStorage.removeItem('pendingRegistration');
+                
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
+                
+                showToast('🎉 تم إنشاء حسابك بنجاح!');
+                closeModal('verification-modal');
+                
+                setTimeout(() => {
+                    showToast('مرحباً بك ' + pendingData.name + '!');
+                }, 1000);
+            } else {
+                showToast('❌ رمز التحقق غير صحيح. يرجى المحاولة مرة أخرى');
+                
+                digits.forEach(digit => {
+                    digit.style.borderColor = '#ef4444';
+                    setTimeout(() => {
+                        digit.style.borderColor = '#d1d5db';
+                    }, 500);
+                });
+            }
+        }
+
+        function saveUser(name, email, password) {
+            try {
+                let users = JSON.parse(localStorage.getItem('storeUsers') || '[]');
+                
+                if (users.some(user => user.email === email)) {
+                    console.warn('المستخدم مسجل بالفعل:', email);
+                    users = users.filter(user => user.email !== email);
+                }
+                
+                const newUser = {
+                    id: 'USER-' + Date.now(),
+                    name: name,
+                    email: email,
+                    password: password,
+                    createdAt: new Date().toISOString(),
+                    verified: true,
+                    orders: [],
+                    totalSpent: 0,
+                    loyaltyPoints: 100
+                };
+                
+                users.push(newUser);
+                localStorage.setItem('storeUsers', JSON.stringify(users));
+                
+                localStorage.setItem('currentUser', JSON.stringify({
+                    id: newUser.id,
+                    name: newUser.name,
+                    email: newUser.email
+                }));
+                
+                console.log('✅ تم حفظ المستخدم:', newUser);
+                return true;
+            } catch (error) {
+                console.error('Error saving user:', error);
+                return false;
+            }
+        }
+
+        function handleLoginForm(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            
+            const users = JSON.parse(localStorage.getItem('storeUsers') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                showToast('🎉 تم تسجيل الدخول بنجاح!');
+                closeModal('login-modal');
+                
+                localStorage.setItem('currentUser', JSON.stringify({
+                    id: user.id,
+                    name: user.name,
+                    email: user.email
+                }));
+            } else {
+                showToast('❌ البريد الإلكتروني أو كلمة المرور غير صحيحة');
+            }
+        }
+
+        async function handleContactForm(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            const name = formData.get('to_name').trim();
+            const email = formData.get('to_email').trim();
+            const message = formData.get('message').trim();
+            
+            if (!name || !email || !message) {
+                showToast('يرجى ملء جميع الحقول المطلوبة');
+                return;
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showToast('يرجى إدخال بريد إلكتروني صحيح');
+                return;
+            }
+            
+            const submitButton = form.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'جاري الإرسال...';
+            submitButton.disabled = true;
+            
+            try {
+                const result = await sendContactMessage(formData);
+                
+                if (result.success) {
+                    showToast('✅ تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.');
+                    form.reset();
+                    closeModal('contact-us-modal');
+                } else {
+                    showToast('❌ فشل إرسال الرسالة. يرجى المحاولة مرة أخرى');
+                }
+            } catch (error) {
+                console.error('Contact form error:', error);
+                showToast('حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى');
+            } finally {
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            }
+        }
+
+        async function sendContactMessage(formData) {
+            try {
+                const templateParams = {
+                    to_email: STORE_EMAIL,
+                    to_name: 'أسواق القطب',
+                    from_name: formData.get('to_name'),
+                    from_email: formData.get('to_email'),
+                    message: formData.get('message'),
+                    subject: 'رسالة جديدة من عميل'
+                };
+
+                const response = await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_ID,
+                    templateParams
+                );
+
+                return { success: true, response };
+            } catch (error) {
+                console.error('❌ فشل إرسال رسالة الاتصال:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
+        async function handlePaymentForm(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            showToast('جاري معالجة طلبك...');
+            
+            const orderData = {
+                id: 'ORD-' + Date.now(),
+                customerName: formData.get('customerName'),
+                phone: formData.get('phone'),
+                address: formData.get('address'),
+                paymentMethod: formData.get('paymentMethod'),
+                items: cartItems,
+                total: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                timestamp: new Date().toISOString(),
+                status: 'pending'
+            };
+            
+            try {
                 const saveResult = await saveOrder(orderData);
                 
                 if (saveResult.success) {
@@ -2311,13 +1915,11 @@
                         showToast('✅ تم حفظ الطلب! سنتصل بك لتأكيد التفاصيل.');
                     }
                     
-                    // إعادة تعيين السلة
                     cartItems = [];
                     saveCartToLocalStorage();
                     renderCart();
                     updateCartModal();
                     
-                    // إغلاق نافذة الدفع
                     closeModal('payment-modal');
                     
                 } else {
@@ -2329,19 +1931,200 @@
             }
         }
 
-        // إضافة مستمعي الأحداث للنماذج
-        document.getElementById('verification-form').addEventListener('submit', handleVerificationForm);
-        document.getElementById('login-form').addEventListener('submit', handleLoginForm);
+        async function sendOrderToOwner(orderData) {
+            try {
+                const templateParams = {
+                    to_email: STORE_EMAIL,
+                    customer_name: orderData.customerName,
+                    order_id: orderData.id,
+                    order_total: orderData.total.toFixed(2),
+                    order_items: orderData.items.map(item => 
+                        `${item.name} - ${item.quantity} x ${item.price} دينار`
+                    ).join('\n'),
+                    customer_phone: orderData.phone,
+                    customer_address: orderData.address,
+                    subject: 'طلب جديد - أسواق القطب'
+                };
 
-        // اختبار EmailJS عند التحميل
-        console.log('📧 EmailJS Configuration:');
-        console.log('- Public Key:', EMAILJS_PUBLIC_KEY);
-        console.log('- Service ID:', EMAILJS_SERVICE_ID);
-        console.log('- Template ID:', EMAILJS_TEMPLATE_ID);
-        console.log('- Contact Template ID:', CONTACT_TEMPLATE_ID);
-        console.log('- Store Email:', STORE_EMAIL);
+                const response = await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_ID,
+                    templateParams
+                );
+                
+                return {success: true, response};
+            } catch (error) {
+                console.error('Failed to send email to owner:', error);
+                return {success: false, error};
+            }
+        }
 
+        async function saveOrder(orderData) {
+            try {
+                let orders = JSON.parse(localStorage.getItem('storeOrders') || '[]');
+                orders.push({
+                    ...orderData,
+                    status: 'pending'
+                });
+                localStorage.setItem('storeOrders', JSON.stringify(orders));
+                
+                const emailResult = await sendOrderToOwner(orderData);
+                
+                return {
+                    success: true,
+                    orderId: orderData.id,
+                    emailSent: emailResult.success
+                };
+            } catch (error) {
+                console.error('Error saving order:', error);
+                return {
+                    success: false,
+                    error: error.message
+                };
+            }
+        }
+
+        function startCountdown() {
+            let countdown = 60;
+            const countdownElement = document.getElementById('countdown');
+            const resendButton = document.getElementById('resend-button');
+            
+            resendButton.disabled = true;
+            
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            countdownInterval = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    resendButton.disabled = false;
+                    countdownElement.textContent = '60';
+                }
+            }, 1000);
+        }
+
+        async function resendVerificationCode() {
+            const pendingData = JSON.parse(localStorage.getItem('pendingRegistration'));
+            if (!pendingData) {
+                showToast('❌ لا توجد بيانات تسجيل معلقة');
+                return;
+            }
+            
+            verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+            pendingData.verificationCode = verificationCode;
+            pendingData.timestamp = Date.now();
+            localStorage.setItem('pendingRegistration', JSON.stringify(pendingData));
+            
+            showToast('جاري إعادة إرسال رمز التحقق...');
+            
+            try {
+                const result = await sendVerificationEmail(
+                    pendingData.email,
+                    pendingData.name,
+                    verificationCode
+                );
+                
+                if (result.success) {
+                    startCountdown();
+                    showToast('✅ تم إعادة إرسال رمز التحقق');
+                } else {
+                    showToast('❌ فشل إعادة الإرسال. يرجى المحاولة مرة أخرى');
+                }
+            } catch (error) {
+                console.error('Resend error:', error);
+                showToast('❌ فشل إعادة الإرسال. حاول مرة أخرى');
+            }
+        }
+
+        function moveToNext(currentInput, nextIndex) {
+            if (currentInput.value.length === 1) {
+                const nextInput = document.querySelector(`.verification-digit:nth-child(${nextIndex})`);
+                if (nextInput) {
+                    nextInput.focus();
+                }
+            }
+        }
+
+        function handleVerificationInput(event, index) {
+            if (event.key === 'Backspace' && event.target.value === '') {
+                const prevInput = document.querySelector(`.verification-digit:nth-child(${index})`);
+                if (prevInput) {
+                    prevInput.focus();
+                }
+            }
+        }
+
+        function changeFilterTab(filter, element) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            let filteredProducts = currentSubProducts;
+            
+            if (filter === 'discount') {
+                filteredProducts = currentSubProducts.filter(p => p.hasDiscount);
+            } else if (filter === 'bestseller') {
+                filteredProducts = currentSubProducts.filter(p => p.isBestseller);
+            }
+            
+            renderSubProducts(filteredProducts);
+        }
+
+        function sortProducts(sortType) {
+            let sortedProducts = [...currentSubProducts];
+            
+            switch(sortType) {
+                case 'price-asc':
+                    sortedProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-desc':
+                    sortedProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name-asc':
+                    sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                default:
+                    break;
+            }
+            
+            renderSubProducts(sortedProducts);
+        }
+
+        // === جعل الدوال متاحة عالمياً ===
+        window.openCategoryDetails = openCategoryDetails;
+        window.changeFilterTab = changeFilterTab;
+        window.sortProducts = sortProducts;
+        window.addToCart = addToCart;
+        window.updateCartItemQuantity = updateCartItemQuantity;
+        window.removeFromCart = removeFromCart;
+        window.openCartModal = openCartModal;
+        window.openContactUsModal = openContactUsModal;
+        window.openPaymentModal = openPaymentModal;
+        window.openProfileModal = openProfileModal;
+        window.openFavoritesModal = openFavoritesModal;
+        window.openSearchModal = openSearchModal;
+        window.openHome = openHome;
+        window.openLoginModal = openLoginModal;
+        window.openRegisterModal = openRegisterModal;
+        window.openVerificationModal = openVerificationModal;
+        window.closeModal = closeModal;
+        window.closeAllModals = closeAllModals;
+        window.closeModalOnOverlay = closeModalOnOverlay;
+        window.setActiveNavItem = setActiveNavItem;
+        window.startShopping = startShopping;
+        window.checkout = checkout;
+        window.switchToRegister = switchToRegister;
+        window.switchToLogin = switchToLogin;
+        window.togglePassword = togglePassword;
+        window.resendVerificationCode = resendVerificationCode;
+        window.moveToNext = moveToNext;
+        window.handleVerificationInput = handleVerificationInput;
     </script>
-     
-    </body>
+</body>
 </html>
