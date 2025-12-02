@@ -63,6 +63,7 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             background: white;
+            height: 100%;
         }
         
         .modern-category-card:hover {
@@ -73,13 +74,19 @@
         .category-image-container {
             position: relative;
             overflow: hidden;
-            height: 140px;
+            height: 200px; /* زيادة الارتفاع ليكون مناسباً */
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
         }
         
         .category-image {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: contain; /* تغيير من cover إلى contain للحفاظ على نسبة الأبعاد */
+            padding: 15px;
             transition: transform 0.5s ease;
         }
         
@@ -122,6 +129,7 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             background: white;
             position: relative;
+            height: 100%;
         }
         
         .modern-product-card:hover {
@@ -131,14 +139,20 @@
         
         .product-image-container {
             position: relative;
-            height: 160px;
+            height: 180px; /* زيادة الارتفاع ليكون مناسباً */
+            width: 100%;
             overflow: hidden;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .product-image {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* تغيير من cover إلى contain */
+            padding: 15px;
             transition: transform 0.5s ease;
         }
         
@@ -290,6 +304,15 @@
             .register-form-mobile {
                 max-height: calc(100vh - 200px) !important;
                 overflow-y: auto !important;
+            }
+            
+            /* تعديل حجم الصور على الجوال */
+            .category-image-container {
+                height: 150px !important;
+            }
+            
+            .product-image-container {
+                height: 140px !important;
             }
         }
         
@@ -652,7 +675,7 @@
             </button>
             <button class="mobile-nav-item touch-feedback relative" onclick="openCartModal()">
                 <i data-lucide="shopping-cart" class="w-6 h-6 mx-auto mb-1"></i>
-                <span id="cart-bottom-badge" class="absolute -top-1 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center cart-badge hidden">0</span>
+                                <span id="cart-bottom-badge" class="absolute -top-1 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center cart-badge hidden">0</span>
                 <span class="text-xs">السلة</span>
             </button>
             <button class="mobile-nav-item touch-feedback" onclick="openFavoritesModal()">
@@ -752,7 +775,7 @@
             <div class="p-6 border-t border-gray-200">
                 <div class="flex justify-between items-center mb-4">
                     <span class="font-semibold">المجموع:</span>
-                    <span id="cart-total" class="font-bold text-lg text-purple-600">0.00</span>
+                    <span id="cart-total" class="font-bold text-lg text-purple-600">0</span>
                 </div>
                 <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback" onclick="checkout()">
                     إتمام الشراء
@@ -1017,7 +1040,7 @@
                     <div class="mt-6">
                         <div class="flex justify-between items-center mb-4">
                             <span class="font-semibold">المجموع:</span>
-                            <span id="payment-total" class="font-bold text-lg text-purple-600">0.00</span>
+                            <span id="payment-total" class="font-bold text-lg text-purple-600">0</span>
                         </div>
                         <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback">
                             تأكيد الطلب
@@ -1559,6 +1582,9 @@
                     `;
                 }
                 
+                // تحويل السعر إلى عدد صحيح بدون فواصل عشرية
+                const displayPrice = Math.round(product.price);
+                
                 card.innerHTML = `
                     <div class="product-image-container">
                         <img src="${product.imageUrl}" alt="${product.name}" class="product-image" loading="lazy">
@@ -1571,7 +1597,7 @@
                         
                         <div class="flex justify-between items-center mt-auto">
                             <div>
-                                <span class="font-extrabold text-lg text-purple-700">${product.price.toFixed(2)} ر.س</span>
+                                <span class="font-extrabold text-lg text-purple-700">${displayPrice}</span>
                             </div>
                         </div>
                     </div>
@@ -1624,8 +1650,8 @@
             
             if (cartItems.length === 0) {
                 cartItemsContainer.innerHTML = '<p class="text-gray-500 text-center py-8">سلة التسوق فارغة</p>';
-                cartTotal.textContent = '0.00';
-                if (paymentTotal) paymentTotal.textContent = '0.00';
+                cartTotal.textContent = '0';
+                if (paymentTotal) paymentTotal.textContent = '0';
                 return;
             }
             
@@ -1635,13 +1661,17 @@
             cartItems.forEach(item => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
+                // تحويل الأسعار إلى أرقام صحيحة
+                const displayPrice = Math.round(item.price);
+                const displayItemTotal = Math.round(itemTotal);
+                
                 itemsHTML += `
                     <div class="flex items-center space-x-4 space-x-reverse p-4 border border-gray-200 rounded-lg">
                         <img src="${item.imageUrl}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
                         <div class="flex-1">
                             <h4 class="font-semibold text-gray-800">${item.name}</h4>
                             <div class="flex items-center justify-between mt-2">
-                                <span class="font-bold text-purple-600">${item.price.toFixed(2)} ر.س</span>
+                                <span class="font-bold text-purple-600">${displayPrice}</span>
                                 <div class="flex items-center space-x-2 space-x-reverse">
                                     <button class="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center touch-feedback" onclick="updateCartItemQuantity('${item.productId}', -1)">
                                         <i data-lucide="minus" class="w-4 h-4"></i>
@@ -1653,7 +1683,7 @@
                                 </div>
                             </div>
                             <div class="flex justify-between items-center mt-2">
-                                <span class="text-sm text-gray-600">المجموع: ${itemTotal.toFixed(2)} ر.س</span>
+                                <span class="text-sm text-gray-600">المجموع: ${displayItemTotal}</span>
                                 <button class="text-red-500 hover:text-red-700 text-sm touch-feedback" onclick="removeFromCart('${item.productId}')">
                                     حذف
                                 </button>
@@ -1664,8 +1694,8 @@
             });
             
             cartItemsContainer.innerHTML = itemsHTML;
-            cartTotal.textContent = total.toFixed(2) + ' ر.س';
-            if (paymentTotal) paymentTotal.textContent = total.toFixed(2) + ' ر.س';
+            cartTotal.textContent = Math.round(total);
+            if (paymentTotal) paymentTotal.textContent = Math.round(total);
             
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
