@@ -1029,6 +1029,45 @@
     </div>
 
     <script>
+        // === الإعدادات الثابتة ===
+        // يمكن تعديل هذه القيم يدوياً في الكود
+        const SHOW_RATINGS = false; // تغيير إلى true لإظهار النجوم
+        const SHOW_DISCOUNTS = false; // تغيير إلى true لإظهار الخصومات
+
+        // === قاعدة بيانات الأسعار الثابتة ===
+        // هنا يمكنك تعديل الأسعار بشكل ثابت لكل فئة
+        const FIXED_PRICES = {
+            // فئة البقوليات (id: 1)
+            1: [
+                16000, 12000, 17.50, 18.00, 19.50, // المنتجات 1-5
+                20.00, 21.50, 22.00, 23.50, 24.00, // المنتجات 6-10
+                25.50, 26.00, 27.50, 28.00, 29.50, // المنتجات 11-15
+                30.00, 31.50, 32.00, 33.50, 34.00, // المنتجات 16-20
+                35.50, 36.00, 37.50, 38.00, 39.50, // المنتجات 21-25
+                40.00, 41.50, 42.00, 43.50, 44.00  // المنتجات 26-30
+            ],
+            // فئة المعلبات (id: 2)
+            2: [
+                8.50, 9.00, 10.50, 11.00, 12.50,
+                13.00, 14.50, 15.00, 16.50, 17.00,
+                18.50, 19.00, 20.50, 21.00, 22.50,
+                23.00, 24.50, 25.00, 26.50, 27.00,
+                28.50, 29.00, 30.50, 31.00, 32.50,
+                33.00, 34.50, 35.00, 36.50, 37.00
+            ],
+            // فئة الحليب ومشتقاته (id: 3)
+            3: [
+                12.00, 12.50, 13.00, 13.50, 14.00,
+                14.50, 15.00, 15.50, 16.00, 16.50,
+                17.00, 17.50, 18.00, 18.50, 19.00,
+                19.50, 20.00, 20.50, 21.00, 21.50,
+                22.00, 22.50, 23.00, 23.50, 24.00,
+                24.50, 25.00, 25.50, 26.00, 26.50
+            ],
+            // يمكن إضافة بقية الفئات هنا...
+            // للحفاظ على البساطة، سأستخدم قاعدة عامة للفئات الأخرى
+        };
+
         // === إعدادات EmailJS ===
         const EMAILJS_USER_ID = 'O3UZPWUhamzxhmC1J';
         const EMAILJS_SERVICE_ID = 'service_s3tkjzh';
@@ -1068,7 +1107,7 @@
         // أسماء المنتجات الحقيقية لكل فئة
         const realProductNames = {
             1: [ // بقوليات
-                "عدس أحمر", "عدس أصفر", "فول مدمس", "حمص حب", "فاصولياء بيضاء",
+                "عدس جوكر", "عدس نورس", "فول مدمس", "حمص حب", "فاصولياء بيضاء",
                 "فاصولياء حمراء", "لوبيا حمراء", "بازلاء مجففة", "ترمس", "ذرة مجففة",
                 "فول سوداني", "لوبيا سوداء", "حبوب الحلبة", "قمح مجروش", "شعير",
                 "دخن", "فول صويا", "فول أخضر", "حمص شامي", "عدس بني",
@@ -1397,16 +1436,21 @@
 
         function generateSubProducts(categoryId, categoryName) {
             const products = [];
-            const basePrice = (categoryId * 5) + 10;
             
             // الحصول على الأسماء الحقيقية للمنتجات لهذه الفئة
             const realNames = realProductNames[categoryId];
             
             for (let i = 1; i <= 30; i++) {
-                const hasDiscount = Math.random() > 0.7;
-                const isBestseller = Math.random() > 0.8;
-                const price = (basePrice + (i * 0.23)).toFixed(2);
-                const originalPrice = hasDiscount ? (parseFloat(price) * 1.2).toFixed(2) : null;
+                const productId = `${categoryId}-${i}`;
+                let price;
+                
+                // تحديد السعر (استخدام الأسعار الثابتة إذا متوفرة، وإلا استخدام قاعدة عامة)
+                if (FIXED_PRICES[categoryId] && FIXED_PRICES[categoryId][i-1]) {
+                    price = FIXED_PRICES[categoryId][i-1];
+                } else {
+                    // قاعدة عامة للأسعار إذا لم يتم تحديدها
+                    price = (categoryId * 10) + (i * 0.5);
+                }
                 
                 // استخدام اسم حقيقي للمنتج إذا كان متاحاً، وإلا استخدام اسم عام
                 let productName;
@@ -1417,16 +1461,14 @@
                 }
                 
                 products.push({
-                    id: `${categoryId}-${i}`,
+                    id: productId,
                     name: productName,
-                    price: parseFloat(price),
-                    originalPrice: originalPrice ? parseFloat(originalPrice) : null,
+                    price: price,
                     description: `وصف مختصر لمنتج ${productName} بجودة عالية`,
                     imageUrl: categories.find(c => c.id === categoryId).imageUrl,
                     categoryName: categoryName,
-                    hasDiscount: hasDiscount,
-                    isBestseller: isBestseller,
-                    rating: (Math.random() * 2 + 3).toFixed(1)
+                    isBestseller: i <= 3, // أول 3 منتجات هي الأكثر مبيعاً
+                    rating: 4.5 // تقييم ثابت
                 });
             }
             return products;
@@ -1502,15 +1544,9 @@
                 const card = document.createElement('div');
                 card.className = `modern-product-card touch-feedback`;
                 
-                card.innerHTML = `
-                    <div class="product-image-container">
-                        <img src="${product.imageUrl}" alt="${product.name}" class="product-image" loading="lazy">
-                        ${product.isBestseller ? '<div class="product-badge">الأكثر مبيعاً</div>' : ''}
-                        ${product.hasDiscount ? '<div class="discount-badge">خصم 20%</div>' : ''}
-                    </div>
-                    <div class="p-4 flex flex-col">
-                        <p class="text-sm font-semibold text-gray-800 line-clamp-2 mb-2">${product.name}</p>
-                        
+                let ratingsHtml = '';
+                if (SHOW_RATINGS) {
+                    ratingsHtml = `
                         <div class="flex items-center mb-2">
                             <div class="flex text-amber-400">
                                 ${Array.from({length: 5}, (_, i) => 
@@ -1520,11 +1556,22 @@
                             </div>
                             <span class="text-xs text-gray-500 mr-1">${product.rating}</span>
                         </div>
+                    `;
+                }
+                
+                card.innerHTML = `
+                    <div class="product-image-container">
+                        <img src="${product.imageUrl}" alt="${product.name}" class="product-image" loading="lazy">
+                        ${product.isBestseller ? '<div class="product-badge">الأكثر مبيعاً</div>' : ''}
+                    </div>
+                    <div class="p-4 flex flex-col">
+                        <p class="text-sm font-semibold text-gray-800 line-clamp-2 mb-2">${product.name}</p>
+                        
+                        ${ratingsHtml}
                         
                         <div class="flex justify-between items-center mt-auto">
                             <div>
-                                <span class="font-extrabold text-lg text-purple-700">${product.price.toFixed(2)}</span>
-                                ${product.hasDiscount ? `<span class="text-xs text-red-500 line-through block">${product.originalPrice.toFixed(2)}</span>` : ''}
+                                <span class="font-extrabold text-lg text-purple-700">${product.price.toFixed(2)} ر.س</span>
                             </div>
                         </div>
                     </div>
@@ -1594,7 +1641,7 @@
                         <div class="flex-1">
                             <h4 class="font-semibold text-gray-800">${item.name}</h4>
                             <div class="flex items-center justify-between mt-2">
-                                <span class="font-bold text-purple-600">${item.price.toFixed(2)}</span>
+                                <span class="font-bold text-purple-600">${item.price.toFixed(2)} ر.س</span>
                                 <div class="flex items-center space-x-2 space-x-reverse">
                                     <button class="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center touch-feedback" onclick="updateCartItemQuantity('${item.productId}', -1)">
                                         <i data-lucide="minus" class="w-4 h-4"></i>
@@ -1606,7 +1653,7 @@
                                 </div>
                             </div>
                             <div class="flex justify-between items-center mt-2">
-                                <span class="text-sm text-gray-600">المجموع: ${itemTotal.toFixed(2)}</span>
+                                <span class="text-sm text-gray-600">المجموع: ${itemTotal.toFixed(2)} ر.س</span>
                                 <button class="text-red-500 hover:text-red-700 text-sm touch-feedback" onclick="removeFromCart('${item.productId}')">
                                     حذف
                                 </button>
@@ -1617,8 +1664,8 @@
             });
             
             cartItemsContainer.innerHTML = itemsHTML;
-            cartTotal.textContent = total.toFixed(2);
-            if (paymentTotal) paymentTotal.textContent = total.toFixed(2);
+            cartTotal.textContent = total.toFixed(2) + ' ر.س';
+            if (paymentTotal) paymentTotal.textContent = total.toFixed(2) + ' ر.س';
             
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
