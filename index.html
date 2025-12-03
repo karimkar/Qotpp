@@ -63,7 +63,6 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             background: white;
-            height: 100%;
         }
         
         .modern-category-card:hover {
@@ -74,19 +73,13 @@
         .category-image-container {
             position: relative;
             overflow: hidden;
-            height: 200px; /* زيادة الارتفاع ليكون مناسباً */
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f8fafc;
+            height: 140px;
         }
         
         .category-image {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* تغيير من cover إلى contain للحفاظ على نسبة الأبعاد */
-            padding: 15px;
+            object-fit: contain;
             transition: transform 0.5s ease;
         }
         
@@ -129,7 +122,6 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             background: white;
             position: relative;
-            height: 100%;
         }
         
         .modern-product-card:hover {
@@ -139,20 +131,14 @@
         
         .product-image-container {
             position: relative;
-            height: 180px; /* زيادة الارتفاع ليكون مناسباً */
-            width: 100%;
+            height: 160px;
             overflow: hidden;
-            background: #f8fafc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         
         .product-image {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* تغيير من cover إلى contain */
-            padding: 15px;
+            object-fit: cover;
             transition: transform 0.5s ease;
         }
         
@@ -304,15 +290,6 @@
             .register-form-mobile {
                 max-height: calc(100vh - 200px) !important;
                 overflow-y: auto !important;
-            }
-            
-            /* تعديل حجم الصور على الجوال */
-            .category-image-container {
-                height: 150px !important;
-            }
-            
-            .product-image-container {
-                height: 140px !important;
             }
         }
         
@@ -675,7 +652,7 @@
             </button>
             <button class="mobile-nav-item touch-feedback relative" onclick="openCartModal()">
                 <i data-lucide="shopping-cart" class="w-6 h-6 mx-auto mb-1"></i>
-                                <span id="cart-bottom-badge" class="absolute -top-1 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center cart-badge hidden">0</span>
+                <span id="cart-bottom-badge" class="absolute -top-1 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center cart-badge hidden">0</span>
                 <span class="text-xs">السلة</span>
             </button>
             <button class="mobile-nav-item touch-feedback" onclick="openFavoritesModal()">
@@ -775,7 +752,7 @@
             <div class="p-6 border-t border-gray-200">
                 <div class="flex justify-between items-center mb-4">
                     <span class="font-semibold">المجموع:</span>
-                    <span id="cart-total" class="font-bold text-lg text-purple-600">0</span>
+                    <span id="cart-total" class="font-bold text-lg text-purple-600">0.00</span>
                 </div>
                 <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback" onclick="checkout()">
                     إتمام الشراء
@@ -1040,7 +1017,7 @@
                     <div class="mt-6">
                         <div class="flex justify-between items-center mb-4">
                             <span class="font-semibold">المجموع:</span>
-                            <span id="payment-total" class="font-bold text-lg text-purple-600">0</span>
+                            <span id="payment-total" class="font-bold text-lg text-purple-600">0.00</span>
                         </div>
                         <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-150 touch-feedback">
                             تأكيد الطلب
@@ -1105,23 +1082,23 @@
 
         // === بيانات التطبيق ===
         const categories = [
-            { id: 1, name: "بقوليات", icon: "carrot", color: "10b981", gradient: "teal-gradient", imageUrl: "https://images.unsplash.com/photo-1627916515865-c3f9152a466a?q=80&w=600&auto=format&fit=crop" },
-            { id: 2, name: "معلبات", icon: "package", color: "f59e0b", gradient: "orange-gradient", imageUrl: "https://images.unsplash.com/photo-1579613832104-e0b62e49c716?q=80&w=600&auto=format&fit=crop" },
-            { id: 3, name: "الحليب ومشتقاته", icon: "milk", color: "dc2626", gradient: "pink-gradient", imageUrl: "https://images.unsplash.com/photo-1588836592271-be84c478a05c?q=80&w=600&auto=format&fit=crop" },
-            { id: 4, name: "زيوت + سمن", icon: "flask-conical", color: "06b6d4", gradient: "blue-gradient", imageUrl: "https://images.unsplash.com/photo-1615719984922-38e55e0037a3?q=80&w=600&auto=format&fit=crop" },
-            { id: 5, name: "تتبيلات + صلصات", icon: "utensils", color: "3b82f6", gradient: "purple-gradient", imageUrl: "https://images.unsplash.com/photo-1549480654-e67c8702c2db?q=80&w=600&auto=format&fit=crop" },
-            { id: 6, name: "مخللات", icon: "carrot", color: "a8a29e", gradient: "teal-gradient", imageUrl: "https://images.unsplash.com/photo-1574015091771-b0400b8686d1?q=80&w=600&auto=format&fit=crop" },
-            { id: 7, name: "حلويات + تسالي", icon: "croissant", color: "d97706", gradient: "orange-gradient", imageUrl: "https://images.unsplash.com/photo-1551025537-8894ce51897c?q=80&w=600&auto=format&fit=crop" },
-            { id: 8, name: "مشروبات باردة", icon: "glass-water", color: "6b7280", gradient: "blue-gradient", imageUrl: "https://images.unsplash.com/photo-1596707323136-12157a97495d?q=80&w=600&auto=format&fit=crop" },
-            { id: 9, name: "مشروبات ساخنة", icon: "coffee", color: "93c5fd", gradient: "purple-gradient", imageUrl: "https://images.unsplash.com/photo-1550882354-9fa2a8342718?q=80&w=600&auto=format&fit=crop" },
-            { id: 10, name: "منظفات سائلة", icon: "spray-can", color: "475569", gradient: "teal-gradient", imageUrl: "https://images.unsplash.com/photo-1549727494-0a86b3626d77?q=80&w=600&auto=format&fit=crop" },
-            { id: 11, name: "منظفات جافة", icon: "box", color: "78350f", gradient: "orange-gradient", imageUrl: "https://images.unsplash.com/photo-1626207865207-6f0147983656?q=80&w=600&auto=format&fit=crop" },
-            { id: 12, name: "معكرونة + شوربة", icon: "wheat", color: "f472b6", gradient: "pink-gradient", imageUrl: "https://images.unsplash.com/photo-1599818815124-77a7f45b73e3?q=80&w=600&auto=format&fit=crop" },
-            { id: 13, name: "رز + طحين", icon: "wheat", color: "065f46", gradient: "blue-gradient", imageUrl: "https://images.unsplash.com/photo-1621900115049-f14d8583b27b?q=80&w=600&auto=format&fit=crop" },
-            { id: 14, name: "سكر + ملح", icon: "salt", color: "6d28d9", gradient: "purple-gradient", imageUrl: "https://images.unsplash.com/photo-1607062400301-1372e3919e99?q=80&w=600&auto=format&fit=crop" },
+            { id: 1, name: "بقوليات", icon: "carrot", color: "10b981", gradient: "teal-gradient", imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+            { id: 2, name: "معلبات", icon: "package", color: "f59e0b", gradient: "orange-gradient", imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+            { id: 3, name: "الحليب ومشتقاته", icon: "milk", color: "dc2626", gradient: "pink-gradient", imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk },
+            { id: 4, name: "زيوت + سمن", icon: "flask-conical", color: "06b6d4", gradient: "blue-gradient", imageUrl: "https://drive.google.com/file/d/1os9FSQII8UR6XNkny0kqdLMAPlIK6cdV/view?usp=drivesdk" },
+            { id: 5, name: "تتبيلات + صلصات", icon: "utensils", color: "3b82f6", gradient: "purple-gradient", imageUrl: "https://drive.google.com/file/d/1u28_OB-YHBHaCAdOzt8AhQnAbEbJEEGQ/view?" },
+            { id: 6, name: "مخللات", icon: "carrot", color: "a8a29e", gradient: "teal-gradient", imageUrl: "https://drive.google.com/file/d/1r4l7guap8zc2u_3als-ErdMlyeanoWgF/view?usp=drivesdk" },
+            { id: 7, name: "حلويات + تسالي", icon: "croissant", color: "d97706", gradient: "orange-gradient", imageUrl: "https://drive.google.com/file/d/1mzSc_Xtge_kNyVnvBRJ7rivPlwHt8LwP/view?usp=drivesdk" },
+            { id: 8, name: "مشروبات باردة", icon: "glass-water", color: "6b7280", gradient: "blue-gradient", imageUrl: "https://drive.google.com/file/d/1bGnRqNgWgugzOnu_Bm1eNBnawEfynD2s/view?usp=drivesdk" },
+            { id: 9, name: "مشروبات ساخنة", icon: "coffee", color: "93c5fd", gradient: "purple-gradient", imageUrl: "https://drive.google.com/file/d/1AkiXft7UsV3m7V1mlyVZGAWA1P8JOb6Y/view?usp=drivesdk" },
+            { id: 10, name: "منظفات سائلة", icon: "spray-can", color: "475569", gradient: "teal-gradient", imageUrl: "https://drive.google.com/file/d/1BdzLbwgINn8KyZP16yZs7xtbfOoElq4y/view?usp=drivesdk" },
+            { id: 11, name: "منظفات جافة", icon: "box", color: "78350f", gradient: "orange-gradient", imageUrl: "https://drive.google.com/file/d/1Kj5SolY6XKZUis3YyX8p2kYb7P7mmQaq/view?usp=drivesdk" },
+            { id: 12, name: "معكرونة + شوربة", icon: "wheat", color: "f472b6", gradient: "pink-gradient", imageUrl: "https://drive.google.com/file/d/1q6hGFbGqOHXJDQTrW4z2B6JGVP6LQWDB/view?usp=drivesdk" },
+            { id: 13, name: "رز + طحين", icon: "wheat", color: "065f46", gradient: "blue-gradient", imageUrl: "https://drive.google.com/file/d/1JcwEWDBgmbWPJvknJwrmuv1PDSD7Uwvm/view?usp=drivesdk" },
+            { id: 14, name: "سكر + ملح", icon: "salt", color: "6d28d9", gradient: "purple-gradient", imageUrl: "https://drive.google.com/file/d/1GAev7dB8-6moV9XjpwW5DRU_l9bvh_fv/view?usp=drivesdk" },
             { id: 15, name: "مستلزمات الطفل", icon: "baby", color: "1e40af", gradient: "teal-gradient", imageUrl: "https://images.unsplash.com/photo-1632766863814-192e22c15981?q=80&w=600&auto=format&fit=crop" },
-            { id: 16, name: "العناية الشخصية", icon: "user", color: "f97316", gradient: "orange-gradient", imageUrl: "https://images.unsplash.com/photo-1541544778546-bc5921821033?q=80&w=600&auto=format&fit=crop" },
-            { id: 17, name: "المستهلكات", icon: "shopping-bag", color: "ca8a04", gradient: "pink-gradient", imageUrl: "https://images.unsplash.com/photo-1547496503-75f858066b1a?q=80&w=600&auto=format&fit=crop" },
+            { id: 16, name: "العناية الشخصية", icon: "user", color: "f97316", gradient: "orange-gradient", imageUrl: "https://drive.google.com/file/d/1lVEspCi7QAswoBnKPJepRcp3RS7B2795/view?usp=drivesdk" },
+            { id: 17, name: "المستهلكات", icon: "shopping-bag", color: "ca8a04", gradient: "pink-gradient", imageUrl: "https://drive.google.com/file/d/1qSN2l7WBWu-um69-Q17TR4EO_ES9gJwt/view?usp=drivesdk" },
             { id: 18, name: "البيض", icon: "egg", color: "fbbf24", gradient: "blue-gradient", imageUrl: "https://images.unsplash.com/photo-1587842795431-705b06d86016?q=80&w=600&auto=format&fit=crop" },
             { id: 19, name: "الشاي والقهوة", icon: "coffee", color: "57534e", gradient: "purple-gradient", imageUrl: "https://images.unsplash.com/photo-1497935321875-1085023a1a51?q=80&w=600&auto=format&fit=crop" },
             { id: 20, name: "الآيس كريم والمثلجات", icon: "ice-cream", color: "ec4899", gradient: "teal-gradient", imageUrl: "https://images.unsplash.com/photo-1518349271638-348518900696?q=80&w=600&auto=format&fit=crop" }
@@ -1582,9 +1559,6 @@
                     `;
                 }
                 
-                // تحويل السعر إلى عدد صحيح بدون فواصل عشرية
-                const displayPrice = Math.round(product.price);
-                
                 card.innerHTML = `
                     <div class="product-image-container">
                         <img src="${product.imageUrl}" alt="${product.name}" class="product-image" loading="lazy">
@@ -1597,7 +1571,7 @@
                         
                         <div class="flex justify-between items-center mt-auto">
                             <div>
-                                <span class="font-extrabold text-lg text-purple-700">${displayPrice}</span>
+                                <span class="font-extrabold text-lg text-purple-700">${product.price.toFixed(2)} ر.س</span>
                             </div>
                         </div>
                     </div>
@@ -1650,8 +1624,8 @@
             
             if (cartItems.length === 0) {
                 cartItemsContainer.innerHTML = '<p class="text-gray-500 text-center py-8">سلة التسوق فارغة</p>';
-                cartTotal.textContent = '0';
-                if (paymentTotal) paymentTotal.textContent = '0';
+                cartTotal.textContent = '0.00';
+                if (paymentTotal) paymentTotal.textContent = '0.00';
                 return;
             }
             
@@ -1661,17 +1635,13 @@
             cartItems.forEach(item => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
-                // تحويل الأسعار إلى أرقام صحيحة
-                const displayPrice = Math.round(item.price);
-                const displayItemTotal = Math.round(itemTotal);
-                
                 itemsHTML += `
                     <div class="flex items-center space-x-4 space-x-reverse p-4 border border-gray-200 rounded-lg">
                         <img src="${item.imageUrl}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
                         <div class="flex-1">
                             <h4 class="font-semibold text-gray-800">${item.name}</h4>
                             <div class="flex items-center justify-between mt-2">
-                                <span class="font-bold text-purple-600">${displayPrice}</span>
+                                <span class="font-bold text-purple-600">${item.price.toFixed(2)} ر.س</span>
                                 <div class="flex items-center space-x-2 space-x-reverse">
                                     <button class="bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center touch-feedback" onclick="updateCartItemQuantity('${item.productId}', -1)">
                                         <i data-lucide="minus" class="w-4 h-4"></i>
@@ -1683,7 +1653,7 @@
                                 </div>
                             </div>
                             <div class="flex justify-between items-center mt-2">
-                                <span class="text-sm text-gray-600">المجموع: ${displayItemTotal}</span>
+                                <span class="text-sm text-gray-600">المجموع: ${itemTotal.toFixed(2)} ر.س</span>
                                 <button class="text-red-500 hover:text-red-700 text-sm touch-feedback" onclick="removeFromCart('${item.productId}')">
                                     حذف
                                 </button>
@@ -1694,8 +1664,8 @@
             });
             
             cartItemsContainer.innerHTML = itemsHTML;
-            cartTotal.textContent = Math.round(total);
-            if (paymentTotal) paymentTotal.textContent = Math.round(total);
+            cartTotal.textContent = total.toFixed(2) + ' ر.س';
+            if (paymentTotal) paymentTotal.textContent = total.toFixed(2) + ' ر.س';
             
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
