@@ -74,12 +74,13 @@
             position: relative;
             overflow: hidden;
             height: 140px;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
         }
         
         .category-image {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
             transition: transform 0.5s ease;
         }
         
@@ -133,6 +134,7 @@
             position: relative;
             height: 160px;
             overflow: hidden;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
         }
         
         .product-image {
@@ -525,18 +527,6 @@
         .resend-button:disabled {
             color: #9ca3af;
             cursor: not-allowed;
-        }
-
-        /* إضافة أنماط جديدة للمعالجة */
-        .img-loading {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
         }
     </style>
 </head>
@@ -1041,7 +1031,7 @@
     </div>
 
     <script>
-        // === الدوال المساعدة للصور ===
+        // === الدوال المساعدة لتحويل روابط Google Drive ===
         function convertDriveToDirectLink(driveLink) {
             if (!driveLink || !driveLink.includes('drive.google.com')) {
                 return driveLink;
@@ -1051,6 +1041,7 @@
                 // استخراج ID من الرابط
                 const idMatch = driveLink.match(/\/d\/([^\/\?]+)/);
                 if (idMatch && idMatch[1]) {
+                    // استخدام رابط مباشر للصورة
                     return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
                 }
                 return driveLink;
@@ -1058,26 +1049,6 @@
                 console.log('Error converting link:', error);
                 return driveLink;
             }
-        }
-
-        function optimizeImageLoading() {
-            // إضافة تأثير التحميل للصور
-            const images = document.querySelectorAll('img[loading="lazy"]');
-            
-            images.forEach(img => {
-                if (!img.complete) {
-                    img.classList.add('img-loading');
-                    
-                    img.addEventListener('load', function() {
-                        this.classList.remove('img-loading');
-                    });
-                    
-                    img.addEventListener('error', function() {
-                        this.classList.remove('img-loading');
-                        console.warn('فشل تحميل الصورة:', this.src);
-                    });
-                }
-            });
         }
 
         // === الإعدادات الثابتة ===
@@ -1168,40 +1139,6 @@
               imageUrl: "https://images.unsplash.com/photo-1518349271638-348518900696?q=80&w=600&auto=format&fit=crop" }
         ];
 
-        // أسماء المنتجات الحقيقية لكل فئة
-        const realProductNames = {
-            1: [ // بقوليات
-                "سميد متين", "ذرة معمورة", "ذرة زير", "حمص مكسيكي", "ليمون دوزي",
-                "فاصوليا مصري", "جريش كبة", "نومي بصرة", "باقلاء", "جريش زير",
-                "برغل زير", "لوبيا سوداء", "حبوب الحلبة", "قمح مجروش", "شعير",
-                "دخن", "فول صويا", "فول أخضر", "حمص شامي", "عدس بني",
-                "فاصولياء سوداء", "فاصولياء بينتو", "بازلاء خضراء", "عدس مجروش",
-                "فول بلدي", "حمص محمص", "فول نابت", "فاصولياء ليما", "حبوب الدجرا",
-                "فول العريش"
-            ],
-            2: [ // معلبات
-                "معجون طماطم", "ذرة حلوة معبأة", "فاصولياء مطبوخة", "حمص معلب",
-                "تونة بالزيت", "تونة بالماء", "سردين بالزيت", "سردين بالطماطم",
-                "زيتون أخضر", "زيتون أسود", "أنشوجة", "رنجة", "فطر معلب",
-                "هليون معلب", "جزر معلب", "بازلاء معبأة", "فاصولياء خضراء",
-                "شوربة خضار معبأة", "صلصة معبأة", "فواكه معبأة", "خوخ معلب",
-                "أناناس معلب", "كمثرى معبأة", "كرز معلب", "تونة لايت",
-                "سردين مدخن", "زيتون محشو", "مخلل معلب", "فلفل معلب",
-                "فول مدمس معلب"
-            ],
-            3: [ // الحليب ومشتقاته
-                "حليب كامل الدسم", "حليب قليل الدسم", "حليب خالي الدسم",
-                "لبن زبادي كامل", "لبن زبادي قليل الدسم", "لبنة", "جبنة بيضاء",
-                "جبنة شيدر", "جبنة موزاريلا", "قشطة طازجة", "زبدة",
-                "جبنة فيتا", "جبنة رومي", "جبنة بري", "جبنة كريمي",
-                "حليب مكثف محلى", "حليب بودرة", "كريمة طبخ", "جبنة ريكوتا",
-                "جبنة جودا", "جبنة إيدام", "جبنة هالومي", "جبنة تشيدر",
-                "جبنة بارميزان", "جبنة غودا", "جبنة كاممبرت", "جبنة روكفور",
-                "حليب لوز", "حليب صويا", "حليب أرز"
-            ]
-            // ... بقية الفئات كما هي في كودك
-        };
-
         // === متغيرات عامة ===
         let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
         let currentSubProducts = [];
@@ -1259,9 +1196,6 @@
             document.getElementById('cart-header-btn').addEventListener('click', openCartModal);
             document.getElementById('contact-us-btn').addEventListener('click', openContactUsModal);
             
-            // تحسين تحميل الصور
-            setTimeout(optimizeImageLoading, 1000);
-            
             console.log('✅ تم تهيئة التطبيق بنجاح');
             
             // تنظيف البيانات القديمة
@@ -1312,13 +1246,9 @@
         function generateSubProducts(categoryId, categoryName) {
             const products = [];
             
-            // الحصول على الأسماء الحقيقية للمنتجات لهذه الفئة
-            const realNames = realProductNames[categoryId];
-            
-            // تحويل رابط الصورة إلى رابط مباشر
+            // الحصول على الصورة المناسبة للفئة
             const category = categories.find(c => c.id === categoryId);
-            let imageUrl = category ? category.imageUrl : '';
-            imageUrl = convertDriveToDirectLink(imageUrl);
+            const imageUrl = category ? category.imageUrl : '';
             
             for (let i = 1; i <= 30; i++) {
                 const productId = `${categoryId}-${i}`;
@@ -1331,19 +1261,11 @@
                     price = (categoryId * 10) + (i * 0.5);
                 }
                 
-                // استخدام اسم حقيقي للمنتج إذا كان متاحاً
-                let productName;
-                if (realNames && realNames[i-1]) {
-                    productName = realNames[i-1];
-                } else {
-                    productName = `${categoryName} ${i}`;
-                }
-                
                 products.push({
                     id: productId,
-                    name: productName,
+                    name: `${categoryName} ${i}`,
                     price: price,
-                    description: `وصف مختصر لمنتج ${productName} بجودة عالية`,
+                    description: `وصف مختصر لمنتج ${categoryName} ${i} بجودة عالية`,
                     imageUrl: imageUrl,
                     categoryName: categoryName,
                     isBestseller: i <= 3,
@@ -1390,12 +1312,10 @@
                 grid.appendChild(categoryCard);
             });
             
-            // إعادة إنشاء الأيقونات بعد التحميل
-            setTimeout(() => {
-                if (typeof lucide !== 'undefined') {
-                    lucide.createIcons();
-                }
-            }, 100);
+            // إعادة إنشاء الأيقونات
+            if (typeof lucide !== 'undefined') {
+                setTimeout(() => lucide.createIcons(), 100);
+            }
         }
 
         // === دوال النوافذ ===
@@ -1426,26 +1346,11 @@
             grid.innerHTML = '';
 
             products.forEach(product => {
-                const card = document.createElement('div');
-                card.className = `modern-product-card touch-feedback`;
-                
-                let ratingsHtml = '';
-                if (SHOW_RATINGS) {
-                    ratingsHtml = `
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-amber-400">
-                                ${Array.from({length: 5}, (_, i) => 
-                                    `<i data-lucide="${i < Math.floor(product.rating) ? 'star' : 'star'}" 
-                                        class="w-4 h-4 ${i < product.rating ? 'text-amber-400 fill-current' : 'text-gray-300'}"></i>`
-                                ).join('')}
-                            </div>
-                            <span class="text-xs text-gray-500 mr-1">${product.rating}</span>
-                        </div>
-                    `;
-                }
-                
                 // تحويل رابط الصورة إلى رابط مباشر
                 const directImageUrl = convertDriveToDirectLink(product.imageUrl);
+                
+                const card = document.createElement('div');
+                card.className = `modern-product-card touch-feedback`;
                 
                 card.innerHTML = `
                     <div class="product-image-container">
@@ -1454,8 +1359,6 @@
                     </div>
                     <div class="p-4 flex flex-col">
                         <p class="text-sm font-semibold text-gray-800 line-clamp-2 mb-2">${product.name}</p>
-                        
-                        ${ratingsHtml}
                         
                         <div class="flex justify-between items-center mt-auto">
                             <div>
@@ -1475,12 +1378,9 @@
             });
             
             // إعادة إنشاء الأيقونات
-            setTimeout(() => {
-                if (typeof lucide !== 'undefined') {
-                    lucide.createIcons();
-                }
-                optimizeImageLoading();
-            }, 100);
+            if (typeof lucide !== 'undefined') {
+                setTimeout(() => lucide.createIcons(), 100);
+            }
         }
 
         // === دوال السلة ===
@@ -1564,12 +1464,9 @@
             if (paymentTotal) paymentTotal.textContent = total.toFixed(2) + ' ر.س';
             
             // إعادة إنشاء الأيقونات
-            setTimeout(() => {
-                if (typeof lucide !== 'undefined') {
-                    lucide.createIcons();
-                }
-                optimizeImageLoading();
-            }, 100);
+            if (typeof lucide !== 'undefined') {
+                setTimeout(() => lucide.createIcons(), 100);
+            }
         }
 
         function addToCart(productId) {
@@ -1774,49 +1671,6 @@
         }
 
         // === دوال التحقق والتسجيل ===
-        async function sendVerificationEmail(email, name, code) {
-            try {
-                console.log('📧 محاولة إرسال رمز التحقق إلى:', email);
-                
-                if (typeof emailjs === 'undefined') {
-                    console.error('❌ EmailJS غير محمّل');
-                    throw new Error('EmailJS غير محمّل');
-                }
-
-                const templateParams = {
-                    to_email: email,
-                    to_name: name,
-                    verification_code: code,
-                    store_name: 'أسواق القطب',
-                    subject: 'رمز التحقق - أسواق القطب'
-                };
-
-                console.log('🔧 معاملات القالب:', templateParams);
-                console.log('🔧 Service ID:', EMAILJS_SERVICE_ID);
-                console.log('🔧 Template ID:', EMAILJS_TEMPLATE_ID);
-
-                const response = await emailjs.send(
-                    EMAILJS_SERVICE_ID,
-                    EMAILJS_TEMPLATE_ID,
-                    templateParams
-                );
-
-                console.log('✅ تم إرسال رمز التحقق بنجاح:', response);
-                return { 
-                    success: true, 
-                    response: response
-                };
-            } catch (error) {
-                console.error('❌ فشل إرسال رمز التحقق:', error);
-                
-                return { 
-                    success: false, 
-                    error: error,
-                    message: 'فشل إرسال رمز التحقق'
-                };
-            }
-        }
-
         async function handleRegisterForm(e) {
             e.preventDefault();
             
@@ -2045,30 +1899,6 @@
             }
         }
 
-        async function sendContactMessage(formData) {
-            try {
-                const templateParams = {
-                    to_email: STORE_EMAIL,
-                    to_name: 'أسواق القطب',
-                    from_name: formData.get('to_name'),
-                    from_email: formData.get('to_email'),
-                    message: formData.get('message'),
-                    subject: 'رسالة جديدة من عميل'
-                };
-
-                const response = await emailjs.send(
-                    EMAILJS_SERVICE_ID,
-                    EMAILJS_TEMPLATE_ID,
-                    templateParams
-                );
-
-                return { success: true, response };
-            } catch (error) {
-                console.error('❌ فشل إرسال رسالة الاتصال:', error);
-                return { success: false, error: error.message };
-            }
-        }
-
         async function handlePaymentForm(e) {
             e.preventDefault();
             
@@ -2112,6 +1942,54 @@
             } catch (error) {
                 console.error('Order completion error:', error);
                 showToast('❌ حدث خطأ غير متوقع. يرجى الاتصال بنا مباشرة.');
+            }
+        }
+
+        // === دوال المساعدة الأخرى ===
+        async function sendVerificationEmail(email, name, code) {
+            try {
+                const templateParams = {
+                    to_email: email,
+                    to_name: name,
+                    verification_code: code,
+                    store_name: 'أسواق القطب',
+                    subject: 'رمز التحقق - أسواق القطب'
+                };
+
+                const response = await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_ID,
+                    templateParams
+                );
+
+                return { success: true, response: response };
+            } catch (error) {
+                console.error('❌ فشل إرسال رمز التحقق:', error);
+                return { success: false, error: error };
+            }
+        }
+
+        async function sendContactMessage(formData) {
+            try {
+                const templateParams = {
+                    to_email: STORE_EMAIL,
+                    to_name: 'أسواق القطب',
+                    from_name: formData.get('to_name'),
+                    from_email: formData.get('to_email'),
+                    message: formData.get('message'),
+                    subject: 'رسالة جديدة من عميل'
+                };
+
+                const response = await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_ID,
+                    templateParams
+                );
+
+                return { success: true, response };
+            } catch (error) {
+                console.error('❌ فشل إرسال رسالة الاتصال:', error);
+                return { success: false, error: error.message };
             }
         }
 
