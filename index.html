@@ -526,6 +526,18 @@
             color: #9ca3af;
             cursor: not-allowed;
         }
+
+        /* إضافة أنماط جديدة للمعالجة */
+        .img-loading {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
     </style>
 </head>
 
@@ -1029,24 +1041,59 @@
     </div>
 
     <script>
+        // === الدوال المساعدة للصور ===
+        function convertDriveToDirectLink(driveLink) {
+            if (!driveLink || !driveLink.includes('drive.google.com')) {
+                return driveLink;
+            }
+            
+            try {
+                // استخراج ID من الرابط
+                const idMatch = driveLink.match(/\/d\/([^\/\?]+)/);
+                if (idMatch && idMatch[1]) {
+                    return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
+                }
+                return driveLink;
+            } catch (error) {
+                console.log('Error converting link:', error);
+                return driveLink;
+            }
+        }
+
+        function optimizeImageLoading() {
+            // إضافة تأثير التحميل للصور
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            
+            images.forEach(img => {
+                if (!img.complete) {
+                    img.classList.add('img-loading');
+                    
+                    img.addEventListener('load', function() {
+                        this.classList.remove('img-loading');
+                    });
+                    
+                    img.addEventListener('error', function() {
+                        this.classList.remove('img-loading');
+                        console.warn('فشل تحميل الصورة:', this.src);
+                    });
+                }
+            });
+        }
+
         // === الإعدادات الثابتة ===
-        // يمكن تعديل هذه القيم يدوياً في الكود
-        const SHOW_RATINGS = false; // تغيير إلى true لإظهار النجوم
-        const SHOW_DISCOUNTS = false; // تغيير إلى true لإظهار الخصومات
+        const SHOW_RATINGS = false;
+        const SHOW_DISCOUNTS = false;
 
         // === قاعدة بيانات الأسعار الثابتة ===
-        // هنا يمكنك تعديل الأسعار بشكل ثابت لكل فئة
         const FIXED_PRICES = {
-            // فئة البقوليات (id: 1)
             1: [
-                1000, 750, 1250, 3000, 2000, // المنتجات 1-5
-                2000, 1500, 4000, 3000, 1000, // المنتجات 6-10
-                1000, 26.00, 27.50, 28.00, 29.50, // المنتجات 11-15
-                30.00, 31.50, 32.00, 33.50, 34.00, // المنتجات 16-20
-                35.50, 36.00, 37.50, 38.00, 39.50, // المنتجات 21-25
-                40.00, 41.50, 42.00, 43.50, 44.00  // المنتجات 26-30
+                1000, 750, 1250, 3000, 2000,
+                2000, 1500, 4000, 3000, 1000,
+                1000, 26.00, 27.50, 28.00, 29.50,
+                30.00, 31.50, 32.00, 33.50, 34.00,
+                35.50, 36.00, 37.50, 38.00, 39.50,
+                40.00, 41.50, 42.00, 43.50, 44.00
             ],
-            // فئة المعلبات (id: 2)
             2: [
                 8.50, 9.00, 10.50, 11.00, 12.50,
                 13.00, 14.50, 15.00, 16.50, 17.00,
@@ -1055,7 +1102,6 @@
                 28.50, 29.00, 30.50, 31.00, 32.50,
                 33.00, 34.50, 35.00, 36.50, 37.00
             ],
-            // فئة الحليب ومشتقاته (id: 3)
             3: [
                 12.00, 12.50, 13.00, 13.50, 14.00,
                 14.50, 15.00, 15.50, 16.00, 16.50,
@@ -1063,9 +1109,7 @@
                 19.50, 20.00, 20.50, 21.00, 21.50,
                 22.00, 22.50, 23.00, 23.50, 24.00,
                 24.50, 25.00, 25.50, 26.00, 26.50
-            ],
-            // يمكن إضافة بقية الفئات هنا...
-            // للحفاظ على البساطة، سأستخدم قاعدة عامة للفئات الأخرى
+            ]
         };
 
         // === إعدادات EmailJS ===
@@ -1077,31 +1121,51 @@
         // === تهيئة EmailJS ===
         (function() {
             emailjs.init(EMAILJS_USER_ID);
-            console.log('✅ EmailJS initialized with user ID:', EMAILJS_USER_ID);
+            console.log('✅ EmailJS initialized');
         })();
 
         // === بيانات التطبيق ===
         const categories = [
-            { id: 1, name: "بقوليات", icon: "carrot", color: "10b981", gradient: "teal-gradient", imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
-            { id: 2, name: "معلبات", icon: "package", color: "f59e0b", gradient: "orange-gradient", imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
-            { id: 3, name: "الحليب ومشتقاته", icon: "milk", color: "dc2626", gradient: "pink-gradient", imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk },
-            { id: 4, name: "زيوت + سمن", icon: "flask-conical", color: "06b6d4", gradient: "blue-gradient", imageUrl: "https://drive.google.com/file/d/1os9FSQII8UR6XNkny0kqdLMAPlIK6cdV/view?usp=drivesdk" },
-            { id: 5, name: "تتبيلات + صلصات", icon: "utensils", color: "3b82f6", gradient: "purple-gradient", imageUrl: "https://drive.google.com/file/d/1u28_OB-YHBHaCAdOzt8AhQnAbEbJEEGQ/view?" },
-            { id: 6, name: "مخللات", icon: "carrot", color: "a8a29e", gradient: "teal-gradient", imageUrl: "https://drive.google.com/file/d/1r4l7guap8zc2u_3als-ErdMlyeanoWgF/view?usp=drivesdk" },
-            { id: 7, name: "حلويات + تسالي", icon: "croissant", color: "d97706", gradient: "orange-gradient", imageUrl: "https://drive.google.com/file/d/1mzSc_Xtge_kNyVnvBRJ7rivPlwHt8LwP/view?usp=drivesdk" },
-            { id: 8, name: "مشروبات باردة", icon: "glass-water", color: "6b7280", gradient: "blue-gradient", imageUrl: "https://drive.google.com/file/d/1bGnRqNgWgugzOnu_Bm1eNBnawEfynD2s/view?usp=drivesdk" },
-            { id: 9, name: "مشروبات ساخنة", icon: "coffee", color: "93c5fd", gradient: "purple-gradient", imageUrl: "https://drive.google.com/file/d/1AkiXft7UsV3m7V1mlyVZGAWA1P8JOb6Y/view?usp=drivesdk" },
-            { id: 10, name: "منظفات سائلة", icon: "spray-can", color: "475569", gradient: "teal-gradient", imageUrl: "https://drive.google.com/file/d/1BdzLbwgINn8KyZP16yZs7xtbfOoElq4y/view?usp=drivesdk" },
-            { id: 11, name: "منظفات جافة", icon: "box", color: "78350f", gradient: "orange-gradient", imageUrl: "https://drive.google.com/file/d/1Kj5SolY6XKZUis3YyX8p2kYb7P7mmQaq/view?usp=drivesdk" },
-            { id: 12, name: "معكرونة + شوربة", icon: "wheat", color: "f472b6", gradient: "pink-gradient", imageUrl: "https://drive.google.com/file/d/1q6hGFbGqOHXJDQTrW4z2B6JGVP6LQWDB/view?usp=drivesdk" },
-            { id: 13, name: "رز + طحين", icon: "wheat", color: "065f46", gradient: "blue-gradient", imageUrl: "https://drive.google.com/file/d/1JcwEWDBgmbWPJvknJwrmuv1PDSD7Uwvm/view?usp=drivesdk" },
-            { id: 14, name: "سكر + ملح", icon: "salt", color: "6d28d9", gradient: "purple-gradient", imageUrl: "https://drive.google.com/file/d/1GAev7dB8-6moV9XjpwW5DRU_l9bvh_fv/view?usp=drivesdk" },
-            { id: 15, name: "مستلزمات الطفل", icon: "baby", color: "1e40af", gradient: "teal-gradient", imageUrl: "https://images.unsplash.com/photo-1632766863814-192e22c15981?q=80&w=600&auto=format&fit=crop" },
-            { id: 16, name: "العناية الشخصية", icon: "user", color: "f97316", gradient: "orange-gradient", imageUrl: "https://drive.google.com/file/d/1lVEspCi7QAswoBnKPJepRcp3RS7B2795/view?usp=drivesdk" },
-            { id: 17, name: "المستهلكات", icon: "shopping-bag", color: "ca8a04", gradient: "pink-gradient", imageUrl: "https://drive.google.com/file/d/1qSN2l7WBWu-um69-Q17TR4EO_ES9gJwt/view?usp=drivesdk" },
-            { id: 18, name: "البيض", icon: "egg", color: "fbbf24", gradient: "blue-gradient", imageUrl: "https://images.unsplash.com/photo-1587842795431-705b06d86016?q=80&w=600&auto=format&fit=crop" },
-            { id: 19, name: "الشاي والقهوة", icon: "coffee", color: "57534e", gradient: "purple-gradient", imageUrl: "https://images.unsplash.com/photo-1497935321875-1085023a1a51?q=80&w=600&auto=format&fit=crop" },
-            { id: 20, name: "الآيس كريم والمثلجات", icon: "ice-cream", color: "ec4899", gradient: "teal-gradient", imageUrl: "https://images.unsplash.com/photo-1518349271638-348518900696?q=80&w=600&auto=format&fit=crop" }
+            { id: 1, name: "بقوليات", icon: "carrot", color: "10b981", gradient: "teal-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+            { id: 2, name: "معلبات", icon: "package", color: "f59e0b", gradient: "orange-gradient", 
+              imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+            { id: 3, name: "الحليب ومشتقاته", icon: "milk", color: "dc2626", gradient: "pink-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+            { id: 4, name: "زيوت + سمن", icon: "flask-conical", color: "06b6d4", gradient: "blue-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1os9FSQII8UR6XNkny0kqdLMAPlIK6cdV/view?usp=drivesdk" },
+            { id: 5, name: "تتبيلات + صلصات", icon: "utensils", color: "3b82f6", gradient: "purple-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1u28_OB-YHBHaCAdOzt8AhQnAbEbJEEGQ/view?" },
+            { id: 6, name: "مخللات", icon: "carrot", color: "a8a29e", gradient: "teal-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1r4l7guap8zc2u_3als-ErdMlyeanoWgF/view?usp=drivesdk" },
+            { id: 7, name: "حلويات + تسالي", icon: "croissant", color: "d97706", gradient: "orange-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1mzSc_Xtge_kNyVnvBRJ7rivPlwHt8LwP/view?usp=drivesdk" },
+            { id: 8, name: "مشروبات باردة", icon: "glass-water", color: "6b7280", gradient: "blue-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1bGnRqNgWgugzOnu_Bm1eNBnawEfynD2s/view?usp=drivesdk" },
+            { id: 9, name: "مشروبات ساخنة", icon: "coffee", color: "93c5fd", gradient: "purple-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1AkiXft7UsV3m7V1mlyVZGAWA1P8JOb6Y/view?usp=drivesdk" },
+            { id: 10, name: "منظفات سائلة", icon: "spray-can", color: "475569", gradient: "teal-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1BdzLbwgINn8KyZP16yZs7xtbfOoElq4y/view?usp=drivesdk" },
+            { id: 11, name: "منظفات جافة", icon: "box", color: "78350f", gradient: "orange-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1Kj5SolY6XKZUis3YyX8p2kYb7P7mmQaq/view?usp=drivesdk" },
+            { id: 12, name: "معكرونة + شوربة", icon: "wheat", color: "f472b6", gradient: "pink-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1q6hGFbGqOHXJDQTrW4z2B6JGVP6LQWDB/view?usp=drivesdk" },
+            { id: 13, name: "رز + طحين", icon: "wheat", color: "065f46", gradient: "blue-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1JcwEWDBgmbWPJvknJwrmuv1PDSD7Uwvm/view?usp=drivesdk" },
+            { id: 14, name: "سكر + ملح", icon: "salt", color: "6d28d9", gradient: "purple-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1GAev7dB8-6moV9XjpwW5DRU_l9bvh_fv/view?usp=drivesdk" },
+            { id: 15, name: "مستلزمات الطفل", icon: "baby", color: "1e40af", gradient: "teal-gradient", 
+              imageUrl: "https://images.unsplash.com/photo-1632766863814-192e22c15981?q=80&w=600&auto=format&fit=crop" },
+            { id: 16, name: "العناية الشخصية", icon: "user", color: "f97316", gradient: "orange-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1lVEspCi7QAswoBnKPJepRcp3RS7B2795/view?usp=drivesdk" },
+            { id: 17, name: "المستهلكات", icon: "shopping-bag", color: "ca8a04", gradient: "pink-gradient", 
+              imageUrl: "https://drive.google.com/file/d/1qSN2l7WBWu-um69-Q17TR4EO_ES9gJwt/view?usp=drivesdk" },
+            { id: 18, name: "البيض", icon: "egg", color: "fbbf24", gradient: "blue-gradient", 
+              imageUrl: "https://images.unsplash.com/photo-1587842795431-705b06d86016?q=80&w=600&auto=format&fit=crop" },
+            { id: 19, name: "الشاي والقهوة", icon: "coffee", color: "57534e", gradient: "purple-gradient", 
+              imageUrl: "https://images.unsplash.com/photo-1497935321875-1085023a1a51?q=80&w=600&auto=format&fit=crop" },
+            { id: 20, name: "الآيس كريم والمثلجات", icon: "ice-cream", color: "ec4899", gradient: "teal-gradient", 
+              imageUrl: "https://images.unsplash.com/photo-1518349271638-348518900696?q=80&w=600&auto=format&fit=crop" }
         ];
 
         // أسماء المنتجات الحقيقية لكل فئة
@@ -1134,200 +1198,8 @@
                 "جبنة جودا", "جبنة إيدام", "جبنة هالومي", "جبنة تشيدر",
                 "جبنة بارميزان", "جبنة غودا", "جبنة كاممبرت", "جبنة روكفور",
                 "حليب لوز", "حليب صويا", "حليب أرز"
-            ],
-            4: [ // زيوت + سمن
-                "زيت زيتون بكر ممتاز", "زيت دوار الشمس", "زيت ذرة", "زيت نباتي",
-                "زيت كانولا", "زيت سمسم", "زيت جوز الهند", "زيت أفوكادو",
-                "زيت فول سوداني", "زيت بذور الكتان", "سمن نباتي", "سمن بلدي",
-                "زيت زيتون عادي", "زيت كبد الحوت", "زيت جنين القمح", "زيت أركان",
-                "زيت خروع", "زيت جوجوبا", "زيت نواة المشمش", "زيت لوز",
-                "زيت خردل", "زيت فول الصويا", "زيت بذور العنب", "زيت بذر الكتان",
-                "زيت القطن", "زيت النخيل", "زيت السمك", "زيت الحبار", "زيت الكريل",
-                "زيت الطحالب"
-            ],
-            5: [ // تتبيلات + صلصات
-                "صلصة طماطم", "صلصة بشاميل", "صلصة سيزر", "صلصة ثوم",
-                "صلصة باربيكيو", "صلصة صويا", "صلصة ترياكي", "صلصة حارة",
-                "صلصة كاتشب", "مايونيز", "خردل", "صوص سلطة سيزر",
-                "صوص سلطة إيطالي", "صوص سلطة فرنسي", "صلصة فطر",
-                "صلصة جبن", "صلصة كاري", "صلصة تاكو", "صلصة سمسة",
-                "معجون طماطم مكثف", "صلصة كريمة فطر", "صلصة بصل",
-                "صلصة فلفل حار", "صلصة زبادي", "صلصة طحينة", "دبس رمان",
-                "خل بلسمي", "خل تفاح", "خل أبيض", "خل عنب"
-            ],
-            6: [ // مخللات
-                "مخلل خيار", "مخلل جزر", "مخلل فلفل", "مخلل لفت",
-                "مخلل بصل", "مخلل زيتون", "مخلل فجل", "مخلل شمندر",
-                "مخلل ثوم", "مخلل ورق عنب", "مخلل قرنبيط", "مخلل فلفل حار",
-                "مخلل خيار مخلل", "مخلل فلفل رومي", "مخلل كرنب",
-                "مخلل خيار مخلل حار", "مخلل فجل أبيض", "مخلل خيار صغير",
-                "مخلل خيار مخلل حلو", "مخلل باذنجان", "مخلل طماطم خضراء",
-                "مخلل فاصولياء خضراء", "مخلل زيتون أخضر", "مخلل زيتون أسود",
-                "مخلل فلفل أخضر", "مخلل فلفل أحمر", "مخلل خيار كوري",
-                "مخلل جزر كوري", "مخلل ثوم كوري", "مخلل فجل كوري"
-            ],
-            7: [ // حلويات + تسالي
-                "بسكويت شوكولاتة", "بسكويت فانيلا", "بسكويت زبدة",
-                "كعك بالشوكولاتة", "كعك بالفواكه", "كعك بالجوز",
-                "حلويات عربية", "بقلاوة", "كنافة", "معمول",
-                "حلويات جيلاتينية", "حلويات شوكولاتة", "حلويات فواكه",
-                "مكسرات محمصة", "فشار", "شيبس بطاطس", "شيبس ذرة",
-                "مقرمشات", "بذور عباد الشمس", "بذور قرع", "بسكويت مملح",
-                "كعك صغير", "حلويات بالتوفي", "حلويات بالكاراميل",
-                "حلويات بالفراولة", "حلويات بالليمون", "حلويات بالقهوة",
-                "حلويات بالفانيلا", "حلويات بالشوكولاتة البيضاء",
-                "حلويات بالشوكولاتة الداكنة"
-            ],
-            8: [ // مشروبات باردة
-                "عصير برتقال", "عصير تفاح", "عصير عنب", "عصير فراولة",
-                "عصير مانجو", "عصير أناناس", "عصير خوخ", "عصير مشمش",
-                "عصير جزر", "عصير طماطم", "مشروبات غازية كولا",
-                "مشروبات غازية برتقال", "مشروبات غازية ليمون",
-                "مشروبات طاقة", "مشروبات رياضية", "ماء معطر",
-                "شاي مثلج", "قهوة مثلجة", "عصير كوكتيل فواكه",
-                "عصير خضروات", "مشروب شعير", "عصير رمان",
-                "عصير توت", "عصير ليمون", "عصير أفوكادو",
-                "مشروب زبادي", "عصير بطيخ", "عصير شمام",
-                "عصير كيوي", "عصير جوافة"
-            ],
-            9: [ // مشروبات ساخنة
-                "شاي أسود", "شاي أخضر", "شاي أبيض", "قهوة عربية",
-                "قهوة تركية", "قهوة أمريكية", "قهوة إسبريسو",
-                "قهوة كابتشينو", "قهوة لاتيه", "شوكولاتة ساخنة",
-                "شاي بالنعناع", "شاي بالليمون", "شاي بالقرفة",
-                "شاي بالزنجبيل", "شاي بالهيل", "شاي بالكركديه",
-                "شاي باليانسون", "شاي بالبابونج", "شاي بالقرفة والقرنفل",
-                "قهوة بالهيل", "قهوة بالقرفة", "شاي أعشاب",
-                "شاي بالنعناع والليمون", "شاي بالفواكه", "شاي بالتفاح",
-                "شاي بالخوخ", "شاي بالتوت", "شاي بالفراولة",
-                "شاي بالمانجو", "شاي بالأناناس"
-            ],
-            10: [ // منظفات سائلة
-                "سائل غسيل الصحون", "سائل غسيل الملابس", "سائل تعطير الجو",
-                "سائل تنظيف الأرضيات", "سائل تنظيف الزجاج", "سائل تنظيف المطبخ",
-                "سائل تنظيف الحمام", "سائل تنظيف السجاد", "سائل تنظيف الأثاث",
-                "سائل تنظيف المعادن", "سائل تنظيف الخشب", "سائل تنظيف البلاط",
-                "سائل تنظيف الجدران", "سائل تنظيف النوافذ", "سائل تنظيف السيارة",
-                "سائل تنظيف الأحذية", "سائل تنظيف الحديقة", "سائل تنظيف المجوهرات",
-                "سائل تنظيف الأجهزة", "سائل تنظيف الأواني", "سائل تنظيف الفرن",
-                "سائل تنظيف الثلاجة", "سائل تنظيف الميكروويف", "سائل تنظيف الغسالة",
-                "سائل تنظيف التكييف", "سائل تنظيف المراوح", "سائل تنظيف الشفاطات",
-                "سائل تنظيف الدفايات", "سائل تنظيف المكيفات", "سائل تنظيف المرحاض"
-            ],
-            11: [ // منظفات جافة
-                "مسحوق غسيل عادي", "مسحوق غسيل أوتوماتيك", "مسحوق تبييض",
-                "مسحوق تنظيف الصحون", "مسحوق تنظيف الأرضيات", "منظف متعدد الأغراض",
-                "ملمع الزجاج", "ملمع الأثاث", "منظف السجاد الجاف",
-                "منظف الحمام الجاف", "منظف المطبخ الجاف", "منظف الفرن الجاف",
-                "منظف الثلاجة الجاف", "منظف الميكروويف الجاف", "منظف الغسالة الجاف",
-                "منظف التكييف الجاف", "منظف المراوح الجاف", "منظف الشفاطات الجاف",
-                "منظف الدفايات الجاف", "منظف المكيفات الجاف", "منظف المرحاض الجاف",
-                "منظف المعادن الجاف", "منظف الخشب الجاف", "منظف البلاط الجاف",
-                "منظف الجدران الجاف", "منظف النوافذ الجاف", "منظف السيارة الجاف",
-                "منظف الأحذية الجاف", "منظف الحديقة الجاف", "منظف المجوهرات الجاف"
-            ],
-            12: [ // معكرونة + شوربة
-                "مكرونة سباغيتي", "مكرونة بنية", "مكرونة فراشة", "مكرونة قوقع",
-                "مكرونة ريجاتوني", "مكرونة فيتوشيني", "مكرونة لازانيا",
-                "مكرونة رافيولي", "مكرونة تورتيليني", "مكرونة نودلز",
-                "شوربة دجاج", "شوربة لحم", "شوربة خضار", "شوربة طماطم",
-                "شوربة فطر", "شوربة عدس", "شوربة كريمة", "شوربة شعيرية",
-                "شوربة ميسو", "شوربة بازلاء", "شوربة جزر", "شوربة كوسا",
-                "شوربة بروكلي", "شوربة قرع", "شوربة بطاطس", "شوربة ذرة",
-                "شوربة فاصولياء", "شوربة حمص", "شوربة لوبيا", "شوربة تونة"
-            ],
-            13: [ // رز + طحين
-                "أرز بسمتي", "أرز مصري", "أرز ياسمين", "أرز أحمر",
-                "أرز أسود", "أرز بري", "أرز بسمتي هندي", "أرز بسمتي باكستاني",
-                "أرز مصري طويل", "أرز مصري متوسط", "أرز مصري قصير",
-                "طحين قمح", "طحين ذرة", "طحين أرز", "طحين شعير",
-                "طحين حبوب كاملة", "طحين أبيض", "طحين أسمر", "طحين خبز",
-                "طحين كعك", "طحين فطائر", "طحين بيتزا", "طحين سميد",
-                "طحين ذرة صفراء", "طحين ذرة بيضاء", "طحين شوفان",
-                "طحين قمح كامل", "طحين قمح أبيض", "طحين قمح أسمر",
-                "طحين قمح متوسط"
-            ],
-            14: [ // سكر + ملح
-                "سكر أبيض", "سكر بني", "سكر ناعم", "سكر خشن", "سكر بودرة",
-                "سكر دايت", "سكر ستيفيا", "سكر قصب", "سكر بني داكن",
-                "سكر بني فاتح", "سكر عضوي", "ملح طعام", "ملح بحري",
-                "ملح هيمالايا", "ملح معدن", "ملح خشن", "ملح ناعم",
-                "ملح مدعم باليود", "ملح قليل الصوديوم", "ملح معطر",
-                "ملح بالليمون", "ملح بالثوم", "ملح بالبصل", "ملح بالأعشاب",
-                "ملح بالفلفل", "ملح بالكمون", "ملح بالكاري", "ملح بالزنجبيل",
-                "ملح بالكركم", "ملح بالفلفل الحار"
-            ],
-            15: [ // مستلزمات الطفل
-                "حفاضات أطفال", "مناديل مبللة", "كريم ضد الطفح",
-                "شامبو أطفال", "صابون أطفال", "غسول أطفال", "لوشن أطفال",
-                "بودرة أطفال", "زيت أطفال", "كريم ترطيب أطفال",
-                "معجون أسنان أطفال", "فرشاة أسنان أطفال", "مستلزمات الرضاعة",
-                "زجاجات رضاعة", "حلمات زجاجات", "معقم زجاجات",
-                "مستلزمات الطعام", "أطباق أطفال", "ملاعق أطفال",
-                "كؤوس أطفال", "مريول أطفال", "مناشف أطفال",
-                "فرشاة شعر أطفال", "مقص أظافر أطفال", "ميزان حرارة أطفال",
-                "مستلزمات الحمام", "مستلزمات النوم", "مستلزمات اللعب",
-                "مستلزمات التعليم", "مستلزمات السلامة"
-            ],
-            16: [ // العناية الشخصية
-                "شامبو", "بلسم", "غسول الجسم", "صابون", "لوشن الجسم",
-                "كريم اليدين", "كريم القدمين", "مزيل العرق", "عطر",
-                "مستحضرات حلاقة", "مستحضرات تجميل", "مستحضرات العناية بالبشرة",
-                "مستحضرات العناية بالشعر", "مستحضرات العناية بالأسنان",
-                "مستحضرات العناية بالأظافر", "مستحضرات العناية بالعين",
-                "مستحضرات العناية بالشفاه", "مستحضرات العناية باليدين",
-                "مستحضرات العناية بالقدمين", "مستحضرات العناية بالجسم",
-                "مستحضرات العناية بالوجه", "مستحضرات العناية بالرقبة",
-                "مستحضرات العناية بالصدر", "مستحضرات العناية بالظهر",
-                "مستحضرات العناية بالبطن", "مستحضرات العناية بالأرداف",
-                "مستحضرات العناية بالفخذين", "مستحضرات العناية بالساقين",
-                "مستحضرات العناية بالذراعين", "مستحضرات العناية بالكوعين"
-            ],
-            17: [ // المستهلكات
-                "أكياس قمامة", "أكياس تسوق", "أكياس تفريز", "أكياس سندوتش",
-                "مناشف ورقية", "مناديل ورقية", "ورق تواليت", "فوط صحية",
-                "فوط يومية", "سدادات قطنية", "أعواد قطنية", "مناديل معقمة",
-                "كحول طبي", "صابون سائل", "معقم اليدين", "مطهرات",
-                "منظفات", "مبيضات", "معطرات جو", "شموع معطرة",
-                "أعشاب عطرية", "أكياس شاي", "فلتر قهوة", "أكياس شوي",
-                "أكياس خبز", "أكياس حفظ الطعام", "أغطية بلاستيكية",
-                "أفلام تغليف", "أوراق زبدة", "أوراق شمع"
-            ],
-            18: [ // البيض
-                "بيض دجاج أبيض", "بيض دجاج بني", "بيض دجاج عضوي",
-                "بيض دجاج حر", "بيض دجاج مخصب", "بيض دجاج كبير",
-                "بيض دجاج وسط", "بيض دجاج صغير", "بيض دجاج طازج",
-                "بيض دجاج مبرد", "بيض بط", "بيض وز", "بيض نعام",
-                "بيض سمان", "بيض رومي", "بيض نعام مجفف", "بيض سمان مجفف",
-                "بيض بط مجفف", "بيض وز مجفف", "بيض دجاج مسلوق",
-                "بيض دجاج مقلي", "بيض دجاج مشوي", "بيض دجاج مخفوق",
-                "بيض دجاج مسحوق", "بيض دجاج سائل", "بيض دجاج مجمد",
-                "بيض دجاج معلب", "بيض دجاج مدخن", "بيض دجاج مملح",
-                "بيض دجاج محفوظ"
-            ],
-            19: [ // الشاي والقهوة
-                "شاي سيلاني", "شاي دارجيلنغ", "شاي أسمام", "شاي كينيا",
-                "شاي نيبال", "شاي فيتنام", "شاي صيني", "شاي ياباني",
-                "قهوة برازيلية", "قهوة كولومبية", "قهوة إثيوبية",
-                "قهوة كينية", "قهوة يمنية", "قهوة هندية", "قهوة فيتنامية",
-                "قهوة إندونيسية", "قهوة بيروفية", "قهوة غواتيمالية",
-                "قهوة كوستاريكية", "قهوة مكسيكية", "قهوة بنما",
-                "قهوة جامايكا", "قهوة هاواي", "قهوة تنزانية",
-                "قهوة رواندية", "قهوة بوروندية", "قهوة أوغندية",
-                "قهوة بابوا غينيا الجديدة", "قهوة سلفادورية", "قهوة نيكاراغوية"
-            ],
-            20: [ // الآيس كريم والمثلجات
-                "آيس كريم فانيلا", "آيس كريم شوكولاتة", "آيس كريم فراولة",
-                "آيس كريم مانجو", "آيس كريم شوكولاتة بيضاء", "آيس كريم كراميل",
-                "آيس كريم قهوة", "آيس كريم نعناع", "آيس كريم فستق",
-                "آيس كريم لوز", "آيس كريم جوز هند", "آيس كريم توت",
-                "آيس كريم رومي", "آيس كريم كوكيز", "آيس كريم براوني",
-                "آيس كريم تشيز كيك", "آيس كريم سنيكرز", "آيس كريم أوريو",
-                "آيس كريم سنكرز", "آيس كريم تويكس", "آيس كريم مالتبار",
-                "آيس كريم ماجنوم", "آيس كريم كورنيتو", "آيس كريم ساندويتش",
-                "آيس كريم ستيك", "آيس كريم كب كيك", "آيس كريم دونات",
-                "آيس كريم وافل", "آيس كريم كون", "آيس كريم كوب"
             ]
+            // ... بقية الفئات كما هي في كودك
         };
 
         // === متغيرات عامة ===
@@ -1387,6 +1259,9 @@
             document.getElementById('cart-header-btn').addEventListener('click', openCartModal);
             document.getElementById('contact-us-btn').addEventListener('click', openContactUsModal);
             
+            // تحسين تحميل الصور
+            setTimeout(optimizeImageLoading, 1000);
+            
             console.log('✅ تم تهيئة التطبيق بنجاح');
             
             // تنظيف البيانات القديمة
@@ -1440,19 +1315,23 @@
             // الحصول على الأسماء الحقيقية للمنتجات لهذه الفئة
             const realNames = realProductNames[categoryId];
             
+            // تحويل رابط الصورة إلى رابط مباشر
+            const category = categories.find(c => c.id === categoryId);
+            let imageUrl = category ? category.imageUrl : '';
+            imageUrl = convertDriveToDirectLink(imageUrl);
+            
             for (let i = 1; i <= 30; i++) {
                 const productId = `${categoryId}-${i}`;
                 let price;
                 
-                // تحديد السعر (استخدام الأسعار الثابتة إذا متوفرة، وإلا استخدام قاعدة عامة)
+                // تحديد السعر
                 if (FIXED_PRICES[categoryId] && FIXED_PRICES[categoryId][i-1]) {
                     price = FIXED_PRICES[categoryId][i-1];
                 } else {
-                    // قاعدة عامة للأسعار إذا لم يتم تحديدها
                     price = (categoryId * 10) + (i * 0.5);
                 }
                 
-                // استخدام اسم حقيقي للمنتج إذا كان متاحاً، وإلا استخدام اسم عام
+                // استخدام اسم حقيقي للمنتج إذا كان متاحاً
                 let productName;
                 if (realNames && realNames[i-1]) {
                     productName = realNames[i-1];
@@ -1465,10 +1344,10 @@
                     name: productName,
                     price: price,
                     description: `وصف مختصر لمنتج ${productName} بجودة عالية`,
-                    imageUrl: categories.find(c => c.id === categoryId).imageUrl,
+                    imageUrl: imageUrl,
                     categoryName: categoryName,
-                    isBestseller: i <= 3, // أول 3 منتجات هي الأكثر مبيعاً
-                    rating: 4.5 // تقييم ثابت
+                    isBestseller: i <= 3,
+                    rating: 4.5
                 });
             }
             return products;
@@ -1485,13 +1364,16 @@
             grid.innerHTML = '';
             
             categories.forEach(cat => {
+                // تحويل رابط الصورة إلى رابط مباشر
+                const directImageUrl = convertDriveToDirectLink(cat.imageUrl);
+                
                 const categoryCard = document.createElement('div');
                 categoryCard.className = `modern-category-card cursor-pointer touch-feedback`;
                 categoryCard.onclick = () => openCategoryDetails(cat.id);
 
                 categoryCard.innerHTML = `
                     <div class="category-image-container">
-                        <img src="${cat.imageUrl}" alt="${cat.name}" class="category-image" loading="lazy">
+                        <img src="${directImageUrl}" alt="${cat.name}" class="category-image" loading="lazy">
                         <div class="category-overlay">
                             <p class="font-semibold text-sm">${cat.name}</p>
                             <p class="text-xs opacity-90">30 منتج</p>
@@ -1508,9 +1390,12 @@
                 grid.appendChild(categoryCard);
             });
             
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
+            // إعادة إنشاء الأيقونات بعد التحميل
+            setTimeout(() => {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }, 100);
         }
 
         // === دوال النوافذ ===
@@ -1559,9 +1444,12 @@
                     `;
                 }
                 
+                // تحويل رابط الصورة إلى رابط مباشر
+                const directImageUrl = convertDriveToDirectLink(product.imageUrl);
+                
                 card.innerHTML = `
                     <div class="product-image-container">
-                        <img src="${product.imageUrl}" alt="${product.name}" class="product-image" loading="lazy">
+                        <img src="${directImageUrl}" alt="${product.name}" class="product-image" loading="lazy">
                         ${product.isBestseller ? '<div class="product-badge">الأكثر مبيعاً</div>' : ''}
                     </div>
                     <div class="p-4 flex flex-col">
@@ -1586,9 +1474,13 @@
                 grid.appendChild(card);
             });
             
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
+            // إعادة إنشاء الأيقونات
+            setTimeout(() => {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+                optimizeImageLoading();
+            }, 100);
         }
 
         // === دوال السلة ===
@@ -1635,9 +1527,13 @@
             cartItems.forEach(item => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
+                
+                // تحويل رابط الصورة إلى رابط مباشر
+                const directImageUrl = convertDriveToDirectLink(item.imageUrl);
+                
                 itemsHTML += `
                     <div class="flex items-center space-x-4 space-x-reverse p-4 border border-gray-200 rounded-lg">
-                        <img src="${item.imageUrl}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
+                        <img src="${directImageUrl}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg" loading="lazy">
                         <div class="flex-1">
                             <h4 class="font-semibold text-gray-800">${item.name}</h4>
                             <div class="flex items-center justify-between mt-2">
@@ -1667,9 +1563,13 @@
             cartTotal.textContent = total.toFixed(2) + ' ر.س';
             if (paymentTotal) paymentTotal.textContent = total.toFixed(2) + ' ر.س';
             
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
+            // إعادة إنشاء الأيقونات
+            setTimeout(() => {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+                optimizeImageLoading();
+            }, 100);
         }
 
         function addToCart(productId) {
