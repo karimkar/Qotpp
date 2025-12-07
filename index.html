@@ -1032,7 +1032,7 @@
 
     <script>
         // === الدوال المساعدة لتحويل روابط Google Drive ===
-        function convertDriveToDirectLink(driveLink) {
+        function convertDriveLink(driveLink) {
             if (!driveLink || !driveLink.includes('drive.google.com')) {
                 return driveLink;
             }
@@ -1042,7 +1042,7 @@
                 const idMatch = driveLink.match(/\/d\/([^\/\?]+)/);
                 if (idMatch && idMatch[1]) {
                     // استخدام رابط مباشر للصورة
-                    return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
+                    return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w1000`;
                 }
                 return driveLink;
             } catch (error) {
@@ -1106,7 +1106,7 @@
             { id: 4, name: "زيوت + سمن", icon: "flask-conical", color: "06b6d4", gradient: "blue-gradient", 
               imageUrl: "https://drive.google.com/file/d/1os9FSQII8UR6XNkny0kqdLMAPlIK6cdV/view?usp=drivesdk" },
             { id: 5, name: "تتبيلات + صلصات", icon: "utensils", color: "3b82f6", gradient: "purple-gradient", 
-              imageUrl: "https://drive.google.com/file/d/1u28_OB-YHBHaCAdOzt8AhQnAbEbJEEGQ/view?" },
+              imageUrl: "https://drive.google.com/file/d/1u28_OB-YHBHaCAdOzt8AhQnAbEbJEEGQ/view?usp=drivesdk" },
             { id: 6, name: "مخللات", icon: "carrot", color: "a8a29e", gradient: "teal-gradient", 
               imageUrl: "https://drive.google.com/file/d/1r4l7guap8zc2u_3als-ErdMlyeanoWgF/view?usp=drivesdk" },
             { id: 7, name: "حلويات + تسالي", icon: "croissant", color: "d97706", gradient: "orange-gradient", 
@@ -1126,11 +1126,11 @@
             { id: 14, name: "سكر + ملح", icon: "salt", color: "6d28d9", gradient: "purple-gradient", 
               imageUrl: "https://drive.google.com/file/d/1GAev7dB8-6moV9XjpwW5DRU_l9bvh_fv/view?usp=drivesdk" },
             { id: 15, name: "مستلزمات الطفل", icon: "baby", color: "1e40af", gradient: "teal-gradient", 
-              imageUrl: "https://images.unsplash.com/photo-1632766863814-192e22c15981?q=80&w=600&auto=format&fit=crop" },
+              imageUrl: "https://drive.google.com/file/d/1ZhgrOmGf9pEgY6GHS1os62juTCc7p_CB/view?usp=drivesdk" },
             { id: 16, name: "العناية الشخصية", icon: "user", color: "f97316", gradient: "orange-gradient", 
               imageUrl: "https://drive.google.com/file/d/1lVEspCi7QAswoBnKPJepRcp3RS7B2795/view?usp=drivesdk" },
             { id: 17, name: "المستهلكات", icon: "shopping-bag", color: "ca8a04", gradient: "pink-gradient", 
-              imageUrl: "https://drive.google.com/file/d/1qSN2l7WBWu-um69-Q17TR4EO_ES9gJwt/view" },
+              imageUrl: "https://drive.google.com/file/d/1qSN2l7WBWu-um69-Q17TR4EO_ES9gJwt/view?usp=drivesdk" },
             { id: 18, name: "البيض", icon: "egg", color: "fbbf24", gradient: "blue-gradient", 
               imageUrl: "https://images.unsplash.com/photo-1587842795431-705b06d86016?q=80&w=600&auto=format&fit=crop" },
             { id: 19, name: "الشاي والقهوة", icon: "coffee", color: "57534e", gradient: "purple-gradient", 
@@ -1287,7 +1287,7 @@
             
             categories.forEach(cat => {
                 // تحويل رابط الصورة إلى رابط مباشر
-                const directImageUrl = convertDriveToDirectLink(cat.imageUrl);
+                const directImageUrl = convertDriveLink(cat.imageUrl);
                 
                 const categoryCard = document.createElement('div');
                 categoryCard.className = `modern-category-card cursor-pointer touch-feedback`;
@@ -1347,7 +1347,7 @@
 
             products.forEach(product => {
                 // تحويل رابط الصورة إلى رابط مباشر
-                const directImageUrl = convertDriveToDirectLink(product.imageUrl);
+                const directImageUrl = convertDriveLink(product.imageUrl);
                 
                 const card = document.createElement('div');
                 card.className = `modern-product-card touch-feedback`;
@@ -1429,7 +1429,7 @@
                 total += itemTotal;
                 
                 // تحويل رابط الصورة إلى رابط مباشر
-                const directImageUrl = convertDriveToDirectLink(item.imageUrl);
+                const directImageUrl = convertDriveLink(item.imageUrl);
                 
                 itemsHTML += `
                     <div class="flex items-center space-x-4 space-x-reverse p-4 border border-gray-200 rounded-lg">
