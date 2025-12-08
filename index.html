@@ -1056,6 +1056,112 @@
         const SHOW_RATINGS = false;
         const SHOW_DISCOUNTS = false;
 
+        // === قاعدة بيانات المنتجات الفرعية القابلة للتعديل ===
+        // يمكنك تعديل أسماء المنتجات وأسعارها وصورها هنا
+        const PRODUCT_DATA = {
+            // الفئة 1: بقوليات
+            1: [
+                { name: "عدس أصفر", price: 1000, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "عدس أحمر", price: 750, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "حمص", price: 1250, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "فاصوليا بيضاء", price: 3000, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "فول مدمس", price: 2000, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "لوبيا حمراء", price: 2000, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "لوبيا سوداء", price: 1500, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "فاصوليا حمراء", price: 4000, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "بسلة جافة", price: 3000, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "فول سوداني", price: 1000, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "ذرة مجففة", price: 1000, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "قمح", price: 26, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "شعير", price: 27, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "سمسم", price: 28, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "حبة البركة", price: 29, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "يانسون", price: 30, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "حلبة", price: 31, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "كمون", price: 32, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "كزبرة", price: 33, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "كراوية", price: 34, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "قرفة", price: 35, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "هيل", price: 36, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "قرنفل", price: 37, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "زنجبيل", price: 38, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "كركم", price: 39, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "فلفل أسود", price: 40, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "فلفل أحمر", price: 41, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "بهارات مشكلة", price: 42, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "شطة", price: 43, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" },
+                { name: "زعفران", price: 44, imageUrl: "https://drive.google.com/file/d/1ewHhDHv9hMHWWxSo4AV43As2xlMjfs1M/view?usp=drivesdk" }
+            ],
+            // الفئة 2: معلبات
+            2: [
+                { name: "معلبات فاصوليا", price: 8, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات ذرة", price: 9, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات بازلاء", price: 10, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات طماطم", price: 11, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات فول", price: 12, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات حمص", price: 13, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات لوبيا", price: 14, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات فطر", price: 15, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات زيتون", price: 16, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات خرشوف", price: 17, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات أناناس", price: 18, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات مشمش", price: 19, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات خوخ", price: 20, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات كرز", price: 21, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات فراولة", price: 22, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات تين", price: 23, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات مانجو", price: 24, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات جريب فروت", price: 25, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات ليمون", price: 26, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات برتقال", price: 27, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات سردين", price: 28, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات تونة", price: 29, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات سلمون", price: 30, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات ماكريل", price: 31, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات رنجة", price: 32, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات سمك", price: 33, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات جمبري", price: 34, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات كالاماري", price: 35, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات محار", price: 36, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" },
+                { name: "معلبات سلطعون", price: 37, imageUrl: "https://drive.google.com/file/d/11SkYwMDgAqJvFpZlRN5_pOKspoKdz-iZ/view?usp=drivesdk" }
+            ],
+            // الفئة 3: الحليب ومشتقاته
+            3: [
+                { name: "حليب طازج", price: 12, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "حليب طويل الأجل", price: 12, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "حليب خالي الدسم", price: 13, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "حليب كامل الدسم", price: 13, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "لبن زبادي", price: 14, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "لبن رائب", price: 14, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "جبنة بيضاء", price: 15, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "جبنة شيدر", price: 15, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "جبنة موزاريلا", price: 16, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "جبنة فيتا", price: 16, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "جبنة رومي", price: 17, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "جبنة هولندي", price: 17, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "زبدة", price: 18, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "كريمة طبخ", price: 18, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "كريمة خفق", price: 19, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "قشطة", price: 19, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "حليب مكثف", price: 20, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "حليب بودرة", price: 20, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "آيس كريم فانيليا", price: 21, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "آيس كريم شوكولاتة", price: 21, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "آيس كريم فراولة", price: 22, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "آيس كريم مانجو", price: 22, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "مثلجات", price: 23, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "بوظة", price: 23, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "مهلبية", price: 24, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "أرز بالحليب", price: 24, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "كاسترد", price: 25, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "مهلبيات جاهزة", price: 25, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "حليب الصويا", price: 26, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" },
+                { name: "حليب اللوز", price: 26, imageUrl: "https://drive.google.com/file/d/1ThafIPyliuUwGomH1oqqUlAGlhBnhBiN/view?usp=drivesdk" }
+            ],
+            // باقي الفئات - يمكنك إضافة بياناتها بنفس الطريقة
+            // إذا لم توجد بيانات محددة، سيتم استخدام البيانات الافتراضية
+        };
+
         // === قاعدة بيانات الأسعار الثابتة ===
         const FIXED_PRICES = {
             1: [
@@ -1249,24 +1355,39 @@
             
             // الحصول على الصورة المناسبة للفئة
             const category = categories.find(c => c.id === categoryId);
-            const imageUrl = category ? category.imageUrl : '';
+            const categoryImageUrl = category ? category.imageUrl : '';
+            
+            // التحقق مما إذا كانت هناك بيانات محددة لهذه الفئة
+            const categoryProductData = PRODUCT_DATA[categoryId];
             
             for (let i = 1; i <= 30; i++) {
                 const productId = `${categoryId}-${i}`;
                 let price;
+                let productName;
+                let imageUrl;
                 
-                // تحديد السعر
-                if (FIXED_PRICES[categoryId] && FIXED_PRICES[categoryId][i-1]) {
-                    price = FIXED_PRICES[categoryId][i-1];
+                // إذا كانت هناك بيانات محددة للمنتج، استخدمها
+                if (categoryProductData && categoryProductData[i-1]) {
+                    const productData = categoryProductData[i-1];
+                    price = productData.price;
+                    productName = productData.name;
+                    imageUrl = productData.imageUrl || categoryImageUrl;
                 } else {
-                    price = (categoryId * 10) + (i * 0.5);
+                    // استخدام البيانات الافتراضية
+                    if (FIXED_PRICES[categoryId] && FIXED_PRICES[categoryId][i-1]) {
+                        price = FIXED_PRICES[categoryId][i-1];
+                    } else {
+                        price = (categoryId * 10) + (i * 0.5);
+                    }
+                    productName = `${categoryName} ${i}`;
+                    imageUrl = categoryImageUrl;
                 }
                 
                 products.push({
                     id: productId,
-                    name: `${categoryName} ${i}`,
+                    name: productName,
                     price: price,
-                    description: `وصف مختصر لمنتج ${categoryName} ${i} بجودة عالية`,
+                    description: `وصف مختصر لمنتج ${productName} بجودة عالية`,
                     imageUrl: imageUrl,
                     categoryName: categoryName,
                     isBestseller: i <= 3,
