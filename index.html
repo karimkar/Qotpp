@@ -1942,7 +1942,7 @@
     // ─────────────────────────────────────────
     //  نموذج الدفع
     // ─────────────────────────────────────────
-    async function handlePaymentForm(e) {
+    <form id="contact-form" onsubmit="sendContactForm(event)">
         e.preventDefault();
         const fd  = new FormData(e.target);
         const btn = e.target.querySelector('button[type="submit"]');
@@ -1957,30 +1957,43 @@
             paymentMethod : fd.get('paymentMethod'),
             items         : cartItems,
             total         : cartItems.reduce((s,i) => s + i.price * i.quantity, 0),
-            timestamp     : new Date().toISOString()
-        };
+                <script>
+        // تهيئة الخدمة بمفتاحك العام
+        emailjs.init("O3UZPWUhamzxhmC1J");
 
-        try {
-            // حفظ محلي
-            const orders = JSON.parse(localStorage.getItem('storeOrders') || '[]');
-            orders.push(order);
-            localStorage.setItem('storeOrders', JSON.stringify(orders));
+        // دالة الإرسال
+        async function sendContactForm(event) {
+            event.preventDefault();
 
-            // إرسال بريد
-            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-                to_email      : STORE_EMAIL,
-                customer_name : order.customerName,
-                order_id      : order.id,
-                order_total   : order.total,
-                order_items   : order.items.map(i => `${i.name} × ${i.quantity} = ${i.price * i.quantity}`).join('\n'),
-                customer_phone: order.phone,
-                customer_address: order.address
-            });
+            const btn = event.target.querySelector('button');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "جاري الإرسال...";
+            btn.disabled = true;
 
-            showToast('🎉 تم تأكيد طلبك بنجاح!');
-            cartItems = [];
-            saveCart();
-            renderCartBadge();
+            const templateParams = {
+                from_name: document.getElementById("name").value,
+                reply_to: document.getElementById("email").value,
+                message: document.getElementById("message").value
+            };
+
+            try {
+                // إرسال البيانات باستخدام معرفاتك
+                await emailjs.send("Service_s3tkjzh", "template_oe0t4ki", templateParams);
+                
+                alert("تم إرسال رسالتك بنجاح! شكراً لتواصلك معنا.");
+                event.target.reset(); 
+            } catch (error) {
+                console.error("EmailJS Error:", error);
+                alert("فشل الإرسال: " + (error.text || "تأكد من اتصالك بالإنترنت وحاول مجدداً."));
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+
+
             closeModal('payment-modal');
         } catch(err) {
             showToast('✅ تم حفظ الطلب، سنتصل بك قريباً');
