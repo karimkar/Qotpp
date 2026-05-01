@@ -1958,85 +1958,32 @@
             items         : cartItems,
             total         : cartItems.reduce((s,i) => s + i.price * i.quantity, 0),
                 <script>
-        // تهيئة الخدمة بمفتاحك العام
         emailjs.init("O3UZPWUhamzxhmC1J");
 
-        // دالة الإرسال
         async function sendContactForm(event) {
             event.preventDefault();
-
             const btn = event.target.querySelector('button');
             const originalText = btn.innerText;
-            
             btn.innerText = "جاري الإرسال...";
             btn.disabled = true;
 
-            const templateParams = {
+            const params = {
                 from_name: document.getElementById("name").value,
                 reply_to: document.getElementById("email").value,
                 message: document.getElementById("message").value
             };
 
             try {
-                // إرسال البيانات باستخدام معرفاتك
-                await emailjs.send("Service_s3tkjzh", "template_oe0t4ki", templateParams);
-                
-                alert("تم إرسال رسالتك بنجاح! شكراً لتواصلك معنا.");
+                await emailjs.send("Service_s3tkjzh", "template_oe0t4ki", params);
+                alert("تم الإرسال بنجاح!");
                 event.target.reset(); 
             } catch (error) {
-                console.error("EmailJS Error:", error);
-                alert("فشل الإرسال: " + (error.text || "تأكد من اتصالك بالإنترنت وحاول مجدداً."));
+                alert("فشل الإرسال، حاول لاحقاً.");
             } finally {
                 btn.innerText = originalText;
                 btn.disabled = false;
             }
         }
-    </script>
-
-
-            closeModal('payment-modal');
-        } catch(err) {
-            showToast('✅ تم حفظ الطلب، سنتصل بك قريباً');
-            cartItems = [];
-            saveCart();
-            renderCartBadge();
-            closeModal('payment-modal');
-        } finally {
-            btn.textContent = 'تأكيد الطلب';
-            btn.disabled = false;
-        }
-    }
-
-    // ─────────────────────────────────────────
-    //  إرسال رمز التحقق عبر EmailJS
-    // ─────────────────────────────────────────
-    async function sendVerificationEmail(email, name, code) {
-        try {
-            const res = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-                to_email: email, to_name: name,
-                verification_code: code, store_name:'أسواق القطب'
-            });
-            return { success: true, response: res };
-        } catch(err) {
-            return { success: false, error: err };
-        }
-    }
-
-    // ─────────────────────────────────────────
-    //  تعريف الدوال عالمياً
-    // ─────────────────────────────────────────
-    Object.assign(window, {
-        openCategoryDetails, changeFilterTab, sortProducts,
-        addToCart, updateCartItemQuantity, removeFromCart,
-        openCartModal, openContactUsModal, openPaymentModal,
-        openProfileModal, openFavoritesModal, openSearchModal,
-        openHome, openLoginModal, openRegisterModal, openVerificationModal,
-        closeModal, closeAllModals, closeModalOnOverlay,
-        startShopping, checkout, switchToRegister, switchToLogin,
-        togglePassword, resendVerificationCode,
-        handleLoginForm, handleRegisterForm, handleVerificationForm,
-        handleContactForm, handlePaymentForm
-    });
     </script>
 </body>
 </html>
