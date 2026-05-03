@@ -1936,54 +1936,5 @@
         } finally {
             btn.textContent = 'إرسال الرسالة';
             btn.disabled = false;
-        }
-    }
-
-    // ─────────────────────────────────────────
-    //  نموذج الدفع
-    // ─────────────────────────────────────────
-    <form id="contact-form" onsubmit="sendContactForm(event)">
-        e.preventDefault();
-        const fd  = new FormData(e.target);
-        const btn = e.target.querySelector('button[type="submit"]');
-        btn.textContent = 'جاري المعالجة...';
-        btn.disabled = true;
-
-        const order = {
-            id            : 'ORD-' + Date.now(),
-            customerName  : fd.get('customerName'),
-            phone         : fd.get('phone'),
-            address       : fd.get('address'),
-            paymentMethod : fd.get('paymentMethod'),
-            items         : cartItems,
-            total         : cartItems.reduce((s,i) => s + i.price * i.quantity, 0),
-                <script>
-        emailjs.init("O3UZPWUhamzxhmC1J");
-
-        async function sendContactForm(event) {
-            event.preventDefault();
-            const btn = event.target.querySelector('button');
-            const originalText = btn.innerText;
-            btn.innerText = "جاري الإرسال...";
-            btn.disabled = true;
-
-            const params = {
-                from_name: document.getElementById("name").value,
-                reply_to: document.getElementById("email").value,
-                message: document.getElementById("message").value
-            };
-
-            try {
-                await emailjs.send("Service_s3tkjzh", "template_oe0t4ki", params);
-                alert("تم الإرسال بنجاح!");
-                event.target.reset(); 
-            } catch (error) {
-                alert("فشل الإرسال، حاول لاحقاً.");
-            } finally {
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }
-        }
-    </script>
 </body>
 </html>
