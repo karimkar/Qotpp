@@ -1936,5 +1936,29 @@
         } finally {
             btn.textContent = 'إرسال الرسالة';
             btn.disabled = false;
+        } finally {
+            btn.textContent = 'إرسال الرسالة';
+            btn.disabled = false;
+        }
+    }
+
+    // ─────────────────────────────────────────
+    //  دالة إرسال بريد التحقق
+    // ─────────────────────────────────────────
+    async function sendVerificationEmail(toEmail, toName, code) {
+        try {
+            const res = await emailjs.send(EMAILJS_SERVICE_ID, 'template_XXXXXXXXX', {
+                to_email: toEmail,
+                to_name: toName,
+                verification_code: code
+            });
+            return { success: true };
+        } catch (error) {
+            console.error(error);
+            return { success: false };
+        }
+    }
+
+</script>
 </body>
 </html>
