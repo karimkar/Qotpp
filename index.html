@@ -1904,12 +1904,7 @@
             if (res.success) { startCountdown(); showToast('✅ تم إعادة إرسال الرمز'); }
             else { showToast('❌ فشل إعادة الإرسال'); }
         } catch { showToast('❌ فشل إعادة الإرسال'); }
-    }
-
-    // ─────────────────────────────────────────
-    //  نموذج التواصل
-    // ─────────────────────────────────────────
-    async function handleContactForm(e) {
+    }    async function handleContactForm(e) {
         e.preventDefault();
         const fd   = new FormData(e.target);
         const name = fd.get('to_name').trim();
@@ -1936,9 +1931,6 @@
         } finally {
             btn.textContent = 'إرسال الرسالة';
             btn.disabled = false;
-        } finally {
-            btn.textContent = 'إرسال الرسالة';
-            btn.disabled = false;
         }
     }
 
@@ -1959,6 +1951,47 @@
         }
     }
 
+    // ─────────────────────────────────────────
+    //  دالة معالجة الدفع
+    // ─────────────────────────────────────────
+    function handlePaymentForm(e) {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.textContent = 'جاري المعالجة...';
+        btn.disabled = true;
+
+        const order = {
+            id: 'ORD-' + Date.now(),
+            customerName: fd.get('customerName'),
+            phone: fd.get('phone'),
+            address: fd.get('address'),
+            paymentMethod: fd.get('paymentMethod'),
+            items: cartItems,
+            total: cartItems.reduce((s, i) => s + i.price * i.quantity, 0),
+            date: new Date().toISOString()
+        };
+
+        // حفظ الطلب في localStorage
+        let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+        orders.push(order);
+        localStorage.setItem('orders', JSON.stringify(orders));
+
+        // تفريغ السلة
+        cartItems = [];
+        saveCart();
+        renderCartBadge();
+
+        // إغلاق نوافذ الدفع وعرض رسالة نجاح
+        closeModal('payment-modal');
+        showToast('🎉 تم تأكيد طلبك بنجاح! رقم الطلب: ' + order.id);
+
+        btn.textContent = 'تأكيد الطلب';
+        btn.disabled = false;
+    }
+
 </script>
 </body>
 </html>
+
+    
